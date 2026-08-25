@@ -1,7 +1,7 @@
-From 54ef7fd5a295671e6cc830bdd9368c0b423cf414 Mon Sep 17 00:00:00 2001
+From de6d8763a264c342edff2317eee162b7713ae287 Mon Sep 17 00:00:00 2001
 From: Ian Thomas <ianthomas23@gmail.com>
 Date: Mon, 8 Dec 2025 08:07:39 +0000
-Subject: [PATCH 6/8] Int to void return types of lapack functions used by
+Subject: [PATCH 06/14] Int to void return types of lapack functions used by
  lapacke
 
 Co-authored-by: Julien Jerphanion <git@jjerphan.xyz>
@@ -10,10 +10,10 @@ Co-authored-by: Julien Jerphanion <git@jjerphan.xyz>
  1 file changed, 33 insertions(+), 33 deletions(-)
 
 diff --git a/lapack-netlib/LAPACKE/include/lapack.h b/lapack-netlib/LAPACKE/include/lapack.h
-index 0ed9ad01a..88393b787 100644
+index f9eb14503..22e7af212 100644
 --- a/lapack-netlib/LAPACKE/include/lapack.h
 +++ b/lapack-netlib/LAPACKE/include/lapack.h
-@@ -3538,28 +3538,28 @@ void LAPACK_zgedmdq_base(
+@@ -3680,28 +3680,28 @@ void LAPACK_zgedmdq_base(
  #endif
  
  #define LAPACK_cgesv LAPACK_GLOBAL(cgesv,CGESV)
@@ -46,7 +46,7 @@ index 0ed9ad01a..88393b787 100644
      lapack_int const* n, lapack_int const* nrhs,
      lapack_complex_double* A, lapack_int const* lda, lapack_int* ipiv,
      lapack_complex_double* B, lapack_int const* ldb,
-@@ -4158,49 +4158,49 @@ void LAPACK_zgesvxx_base(
+@@ -4300,49 +4300,49 @@ void LAPACK_zgesvxx_base(
  #endif
  
  #define LAPACK_cgetf2 LAPACK_GLOBAL(cgetf2,CGETF2)
@@ -104,7 +104,7 @@ index 0ed9ad01a..88393b787 100644
      lapack_int const* m, lapack_int const* n,
      lapack_complex_double* A, lapack_int const* lda, lapack_int* ipiv,
      lapack_int* info );
-@@ -4258,7 +4258,7 @@ void LAPACK_zgetri(
+@@ -4400,7 +4400,7 @@ void LAPACK_zgetri(
      lapack_int* info );
  
  #define LAPACK_cgetrs_base LAPACK_GLOBAL(cgetrs,CGETRS)
@@ -113,7 +113,7 @@ index 0ed9ad01a..88393b787 100644
      char const* trans,
      lapack_int const* n, lapack_int const* nrhs,
      lapack_complex_float const* A, lapack_int const* lda, lapack_int const* ipiv,
-@@ -4275,7 +4275,7 @@ lapack_int LAPACK_cgetrs_base(
+@@ -4417,7 +4417,7 @@ lapack_int LAPACK_cgetrs_base(
  #endif
  
  #define LAPACK_dgetrs_base LAPACK_GLOBAL(dgetrs,DGETRS)
@@ -122,7 +122,7 @@ index 0ed9ad01a..88393b787 100644
      char const* trans,
      lapack_int const* n, lapack_int const* nrhs,
      double const* A, lapack_int const* lda, lapack_int const* ipiv,
-@@ -4292,7 +4292,7 @@ lapack_int LAPACK_dgetrs_base(
+@@ -4434,7 +4434,7 @@ lapack_int LAPACK_dgetrs_base(
  #endif
  
  #define LAPACK_sgetrs_base LAPACK_GLOBAL(sgetrs,SGETRS)
@@ -131,7 +131,7 @@ index 0ed9ad01a..88393b787 100644
      char const* trans,
      lapack_int const* n, lapack_int const* nrhs,
      float const* A, lapack_int const* lda, lapack_int const* ipiv,
-@@ -4309,7 +4309,7 @@ lapack_int LAPACK_sgetrs_base(
+@@ -4451,7 +4451,7 @@ lapack_int LAPACK_sgetrs_base(
  #endif
  
  #define LAPACK_zgetrs_base LAPACK_GLOBAL(zgetrs,ZGETRS)
@@ -140,7 +140,7 @@ index 0ed9ad01a..88393b787 100644
      char const* trans,
      lapack_int const* n, lapack_int const* nrhs,
      lapack_complex_double const* A, lapack_int const* lda, lapack_int const* ipiv,
-@@ -11160,22 +11160,22 @@ void LAPACK_zlassq(
+@@ -11302,22 +11302,22 @@ void LAPACK_zlassq(
      double* sumsq );
  
  #define LAPACK_claswp LAPACK_GLOBAL(claswp,CLASWP)
@@ -167,7 +167,7 @@ index 0ed9ad01a..88393b787 100644
      lapack_int const* n,
      lapack_complex_double* A, lapack_int const* lda, lapack_int const* k1, lapack_int const* k2, lapack_int const* ipiv, lapack_int const* incx );
  
-@@ -11268,7 +11268,7 @@ void LAPACK_zlatms_base(
+@@ -11410,7 +11410,7 @@ void LAPACK_zlatms_base(
  #endif
  
  #define LAPACK_clauum_base LAPACK_GLOBAL(clauum,CLAUUM)
@@ -176,7 +176,7 @@ index 0ed9ad01a..88393b787 100644
      char const* uplo,
      lapack_int const* n,
      lapack_complex_float* A, lapack_int const* lda,
-@@ -11284,7 +11284,7 @@ lapack_int LAPACK_clauum_base(
+@@ -11426,7 +11426,7 @@ lapack_int LAPACK_clauum_base(
  #endif
  
  #define LAPACK_dlauum_base LAPACK_GLOBAL(dlauum,DLAUUM)
@@ -185,7 +185,7 @@ index 0ed9ad01a..88393b787 100644
      char const* uplo,
      lapack_int const* n,
      double* A, lapack_int const* lda,
-@@ -11300,7 +11300,7 @@ lapack_int LAPACK_dlauum_base(
+@@ -11442,7 +11442,7 @@ lapack_int LAPACK_dlauum_base(
  #endif
  
  #define LAPACK_slauum_base LAPACK_GLOBAL(slauum,SLAUUM)
@@ -194,7 +194,7 @@ index 0ed9ad01a..88393b787 100644
      char const* uplo,
      lapack_int const* n,
      float* A, lapack_int const* lda,
-@@ -11316,7 +11316,7 @@ lapack_int LAPACK_slauum_base(
+@@ -11458,7 +11458,7 @@ lapack_int LAPACK_slauum_base(
  #endif
  
  #define LAPACK_zlauum_base LAPACK_GLOBAL(zlauum,ZLAUUM)
@@ -203,7 +203,7 @@ index 0ed9ad01a..88393b787 100644
      char const* uplo,
      lapack_int const* n,
      lapack_complex_double* A, lapack_int const* lda,
-@@ -11332,7 +11332,7 @@ lapack_int LAPACK_zlauum_base(
+@@ -11474,7 +11474,7 @@ lapack_int LAPACK_zlauum_base(
  #endif
  
  #define LAPACK_ilaver LAPACK_GLOBAL(ilaver,ILAVER)
@@ -212,7 +212,7 @@ index 0ed9ad01a..88393b787 100644
      lapack_int* vers_major, lapack_int* vers_minor, lapack_int* vers_patch );
  
  #define LAPACK_dopgtr_base LAPACK_GLOBAL(dopgtr,DOPGTR)
-@@ -13609,7 +13609,7 @@ void LAPACK_zpotf2_base(
+@@ -13751,7 +13751,7 @@ void LAPACK_zpotf2_base(
  #endif
  
  #define LAPACK_cpotrf_base LAPACK_GLOBAL(cpotrf,CPOTRF)
@@ -221,7 +221,7 @@ index 0ed9ad01a..88393b787 100644
      char const* uplo,
      lapack_int const* n,
      lapack_complex_float* A, lapack_int const* lda,
-@@ -13625,7 +13625,7 @@ lapack_int LAPACK_cpotrf_base(
+@@ -13767,7 +13767,7 @@ lapack_int LAPACK_cpotrf_base(
  #endif
  
  #define LAPACK_dpotrf_base LAPACK_GLOBAL(dpotrf,DPOTRF)
@@ -230,7 +230,7 @@ index 0ed9ad01a..88393b787 100644
      char const* uplo,
      lapack_int const* n,
      double* A, lapack_int const* lda,
-@@ -13641,7 +13641,7 @@ lapack_int LAPACK_dpotrf_base(
+@@ -13783,7 +13783,7 @@ lapack_int LAPACK_dpotrf_base(
  #endif
  
  #define LAPACK_spotrf_base LAPACK_GLOBAL(spotrf,SPOTRF)
@@ -239,7 +239,7 @@ index 0ed9ad01a..88393b787 100644
      char const* uplo,
      lapack_int const* n,
      float* A, lapack_int const* lda,
-@@ -13657,7 +13657,7 @@ lapack_int LAPACK_spotrf_base(
+@@ -13799,7 +13799,7 @@ lapack_int LAPACK_spotrf_base(
  #endif
  
  #define LAPACK_zpotrf_base LAPACK_GLOBAL(zpotrf,ZPOTRF)
@@ -248,7 +248,7 @@ index 0ed9ad01a..88393b787 100644
      char const* uplo,
      lapack_int const* n,
      lapack_complex_double* A, lapack_int const* lda,
-@@ -22315,7 +22315,7 @@ void LAPACK_ztrsyl3_base(
+@@ -22457,7 +22457,7 @@ void LAPACK_ztrsyl3_base(
  #endif
  
  #define LAPACK_ctrtri_base LAPACK_GLOBAL(ctrtri,CTRTRI)
@@ -257,7 +257,7 @@ index 0ed9ad01a..88393b787 100644
      char const* uplo, char const* diag,
      lapack_int const* n,
      lapack_complex_float* A, lapack_int const* lda,
-@@ -22331,7 +22331,7 @@ lapack_int LAPACK_ctrtri_base(
+@@ -22473,7 +22473,7 @@ lapack_int LAPACK_ctrtri_base(
  #endif
  
  #define LAPACK_dtrtri_base LAPACK_GLOBAL(dtrtri,DTRTRI)
@@ -266,7 +266,7 @@ index 0ed9ad01a..88393b787 100644
      char const* uplo, char const* diag,
      lapack_int const* n,
      double* A, lapack_int const* lda,
-@@ -22347,7 +22347,7 @@ lapack_int LAPACK_dtrtri_base(
+@@ -22489,7 +22489,7 @@ lapack_int LAPACK_dtrtri_base(
  #endif
  
  #define LAPACK_strtri_base LAPACK_GLOBAL(strtri,STRTRI)
@@ -275,7 +275,7 @@ index 0ed9ad01a..88393b787 100644
      char const* uplo, char const* diag,
      lapack_int const* n,
      float* A, lapack_int const* lda,
-@@ -22363,7 +22363,7 @@ lapack_int LAPACK_strtri_base(
+@@ -22505,7 +22505,7 @@ lapack_int LAPACK_strtri_base(
  #endif
  
  #define LAPACK_ztrtri_base LAPACK_GLOBAL(ztrtri,ZTRTRI)
@@ -285,5 +285,5 @@ index 0ed9ad01a..88393b787 100644
      lapack_int const* n,
      lapack_complex_double* A, lapack_int const* lda,
 -- 
-2.55.0
+2.54.0
 

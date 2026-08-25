@@ -1,7 +1,7 @@
-From 0da4896e72822581b4538870f7015b6ed6175a27 Mon Sep 17 00:00:00 2001
+From cca45c98912ecdcc3d925cf9f0395b8e9596ca36 Mon Sep 17 00:00:00 2001
 From: Julien Jerphanion <git@jjerphan.xyz>
 Date: Thu, 13 Aug 2026 09:45:45 +0200
-Subject: Run OpenBLAS tests under node for emscripten
+Subject: [PATCH 10/14] Run OpenBLAS tests under node for emscripten
 
 Signed-off-by: Julien Jerphanion <git@jjerphan.xyz>
 ---
@@ -149,10 +149,10 @@ index f4e947549..99013e398 100644
  endif
  endif
 diff --git a/utest/Makefile b/utest/Makefile
-index 5b602b1b0..2d264df09 100644
+index b568e0e1e..114ddc058 100644
 --- a/utest/Makefile
 +++ b/utest/Makefile
-@@ -74,8 +74,8 @@ endif
+@@ -75,8 +75,8 @@ endif
  
  run_test: $(UTESTBIN) $(UTESTEXTBIN)
  ifneq ($(CROSS), 1)
@@ -164,5 +164,5 @@ index 5b602b1b0..2d264df09 100644
  
  clean:
 -- 
-2.55.0
+2.54.0
 

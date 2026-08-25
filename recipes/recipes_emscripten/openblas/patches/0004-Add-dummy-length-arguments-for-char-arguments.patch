@@ -1,176 +1,730 @@
-From fde93b1e995fe8a5b0e22c2b6575b483589a1ce9 Mon Sep 17 00:00:00 2001
+From 15a97208bd8f4040f1d13f7ecccea49ef04dd808 Mon Sep 17 00:00:00 2001
 From: Ian Thomas <ianthomas23@gmail.com>
 Date: Mon, 8 Dec 2025 07:59:50 +0000
-Subject: [PATCH 4/8] Add dummy length arguments for char arguments
+Subject: [PATCH 04/14] Add dummy length arguments for char arguments
 
 Co-authored-by: Julien Jerphanion <git@jjerphan.xyz>
 ---
- common_interface.h          | 552 ++++++++++++++++++------------------
- interface/gbmv.c            |   2 +-
- interface/gemm.c            |   2 +-
- interface/gemmt.c           |   6 +-
- interface/gemv.c            |   4 +-
- interface/lapack/getrf.c    |   2 +-
- interface/lapack/getrs.c    |   2 +-
- interface/lapack/lauu2.c    |   2 +-
- interface/lapack/lauum.c    |   2 +-
- interface/lapack/potf2.c    |   2 +-
- interface/lapack/potrf.c    |   4 +-
- interface/lapack/potri.c    |   2 +-
- interface/lapack/trti2.c    |   2 +-
- interface/lapack/trtri.c    |   2 +-
- interface/lapack/trtrs.c    |   2 +-
- interface/lapack/zgetrs.c   |   2 +-
- interface/lapack/zlauu2.c   |   2 +-
- interface/lapack/zlauum.c   |   2 +-
- interface/lapack/zpotf2.c   |   2 +-
- interface/lapack/zpotrf.c   |   2 +-
- interface/lapack/zpotri.c   |   2 +-
- interface/lapack/ztrti2.c   |   2 +-
- interface/lapack/ztrtri.c   |   2 +-
- interface/lapack/ztrtrs.c   |   2 +-
- interface/sbmv.c            |   2 +-
- interface/spmv.c            |   2 +-
- interface/spr.c             |   4 +-
- interface/spr2.c            |   2 +-
- interface/symm.c            |   4 +-
- interface/symv.c            |   2 +-
- interface/syr.c             |   6 +-
- interface/syr2.c            |   4 +-
- interface/syr2k.c           |   2 +-
- interface/syrk.c            |   2 +-
- interface/tbmv.c            |   2 +-
- interface/tbsv.c            |   2 +-
- interface/tpmv.c            |   2 +-
- interface/tpsv.c            |   2 +-
- interface/trmv.c            |   2 +-
- interface/trsm.c            |   4 +-
- interface/trsv.c            |   2 +-
- interface/zgbmv.c           |   4 +-
- interface/zgemv.c           |   8 +-
- interface/zhbmv.c           |   2 +-
- interface/zhemv.c           |   2 +-
- interface/zher.c            |   2 +-
- interface/zher2.c           |   2 +-
- interface/zhpmv.c           |   2 +-
- interface/zhpr.c            |   2 +-
- interface/zhpr2.c           |   2 +-
- interface/zsbmv.c           |   2 +-
- interface/zspmv.c           |   2 +-
- interface/zspr.c            |   2 +-
- interface/zspr2.c           |   2 +-
- interface/zsymv.c           |   2 +-
- interface/zsyr.c            |   2 +-
- interface/zsyr2.c           |   2 +-
- interface/ztbmv.c           |   2 +-
- interface/ztbsv.c           |   4 +-
- interface/ztpmv.c           |   4 +-
- interface/ztpsv.c           |   4 +-
- interface/ztrmv.c           |   4 +-
- interface/ztrsv.c           |   4 +-
- kernel/generic/lsame.c      |   2 +-
- lapack/laed3/laed3_single.c |  20 +-
- 65 files changed, 368 insertions(+), 368 deletions(-)
+ common_interface.h          | 1408 +++++++++++++++++------------------
+ interface/gbmv.c            |    2 +-
+ interface/gemm.c            |    2 +-
+ interface/gemmt.c           |    6 +-
+ interface/gemv.c            |    4 +-
+ interface/lapack/getrf.c    |    2 +-
+ interface/lapack/getrs.c    |    2 +-
+ interface/lapack/lauu2.c    |    2 +-
+ interface/lapack/lauum.c    |    2 +-
+ interface/lapack/potf2.c    |    2 +-
+ interface/lapack/potrf.c    |    4 +-
+ interface/lapack/potri.c    |    2 +-
+ interface/lapack/trti2.c    |    2 +-
+ interface/lapack/trtri.c    |    2 +-
+ interface/lapack/trtrs.c    |    2 +-
+ interface/lapack/zgetrs.c   |    2 +-
+ interface/lapack/zlauu2.c   |    2 +-
+ interface/lapack/zlauum.c   |    2 +-
+ interface/lapack/zpotf2.c   |    2 +-
+ interface/lapack/zpotrf.c   |    2 +-
+ interface/lapack/zpotri.c   |    2 +-
+ interface/lapack/ztrti2.c   |    2 +-
+ interface/lapack/ztrtri.c   |    2 +-
+ interface/lapack/ztrtrs.c   |    2 +-
+ interface/sbmv.c            |    2 +-
+ interface/spmv.c            |    2 +-
+ interface/spr.c             |    4 +-
+ interface/spr2.c            |    2 +-
+ interface/symm.c            |    4 +-
+ interface/symv.c            |    2 +-
+ interface/syr.c             |    6 +-
+ interface/syr2.c            |    4 +-
+ interface/syr2k.c           |    2 +-
+ interface/syrk.c            |    2 +-
+ interface/tbmv.c            |    2 +-
+ interface/tbsv.c            |    2 +-
+ interface/tpmv.c            |    2 +-
+ interface/tpsv.c            |    2 +-
+ interface/trmv.c            |    2 +-
+ interface/trsm.c            |    4 +-
+ interface/trsv.c            |    2 +-
+ interface/zgbmv.c           |    4 +-
+ interface/zgemv.c           |    8 +-
+ interface/zhbmv.c           |    2 +-
+ interface/zhemv.c           |    2 +-
+ interface/zher.c            |    2 +-
+ interface/zher2.c           |    2 +-
+ interface/zhpmv.c           |    2 +-
+ interface/zhpr.c            |    2 +-
+ interface/zhpr2.c           |    2 +-
+ interface/zsbmv.c           |    2 +-
+ interface/zspmv.c           |    2 +-
+ interface/zspr.c            |    2 +-
+ interface/zspr2.c           |    2 +-
+ interface/zsymv.c           |    2 +-
+ interface/zsyr.c            |    2 +-
+ interface/zsyr2.c           |    2 +-
+ interface/ztbmv.c           |    2 +-
+ interface/ztbsv.c           |    4 +-
+ interface/ztpmv.c           |    4 +-
+ interface/ztpsv.c           |    4 +-
+ interface/ztrmv.c           |    4 +-
+ interface/ztrsv.c           |    4 +-
+ kernel/generic/lsame.c      |    2 +-
+ lapack/laed3/laed3_single.c |   20 +-
+ 65 files changed, 796 insertions(+), 796 deletions(-)
 
 diff --git a/common_interface.h b/common_interface.h
-index 26107634d..e4576e60a 100644
+index 4bd307ea3..e4576e60a 100644
 --- a/common_interface.h
 +++ b/common_interface.h
-@@ -258,232 +258,232 @@ void BLASFUNC(xgerc)(blasint *,    blasint *, xdouble *, xdouble *, blasint *,
+@@ -46,26 +46,26 @@ extern "C" {
+ 
+ int    BLASFUNC(xerbla)(char *, blasint *info, blasint);
+ 
+-OPENBLAS_EXPORT void extern openblas_set_num_threads_(int *);
++void    openblas_set_num_threads_(int *);
+ 
+ /*Set the threading backend to a custom callback.*/
+ typedef void (*openblas_dojob_callback)(int thread_num, void *jobdata, int dojob_data);
+ typedef void (*openblas_threads_callback)(int sync, openblas_dojob_callback dojob, int numjobs, size_t jobdata_elsize, void *jobdata, int dojob_data);
+ extern openblas_threads_callback openblas_threads_callback_;
+ 
+-FLOATRET  OPENBLAS_API(sdot)  (blasint *, float  *, blasint *, float  *, blasint *);
+-FLOATRET  OPENBLAS_API(sdsdot)(blasint *, float  *,        float  *, blasint *, float  *, blasint *);
++FLOATRET  BLASFUNC(sdot)  (blasint *, float  *, blasint *, float  *, blasint *);
++FLOATRET  BLASFUNC(sdsdot)(blasint *, float  *,        float  *, blasint *, float  *, blasint *);
+ 
+-double OPENBLAS_API(dsdot) (blasint *, float  *, blasint *, float  *, blasint *);
+-double OPENBLAS_API(ddot)  (blasint *, double *, blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qdot)  (blasint *, xdouble *, blasint *, xdouble *, blasint *);
++double BLASFUNC(dsdot) (blasint *, float  *, blasint *, float  *, blasint *);
++double BLASFUNC(ddot)  (blasint *, double *, blasint *, double *, blasint *);
++xdouble BLASFUNC(qdot)  (blasint *, xdouble *, blasint *, xdouble *, blasint *);
+ 
+-void   OPENBLAS_API(bscal) (blasint *,  bfloat16  *, bfloat16  *, blasint *);
+-float  OPENBLAS_API(sbdot)     (blasint *, bfloat16 *, blasint *, bfloat16 *, blasint *);
+-void   OPENBLAS_API(sbstobf16) (blasint *, float *,    blasint *, bfloat16 *, blasint *);
+-void   OPENBLAS_API(sbdtobf16) (blasint *, double *,   blasint *, bfloat16 *, blasint *);
+-void   OPENBLAS_API(sbf16tos)  (blasint *, bfloat16 *, blasint *, float *,    blasint *);
+-void   OPENBLAS_API(dbf16tod)  (blasint *, bfloat16 *, blasint *, double *,   blasint *);
++void   BLASFUNC(bscal) (blasint *,  bfloat16  *, bfloat16  *, blasint *);
++float  BLASFUNC(sbdot)     (blasint *, bfloat16 *, blasint *, bfloat16 *, blasint *);
++void   BLASFUNC(sbstobf16) (blasint *, float *,    blasint *, bfloat16 *, blasint *);
++void   BLASFUNC(sbdtobf16) (blasint *, double *,   blasint *, bfloat16 *, blasint *);
++void   BLASFUNC(sbf16tos)  (blasint *, bfloat16 *, blasint *, float *,    blasint *);
++void   BLASFUNC(dbf16tod)  (blasint *, bfloat16 *, blasint *, double *,   blasint *);
+ 
+ #ifdef RETURN_BY_STRUCT
+ typedef struct {
+@@ -80,731 +80,731 @@ typedef struct {
+   xdouble r, i;
+ } myxcomplex_t;
+ 
+-myccomplex_t    OPENBLAS_API(cdotu)  (blasint *, float  *, blasint *, float  *, blasint *);
+-myccomplex_t    OPENBLAS_API(cdotc)  (blasint *, float  *, blasint *, float  *, blasint *);
+-myzcomplex_t    OPENBLAS_API(zdotu)  (blasint *, double  *, blasint *, double  *, blasint *);
+-myzcomplex_t    OPENBLAS_API(zdotc)  (blasint *, double  *, blasint *, double  *, blasint *);
+-myxcomplex_t    OPENBLAS_API(xdotu)  (blasint *, xdouble  *, blasint *, xdouble  *, blasint *);
+-myxcomplex_t    OPENBLAS_API(xdotc)  (blasint *, xdouble  *, blasint *, xdouble  *, blasint *);
++myccomplex_t    BLASFUNC(cdotu)  (blasint *, float  *, blasint *, float  *, blasint *);
++myccomplex_t    BLASFUNC(cdotc)  (blasint *, float  *, blasint *, float  *, blasint *);
++myzcomplex_t    BLASFUNC(zdotu)  (blasint *, double  *, blasint *, double  *, blasint *);
++myzcomplex_t    BLASFUNC(zdotc)  (blasint *, double  *, blasint *, double  *, blasint *);
++myxcomplex_t    BLASFUNC(xdotu)  (blasint *, xdouble  *, blasint *, xdouble  *, blasint *);
++myxcomplex_t    BLASFUNC(xdotc)  (blasint *, xdouble  *, blasint *, xdouble  *, blasint *);
+ 
+ #elif defined RETURN_BY_STACK
+-void  OPENBLAS_API(cdotu)  (openblas_complex_float   *,  blasint *, float  * , blasint *, float  *,  blasint *);
+-void  OPENBLAS_API(cdotc)  (openblas_complex_float   *,  blasint *, float  *,  blasint *, float  *,  blasint *);
+-void  OPENBLAS_API(zdotu)  (openblas_complex_double  *, blasint *, double  *, blasint *, double  *, blasint *);
+-void  OPENBLAS_API(zdotc)  (openblas_complex_double  *, blasint *, double  *, blasint *, double  *, blasint *);
+-void  OPENBLAS_API(xdotu)  (openblas_complex_xdouble *, blasint *, xdouble  *, blasint *, xdouble  *, blasint *);
+-void  OPENBLAS_API(xdotc)  (openblas_complex_xdouble *, blasint *, xdouble  *, blasint *, xdouble  *, blasint *);
++void  BLASFUNC(cdotu)  (openblas_complex_float   *,  blasint *, float  * , blasint *, float  *,  blasint *);
++void  BLASFUNC(cdotc)  (openblas_complex_float   *,  blasint *, float  *,  blasint *, float  *,  blasint *);
++void  BLASFUNC(zdotu)  (openblas_complex_double  *, blasint *, double  *, blasint *, double  *, blasint *);
++void  BLASFUNC(zdotc)  (openblas_complex_double  *, blasint *, double  *, blasint *, double  *, blasint *);
++void  BLASFUNC(xdotu)  (openblas_complex_xdouble *, blasint *, xdouble  *, blasint *, xdouble  *, blasint *);
++void  BLASFUNC(xdotc)  (openblas_complex_xdouble *, blasint *, xdouble  *, blasint *, xdouble  *, blasint *);
+ #else
+-openblas_complex_float   OPENBLAS_API(cdotu)  (blasint *, float  *, blasint *, float  *, blasint *);
+-openblas_complex_float   OPENBLAS_API(cdotc)  (blasint *, float  *, blasint *, float  *, blasint *);
+-openblas_complex_double  OPENBLAS_API(zdotu)  (blasint *, double  *, blasint *, double  *, blasint *);
+-openblas_complex_double  OPENBLAS_API(zdotc)  (blasint *, double  *, blasint *, double  *, blasint *);
+-openblas_complex_xdouble OPENBLAS_API(xdotu)  (blasint *, xdouble  *, blasint *, xdouble  *, blasint *);
+-openblas_complex_xdouble OPENBLAS_API(xdotc)  (blasint *, xdouble  *, blasint *, xdouble  *, blasint *);
++openblas_complex_float   BLASFUNC(cdotu)  (blasint *, float  *, blasint *, float  *, blasint *);
++openblas_complex_float   BLASFUNC(cdotc)  (blasint *, float  *, blasint *, float  *, blasint *);
++openblas_complex_double  BLASFUNC(zdotu)  (blasint *, double  *, blasint *, double  *, blasint *);
++openblas_complex_double  BLASFUNC(zdotc)  (blasint *, double  *, blasint *, double  *, blasint *);
++openblas_complex_xdouble BLASFUNC(xdotu)  (blasint *, xdouble  *, blasint *, xdouble  *, blasint *);
++openblas_complex_xdouble BLASFUNC(xdotc)  (blasint *, xdouble  *, blasint *, xdouble  *, blasint *);
+ #endif
+ 
+-void    OPENBLAS_API(saxpy) (blasint *, float  *, float  *, blasint *, float  *, blasint *);
+-void    OPENBLAS_API(daxpy) (blasint *, double *, double *, blasint *, double *, blasint *);
+-void    OPENBLAS_API(qaxpy) (blasint *, xdouble *, xdouble *, blasint *, xdouble *, blasint *);
+-void    OPENBLAS_API(caxpy) (blasint *, float  *, float  *, blasint *, float  *, blasint *);
+-void    OPENBLAS_API(zaxpy) (blasint *, double *, double *, blasint *, double *, blasint *);
+-void    OPENBLAS_API(xaxpy) (blasint *, xdouble *, xdouble *, blasint *, xdouble *, blasint *);
+-void    OPENBLAS_API(caxpyc)(blasint *, float  *, float  *, blasint *, float  *, blasint *);
+-void    OPENBLAS_API(zaxpyc)(blasint *, double *, double *, blasint *, double *, blasint *);
+-void    OPENBLAS_API(xaxpyc)(blasint *, xdouble *, xdouble *, blasint *, xdouble *, blasint *);
+-
+-void    OPENBLAS_API(scopy) (blasint *, float  *, blasint *, float  *, blasint *);
+-void    OPENBLAS_API(dcopy) (blasint *, double *, blasint *, double *, blasint *);
+-void    OPENBLAS_API(qcopy) (blasint *, xdouble *, blasint *, xdouble *, blasint *);
+-void    OPENBLAS_API(ccopy) (blasint *, float  *, blasint *, float  *, blasint *);
+-void    OPENBLAS_API(zcopy) (blasint *, double *, blasint *, double *, blasint *);
+-void    OPENBLAS_API(xcopy) (blasint *, xdouble *, blasint *, xdouble *, blasint *);
+-
+-void    OPENBLAS_API(sswap) (blasint *, float  *, blasint *, float  *, blasint *);
+-void    OPENBLAS_API(dswap) (blasint *, double *, blasint *, double *, blasint *);
+-void    OPENBLAS_API(qswap) (blasint *, xdouble *, blasint *, xdouble *, blasint *);
+-void    OPENBLAS_API(cswap) (blasint *, float  *, blasint *, float  *, blasint *);
+-void    OPENBLAS_API(zswap) (blasint *, double *, blasint *, double *, blasint *);
+-void    OPENBLAS_API(xswap) (blasint *, xdouble *, blasint *, xdouble *, blasint *);
+-
+-FLOATRET  OPENBLAS_API(sasum) (blasint *, float  *, blasint *);
+-FLOATRET  OPENBLAS_API(scasum)(blasint *, float  *, blasint *);
+-double OPENBLAS_API(dasum) (blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qasum) (blasint *, xdouble *, blasint *);
+-double OPENBLAS_API(dzasum)(blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qxasum)(blasint *, xdouble *, blasint *);
+-
+-FLOATRET  OPENBLAS_API(ssum) (blasint *, float  *, blasint *);
+-FLOATRET  OPENBLAS_API(scsum)(blasint *, float  *, blasint *);
+-double OPENBLAS_API(dsum) (blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qsum) (blasint *, xdouble *, blasint *);
+-double OPENBLAS_API(dzsum)(blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qxsum)(blasint *, xdouble *, blasint *);
+-
+-blasint    OPENBLAS_API(isamax)(blasint *, float  *, blasint *);
+-blasint    OPENBLAS_API(idamax)(blasint *, double *, blasint *);
+-blasint    OPENBLAS_API(iqamax)(blasint *, xdouble *, blasint *);
+-blasint    OPENBLAS_API(icamax)(blasint *, float  *, blasint *);
+-blasint    OPENBLAS_API(izamax)(blasint *, double *, blasint *);
+-blasint    OPENBLAS_API(ixamax)(blasint *, xdouble *, blasint *);
+-
+-blasint    OPENBLAS_API(ismax) (blasint *, float  *, blasint *);
+-blasint    OPENBLAS_API(idmax) (blasint *, double *, blasint *);
+-blasint    OPENBLAS_API(iqmax) (blasint *, xdouble *, blasint *);
+-blasint    OPENBLAS_API(icmax) (blasint *, float  *, blasint *);
+-blasint    OPENBLAS_API(izmax) (blasint *, double *, blasint *);
+-blasint    OPENBLAS_API(ixmax) (blasint *, xdouble *, blasint *);
+-
+-blasint    OPENBLAS_API(isamin)(blasint *, float  *, blasint *);
+-blasint    OPENBLAS_API(idamin)(blasint *, double *, blasint *);
+-blasint    OPENBLAS_API(iqamin)(blasint *, xdouble *, blasint *);
+-blasint    OPENBLAS_API(icamin)(blasint *, float  *, blasint *);
+-blasint    OPENBLAS_API(izamin)(blasint *, double *, blasint *);
+-blasint    OPENBLAS_API(ixamin)(blasint *, xdouble *, blasint *);
+-
+-blasint    OPENBLAS_API(ismin)(blasint *, float  *, blasint *);
+-blasint    OPENBLAS_API(idmin)(blasint *, double *, blasint *);
+-blasint    OPENBLAS_API(iqmin)(blasint *, xdouble *, blasint *);
+-blasint    OPENBLAS_API(icmin)(blasint *, float  *, blasint *);
+-blasint    OPENBLAS_API(izmin)(blasint *, double *, blasint *);
+-blasint    OPENBLAS_API(ixmin)(blasint *, xdouble *, blasint *);
+-
+-FLOATRET  OPENBLAS_API(samax) (blasint *, float  *, blasint *);
+-double OPENBLAS_API(damax) (blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qamax) (blasint *, xdouble *, blasint *);
+-FLOATRET  OPENBLAS_API(scamax)(blasint *, float  *, blasint *);
+-double OPENBLAS_API(dzamax)(blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qxamax)(blasint *, xdouble *, blasint *);
+-
+-FLOATRET  OPENBLAS_API(samin) (blasint *, float  *, blasint *);
+-double OPENBLAS_API(damin) (blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qamin) (blasint *, xdouble *, blasint *);
+-FLOATRET  OPENBLAS_API(scamin)(blasint *, float  *, blasint *);
+-double OPENBLAS_API(dzamin)(blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qxamin)(blasint *, xdouble *, blasint *);
+-
+-FLOATRET  OPENBLAS_API(smax)  (blasint *, float  *, blasint *);
+-double OPENBLAS_API(dmax)  (blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qmax)  (blasint *, xdouble *, blasint *);
+-FLOATRET  OPENBLAS_API(scmax) (blasint *, float  *, blasint *);
+-double OPENBLAS_API(dzmax) (blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qxmax) (blasint *, xdouble *, blasint *);
+-
+-FLOATRET  OPENBLAS_API(smin)  (blasint *, float  *, blasint *);
+-double OPENBLAS_API(dmin)  (blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qmin)  (blasint *, xdouble *, blasint *);
+-FLOATRET  OPENBLAS_API(scmin) (blasint *, float  *, blasint *);
+-double OPENBLAS_API(dzmin) (blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qxmin) (blasint *, xdouble *, blasint *);
+-
+-void    OPENBLAS_API(sscal) (blasint *,  float  *, float  *, blasint *);
+-void    OPENBLAS_API(dscal) (blasint *,  double *, double *, blasint *);
+-void    OPENBLAS_API(qscal) (blasint *,  xdouble *, xdouble *, blasint *);
+-void    OPENBLAS_API(cscal) (blasint *,  float  *, float  *, blasint *);
+-void    OPENBLAS_API(zscal) (blasint *,  double *, double *, blasint *);
+-void    OPENBLAS_API(xscal) (blasint *,  xdouble *, xdouble *, blasint *);
+-void    OPENBLAS_API(csscal)(blasint *,  float  *, float  *, blasint *);
+-void    OPENBLAS_API(zdscal)(blasint *,  double *, double *, blasint *);
+-void    OPENBLAS_API(xqscal)(blasint *,  xdouble *, xdouble *, blasint *);
+-
+-FLOATRET  OPENBLAS_API(snrm2) (blasint *, float  *, blasint *);
+-FLOATRET  OPENBLAS_API(scnrm2)(blasint *, float  *, blasint *);
+-
+-double OPENBLAS_API(dnrm2) (blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qnrm2) (blasint *, xdouble *, blasint *);
+-double OPENBLAS_API(dznrm2)(blasint *, double *, blasint *);
+-xdouble OPENBLAS_API(qxnrm2)(blasint *, xdouble *, blasint *);
+-
+-void  OPENBLAS_API(srot)  (blasint *, float  *, blasint *, float  *, blasint *, float  *, float  *);
+-void  OPENBLAS_API(drot)  (blasint *, double *, blasint *, double *, blasint *, double *, double *);
+-void  OPENBLAS_API(qrot)  (blasint *, xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *);
+-void  OPENBLAS_API(csrot) (blasint *, float  *, blasint *, float  *, blasint *, float  *, float  *);
+-void  OPENBLAS_API(zdrot) (blasint *, double *, blasint *, double *, blasint *, double *, double *);
+-void  OPENBLAS_API(xqrot) (blasint *, xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *);
+-
+-void  OPENBLAS_API(srotg) (float  *, float  *, float  *, float  *);
+-void  OPENBLAS_API(drotg) (double *, double *, double *, double *);
+-void  OPENBLAS_API(qrotg) (xdouble *, xdouble *, xdouble *, xdouble *);
+-void  OPENBLAS_API(crotg) (float  *, float  *, float  *, float  *);
+-void  OPENBLAS_API(zrotg) (double *, double *, double *, double *);
+-void  OPENBLAS_API(xrotg) (xdouble *, xdouble *, xdouble *, xdouble *);
+-
+-void  OPENBLAS_API(srotmg)(float  *, float  *, float  *, float  *, float  *);
+-void  OPENBLAS_API(drotmg)(double *, double *, double *, double *, double *);
+-
+-void  OPENBLAS_API(srotm) (blasint *, float  *, blasint *, float  *, blasint *, float  *);
+-void  OPENBLAS_API(drotm) (blasint *, double *, blasint *, double *, blasint *, double *);
+-void  OPENBLAS_API(qrotm) (blasint *, xdouble *, blasint *, xdouble *, blasint *, xdouble *);
++void    BLASFUNC(saxpy) (blasint *, float  *, float  *, blasint *, float  *, blasint *);
++void    BLASFUNC(daxpy) (blasint *, double *, double *, blasint *, double *, blasint *);
++void    BLASFUNC(qaxpy) (blasint *, xdouble *, xdouble *, blasint *, xdouble *, blasint *);
++void    BLASFUNC(caxpy) (blasint *, float  *, float  *, blasint *, float  *, blasint *);
++void    BLASFUNC(zaxpy) (blasint *, double *, double *, blasint *, double *, blasint *);
++void    BLASFUNC(xaxpy) (blasint *, xdouble *, xdouble *, blasint *, xdouble *, blasint *);
++void    BLASFUNC(caxpyc)(blasint *, float  *, float  *, blasint *, float  *, blasint *);
++void    BLASFUNC(zaxpyc)(blasint *, double *, double *, blasint *, double *, blasint *);
++void    BLASFUNC(xaxpyc)(blasint *, xdouble *, xdouble *, blasint *, xdouble *, blasint *);
++
++void    BLASFUNC(scopy) (blasint *, float  *, blasint *, float  *, blasint *);
++void    BLASFUNC(dcopy) (blasint *, double *, blasint *, double *, blasint *);
++void    BLASFUNC(qcopy) (blasint *, xdouble *, blasint *, xdouble *, blasint *);
++void    BLASFUNC(ccopy) (blasint *, float  *, blasint *, float  *, blasint *);
++void    BLASFUNC(zcopy) (blasint *, double *, blasint *, double *, blasint *);
++void    BLASFUNC(xcopy) (blasint *, xdouble *, blasint *, xdouble *, blasint *);
++
++void    BLASFUNC(sswap) (blasint *, float  *, blasint *, float  *, blasint *);
++void    BLASFUNC(dswap) (blasint *, double *, blasint *, double *, blasint *);
++void    BLASFUNC(qswap) (blasint *, xdouble *, blasint *, xdouble *, blasint *);
++void    BLASFUNC(cswap) (blasint *, float  *, blasint *, float  *, blasint *);
++void    BLASFUNC(zswap) (blasint *, double *, blasint *, double *, blasint *);
++void    BLASFUNC(xswap) (blasint *, xdouble *, blasint *, xdouble *, blasint *);
++
++FLOATRET  BLASFUNC(sasum) (blasint *, float  *, blasint *);
++FLOATRET  BLASFUNC(scasum)(blasint *, float  *, blasint *);
++double BLASFUNC(dasum) (blasint *, double *, blasint *);
++xdouble BLASFUNC(qasum) (blasint *, xdouble *, blasint *);
++double BLASFUNC(dzasum)(blasint *, double *, blasint *);
++xdouble BLASFUNC(qxasum)(blasint *, xdouble *, blasint *);
++
++FLOATRET  BLASFUNC(ssum) (blasint *, float  *, blasint *);
++FLOATRET  BLASFUNC(scsum)(blasint *, float  *, blasint *);
++double BLASFUNC(dsum) (blasint *, double *, blasint *);
++xdouble BLASFUNC(qsum) (blasint *, xdouble *, blasint *);
++double BLASFUNC(dzsum)(blasint *, double *, blasint *);
++xdouble BLASFUNC(qxsum)(blasint *, xdouble *, blasint *);
++
++blasint    BLASFUNC(isamax)(blasint *, float  *, blasint *);
++blasint    BLASFUNC(idamax)(blasint *, double *, blasint *);
++blasint    BLASFUNC(iqamax)(blasint *, xdouble *, blasint *);
++blasint    BLASFUNC(icamax)(blasint *, float  *, blasint *);
++blasint    BLASFUNC(izamax)(blasint *, double *, blasint *);
++blasint    BLASFUNC(ixamax)(blasint *, xdouble *, blasint *);
++
++blasint    BLASFUNC(ismax) (blasint *, float  *, blasint *);
++blasint    BLASFUNC(idmax) (blasint *, double *, blasint *);
++blasint    BLASFUNC(iqmax) (blasint *, xdouble *, blasint *);
++blasint    BLASFUNC(icmax) (blasint *, float  *, blasint *);
++blasint    BLASFUNC(izmax) (blasint *, double *, blasint *);
++blasint    BLASFUNC(ixmax) (blasint *, xdouble *, blasint *);
++
++blasint    BLASFUNC(isamin)(blasint *, float  *, blasint *);
++blasint    BLASFUNC(idamin)(blasint *, double *, blasint *);
++blasint    BLASFUNC(iqamin)(blasint *, xdouble *, blasint *);
++blasint    BLASFUNC(icamin)(blasint *, float  *, blasint *);
++blasint    BLASFUNC(izamin)(blasint *, double *, blasint *);
++blasint    BLASFUNC(ixamin)(blasint *, xdouble *, blasint *);
++
++blasint    BLASFUNC(ismin)(blasint *, float  *, blasint *);
++blasint    BLASFUNC(idmin)(blasint *, double *, blasint *);
++blasint    BLASFUNC(iqmin)(blasint *, xdouble *, blasint *);
++blasint    BLASFUNC(icmin)(blasint *, float  *, blasint *);
++blasint    BLASFUNC(izmin)(blasint *, double *, blasint *);
++blasint    BLASFUNC(ixmin)(blasint *, xdouble *, blasint *);
++
++FLOATRET  BLASFUNC(samax) (blasint *, float  *, blasint *);
++double BLASFUNC(damax) (blasint *, double *, blasint *);
++xdouble BLASFUNC(qamax) (blasint *, xdouble *, blasint *);
++FLOATRET  BLASFUNC(scamax)(blasint *, float  *, blasint *);
++double BLASFUNC(dzamax)(blasint *, double *, blasint *);
++xdouble BLASFUNC(qxamax)(blasint *, xdouble *, blasint *);
++
++FLOATRET  BLASFUNC(samin) (blasint *, float  *, blasint *);
++double BLASFUNC(damin) (blasint *, double *, blasint *);
++xdouble BLASFUNC(qamin) (blasint *, xdouble *, blasint *);
++FLOATRET  BLASFUNC(scamin)(blasint *, float  *, blasint *);
++double BLASFUNC(dzamin)(blasint *, double *, blasint *);
++xdouble BLASFUNC(qxamin)(blasint *, xdouble *, blasint *);
++
++FLOATRET  BLASFUNC(smax)  (blasint *, float  *, blasint *);
++double BLASFUNC(dmax)  (blasint *, double *, blasint *);
++xdouble BLASFUNC(qmax)  (blasint *, xdouble *, blasint *);
++FLOATRET  BLASFUNC(scmax) (blasint *, float  *, blasint *);
++double BLASFUNC(dzmax) (blasint *, double *, blasint *);
++xdouble BLASFUNC(qxmax) (blasint *, xdouble *, blasint *);
++
++FLOATRET  BLASFUNC(smin)  (blasint *, float  *, blasint *);
++double BLASFUNC(dmin)  (blasint *, double *, blasint *);
++xdouble BLASFUNC(qmin)  (blasint *, xdouble *, blasint *);
++FLOATRET  BLASFUNC(scmin) (blasint *, float  *, blasint *);
++double BLASFUNC(dzmin) (blasint *, double *, blasint *);
++xdouble BLASFUNC(qxmin) (blasint *, xdouble *, blasint *);
++
++void    BLASFUNC(sscal) (blasint *,  float  *, float  *, blasint *);
++void    BLASFUNC(dscal) (blasint *,  double *, double *, blasint *);
++void    BLASFUNC(qscal) (blasint *,  xdouble *, xdouble *, blasint *);
++void    BLASFUNC(cscal) (blasint *,  float  *, float  *, blasint *);
++void    BLASFUNC(zscal) (blasint *,  double *, double *, blasint *);
++void    BLASFUNC(xscal) (blasint *,  xdouble *, xdouble *, blasint *);
++void    BLASFUNC(csscal)(blasint *,  float  *, float  *, blasint *);
++void    BLASFUNC(zdscal)(blasint *,  double *, double *, blasint *);
++void    BLASFUNC(xqscal)(blasint *,  xdouble *, xdouble *, blasint *);
++
++FLOATRET  BLASFUNC(snrm2) (blasint *, float  *, blasint *);
++FLOATRET  BLASFUNC(scnrm2)(blasint *, float  *, blasint *);
++
++double BLASFUNC(dnrm2) (blasint *, double *, blasint *);
++xdouble BLASFUNC(qnrm2) (blasint *, xdouble *, blasint *);
++double BLASFUNC(dznrm2)(blasint *, double *, blasint *);
++xdouble BLASFUNC(qxnrm2)(blasint *, xdouble *, blasint *);
++
++void  BLASFUNC(srot)  (blasint *, float  *, blasint *, float  *, blasint *, float  *, float  *);
++void  BLASFUNC(drot)  (blasint *, double *, blasint *, double *, blasint *, double *, double *);
++void  BLASFUNC(qrot)  (blasint *, xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *);
++void  BLASFUNC(csrot) (blasint *, float  *, blasint *, float  *, blasint *, float  *, float  *);
++void  BLASFUNC(zdrot) (blasint *, double *, blasint *, double *, blasint *, double *, double *);
++void  BLASFUNC(xqrot) (blasint *, xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *);
++
++void  BLASFUNC(srotg) (float  *, float  *, float  *, float  *);
++void  BLASFUNC(drotg) (double *, double *, double *, double *);
++void  BLASFUNC(qrotg) (xdouble *, xdouble *, xdouble *, xdouble *);
++void  BLASFUNC(crotg) (float  *, float  *, float  *, float  *);
++void  BLASFUNC(zrotg) (double *, double *, double *, double *);
++void  BLASFUNC(xrotg) (xdouble *, xdouble *, xdouble *, xdouble *);
++
++void  BLASFUNC(srotmg)(float  *, float  *, float  *, float  *, float  *);
++void  BLASFUNC(drotmg)(double *, double *, double *, double *, double *);
++
++void  BLASFUNC(srotm) (blasint *, float  *, blasint *, float  *, blasint *, float  *);
++void  BLASFUNC(drotm) (blasint *, double *, blasint *, double *, blasint *, double *);
++void  BLASFUNC(qrotm) (blasint *, xdouble *, blasint *, xdouble *, blasint *, xdouble *);
+ 
+ /* Level 2 routines */
+ 
+-void OPENBLAS_API(sger)(blasint *,    blasint *, float *,  float *, blasint *,
++void BLASFUNC(sger)(blasint *,    blasint *, float *,  float *, blasint *,
+ 		   float *,  blasint *, float *,  blasint *);
+-void OPENBLAS_API(dger)(blasint *,    blasint *, double *, double *, blasint *,
++void BLASFUNC(dger)(blasint *,    blasint *, double *, double *, blasint *,
+ 		   double *, blasint *, double *, blasint *);
+-void OPENBLAS_API(qger)(blasint *,    blasint *, xdouble *, xdouble *, blasint *,
++void BLASFUNC(qger)(blasint *,    blasint *, xdouble *, xdouble *, blasint *,
+ 		   xdouble *, blasint *, xdouble *, blasint *);
+-void OPENBLAS_API(cgeru)(blasint *,    blasint *, float *,  float *, blasint *,
++void BLASFUNC(cgeru)(blasint *,    blasint *, float *,  float *, blasint *,
+ 		    float *,  blasint *, float *,  blasint *);
+-void OPENBLAS_API(cgerc)(blasint *,    blasint *, float *,  float *, blasint *,
++void BLASFUNC(cgerc)(blasint *,    blasint *, float *,  float *, blasint *,
+ 		    float *,  blasint *, float *,  blasint *);
+-void OPENBLAS_API(zgeru)(blasint *,    blasint *, double *, double *, blasint *,
++void BLASFUNC(zgeru)(blasint *,    blasint *, double *, double *, blasint *,
+ 		    double *, blasint *, double *, blasint *);
+-void OPENBLAS_API(zgerc)(blasint *,    blasint *, double *, double *, blasint *,
++void BLASFUNC(zgerc)(blasint *,    blasint *, double *, double *, blasint *,
+ 		    double *, blasint *, double *, blasint *);
+-void OPENBLAS_API(xgeru)(blasint *,    blasint *, xdouble *, xdouble *, blasint *,
++void BLASFUNC(xgeru)(blasint *,    blasint *, xdouble *, xdouble *, blasint *,
+ 		    xdouble *, blasint *, xdouble *, blasint *);
+-void OPENBLAS_API(xgerc)(blasint *,    blasint *, xdouble *, xdouble *, blasint *,
++void BLASFUNC(xgerc)(blasint *,    blasint *, xdouble *, xdouble *, blasint *,
  		    xdouble *, blasint *, xdouble *, blasint *);
  
- void BLASFUNC(bgemv)(char *, blasint *, blasint *, bfloat16  *, bfloat16 *, blasint *,
+-void OPENBLAS_API(bgemv)(char *, blasint *, blasint *, bfloat16  *, bfloat16 *, blasint *,
 -            bfloat16  *, blasint *, bfloat16  *, bfloat16  *, blasint *);
-+            bfloat16  *, blasint *, bfloat16  *, bfloat16  *, blasint *, int);
- void BLASFUNC(sbgemv)(char *, blasint *, blasint *, float  *, bfloat16 *, blasint *,
+-void OPENBLAS_API(sbgemv)(char *, blasint *, blasint *, float  *, bfloat16 *, blasint *,
 -            bfloat16  *, blasint *, float  *, float  *, blasint *);
-+            bfloat16  *, blasint *, float  *, float  *, blasint *, int);
- void BLASFUNC(shgemv)(char *, blasint *, blasint *, float  *, hfloat16 *, blasint *,
+-void OPENBLAS_API(shgemv)(char *, blasint *, blasint *, float  *, hfloat16 *, blasint *,
 -            hfloat16  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(sgemv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
+-		    float  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(dgemv)(char *, blasint *, blasint *, double *, double *, blasint *,
+-		    double *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(qgemv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
+-void OPENBLAS_API(cgemv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
+-		    float  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(zgemv)(char *, blasint *, blasint *, double *, double *, blasint *,
+-		    double *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(xgemv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(strsv) (char *, char *, char *, blasint *, float  *, blasint *,
+-		     float  *, blasint *);
+-void OPENBLAS_API(dtrsv) (char *, char *, char *, blasint *, double *, blasint *,
+-		     double *, blasint *);
+-void OPENBLAS_API(qtrsv) (char *, char *, char *, blasint *, xdouble *, blasint *,
+-		     xdouble *, blasint *);
+-void OPENBLAS_API(ctrsv) (char *, char *, char *, blasint *, float  *, blasint *,
+-		     float  *, blasint *);
+-void OPENBLAS_API(ztrsv) (char *, char *, char *, blasint *, double *, blasint *,
+-		     double *, blasint *);
+-void OPENBLAS_API(xtrsv) (char *, char *, char *, blasint *, xdouble *, blasint *,
+-		     xdouble *, blasint *);
+-
+-void OPENBLAS_API(strmv) (char *, char *, char *, blasint *, float  *, blasint *,
+-		     float  *, blasint *);
+-void OPENBLAS_API(dtrmv) (char *, char *, char *, blasint *, double *, blasint *,
+-		     double *, blasint *);
+-void OPENBLAS_API(qtrmv) (char *, char *, char *, blasint *, xdouble *, blasint *,
+-		     xdouble *, blasint *);
+-void OPENBLAS_API(ctrmv) (char *, char *, char *, blasint *, float  *, blasint *,
+-		     float  *, blasint *);
+-void OPENBLAS_API(ztrmv) (char *, char *, char *, blasint *, double *, blasint *,
+-		     double *, blasint *);
+-void OPENBLAS_API(xtrmv) (char *, char *, char *, blasint *, xdouble *, blasint *,
+-		     xdouble *, blasint *);
+-
+-void OPENBLAS_API(stpsv) (char *, char *, char *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(dtpsv) (char *, char *, char *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(qtpsv) (char *, char *, char *, blasint *, xdouble *, xdouble *, blasint *);
+-void OPENBLAS_API(ctpsv) (char *, char *, char *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(ztpsv) (char *, char *, char *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(xtpsv) (char *, char *, char *, blasint *, xdouble *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(stpmv) (char *, char *, char *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(dtpmv) (char *, char *, char *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(qtpmv) (char *, char *, char *, blasint *, xdouble *, xdouble *, blasint *);
+-void OPENBLAS_API(ctpmv) (char *, char *, char *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(ztpmv) (char *, char *, char *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(xtpmv) (char *, char *, char *, blasint *, xdouble *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(stbmv) (char *, char *, char *, blasint *, blasint *, float  *, blasint *, float  *, blasint *);
+-void OPENBLAS_API(dtbmv) (char *, char *, char *, blasint *, blasint *, double *, blasint *, double *, blasint *);
+-void OPENBLAS_API(qtbmv) (char *, char *, char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
+-void OPENBLAS_API(ctbmv) (char *, char *, char *, blasint *, blasint *, float  *, blasint *, float  *, blasint *);
+-void OPENBLAS_API(ztbmv) (char *, char *, char *, blasint *, blasint *, double *, blasint *, double *, blasint *);
+-void OPENBLAS_API(xtbmv) (char *, char *, char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(stbsv) (char *, char *, char *, blasint *, blasint *, float  *, blasint *, float  *, blasint *);
+-void OPENBLAS_API(dtbsv) (char *, char *, char *, blasint *, blasint *, double *, blasint *, double *, blasint *);
+-void OPENBLAS_API(qtbsv) (char *, char *, char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
+-void OPENBLAS_API(ctbsv) (char *, char *, char *, blasint *, blasint *, float  *, blasint *, float  *, blasint *);
+-void OPENBLAS_API(ztbsv) (char *, char *, char *, blasint *, blasint *, double *, blasint *, double *, blasint *);
+-void OPENBLAS_API(xtbsv) (char *, char *, char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(ssymv) (char *, blasint *, float  *, float *, blasint *,
+-		     float  *, blasint *, float *, float *, blasint *);
+-void OPENBLAS_API(dsymv) (char *, blasint *, double  *, double *, blasint *,
+-		     double  *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(qsymv) (char *, blasint *, xdouble  *, xdouble *, blasint *,
+-		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *);
+-void OPENBLAS_API(csymv) (char *, blasint *, float  *, float *, blasint *,
+-		     float  *, blasint *, float *, float *, blasint *);
+-void OPENBLAS_API(zsymv) (char *, blasint *, double  *, double *, blasint *,
+-		     double  *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(xsymv) (char *, blasint *, xdouble  *, xdouble *, blasint *,
+-		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(sspmv) (char *, blasint *, float  *, float *,
+-		     float  *, blasint *, float *, float *, blasint *);
+-void OPENBLAS_API(dspmv) (char *, blasint *, double  *, double *,
+-		     double  *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(qspmv) (char *, blasint *, xdouble  *, xdouble *,
+-		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *);
+-void OPENBLAS_API(cspmv) (char *, blasint *, float  *, float *,
+-		     float  *, blasint *, float *, float *, blasint *);
+-void OPENBLAS_API(zspmv) (char *, blasint *, double  *, double *,
+-		     double  *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(xspmv) (char *, blasint *, xdouble  *, xdouble *,
+-		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(ssyr) (char *, blasint *, float   *, float  *, blasint *,
+-		    float  *, blasint *);
+-void OPENBLAS_API(dsyr) (char *, blasint *, double  *, double *, blasint *,
+-		    double *, blasint *);
+-void OPENBLAS_API(qsyr) (char *, blasint *, xdouble  *, xdouble *, blasint *,
+-		    xdouble *, blasint *);
+-void OPENBLAS_API(csyr) (char *, blasint *, float   *, float  *, blasint *,
+-		    float  *, blasint *);
+-void OPENBLAS_API(zsyr) (char *, blasint *, double  *, double *, blasint *,
+-		    double *, blasint *);
+-void OPENBLAS_API(xsyr) (char *, blasint *, xdouble  *, xdouble *, blasint *,
+-		    xdouble *, blasint *);
+-
+-void OPENBLAS_API(ssyr2) (char *, blasint *, float   *,
+-		     float  *, blasint *, float  *, blasint *, float  *, blasint *);
+-void OPENBLAS_API(dsyr2) (char *, blasint *, double  *,
+-		     double *, blasint *, double *, blasint *, double *, blasint *);
+-void OPENBLAS_API(qsyr2) (char *, blasint *, xdouble  *,
+-		     xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
+-void OPENBLAS_API(csyr2) (char *, blasint *, float   *,
+-		     float  *, blasint *, float  *, blasint *, float  *, blasint *);
+-void OPENBLAS_API(zsyr2) (char *, blasint *, double  *,
+-		     double *, blasint *, double *, blasint *, double *, blasint *);
+-void OPENBLAS_API(xsyr2) (char *, blasint *, xdouble  *,
+-		     xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(sspr) (char *, blasint *, float   *, float  *, blasint *,
+-		    float  *);
+-void OPENBLAS_API(dspr) (char *, blasint *, double  *, double *, blasint *,
+-		    double *);
+-void OPENBLAS_API(qspr) (char *, blasint *, xdouble  *, xdouble *, blasint *,
+-		    xdouble *);
+-void OPENBLAS_API(cspr) (char *, blasint *, float   *, float  *, blasint *,
+-		    float  *);
+-void OPENBLAS_API(zspr) (char *, blasint *, double  *, double *, blasint *,
+-		    double *);
+-void OPENBLAS_API(xspr) (char *, blasint *, xdouble  *, xdouble *, blasint *,
+-		    xdouble *);
+-
+-void OPENBLAS_API(sspr2) (char *, blasint *, float   *,
+-		     float  *, blasint *, float  *, blasint *, float  *);
+-void OPENBLAS_API(dspr2) (char *, blasint *, double  *,
+-		     double *, blasint *, double *, blasint *, double *);
+-void OPENBLAS_API(qspr2) (char *, blasint *, xdouble  *,
+-		     xdouble *, blasint *, xdouble *, blasint *, xdouble *);
+-void OPENBLAS_API(cspr2) (char *, blasint *, float   *,
+-		     float  *, blasint *, float  *, blasint *, float  *);
+-void OPENBLAS_API(zspr2) (char *, blasint *, double  *,
+-		     double *, blasint *, double *, blasint *, double *);
+-void OPENBLAS_API(xspr2) (char *, blasint *, xdouble  *,
+-		     xdouble *, blasint *, xdouble *, blasint *, xdouble *);
+-
+-void OPENBLAS_API(cher) (char *, blasint *, float   *, float  *, blasint *,
+-		    float  *, blasint *);
+-void OPENBLAS_API(zher) (char *, blasint *, double  *, double *, blasint *,
+-		    double *, blasint *);
+-void OPENBLAS_API(xher) (char *, blasint *, xdouble  *, xdouble *, blasint *,
+-		    xdouble *, blasint *);
+-
+-void OPENBLAS_API(chpr) (char *, blasint *, float   *, float  *, blasint *, float  *);
+-void OPENBLAS_API(zhpr) (char *, blasint *, double  *, double *, blasint *, double *);
+-void OPENBLAS_API(xhpr) (char *, blasint *, xdouble  *, xdouble *, blasint *, xdouble *);
+-
+-void OPENBLAS_API(cher2) (char *, blasint *, float   *,
+-		     float  *, blasint *, float  *, blasint *, float  *, blasint *);
+-void OPENBLAS_API(zher2) (char *, blasint *, double  *,
+-		     double *, blasint *, double *, blasint *, double *, blasint *);
+-void OPENBLAS_API(xher2) (char *, blasint *, xdouble  *,
+-		     xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(chpr2) (char *, blasint *, float   *,
+-		     float  *, blasint *, float  *, blasint *, float  *);
+-void OPENBLAS_API(zhpr2) (char *, blasint *, double  *,
+-		     double *, blasint *, double *, blasint *, double *);
+-void OPENBLAS_API(xhpr2) (char *, blasint *, xdouble  *,
+-		     xdouble *, blasint *, xdouble *, blasint *, xdouble *);
+-
+-void OPENBLAS_API(chemv) (char *, blasint *, float  *, float *, blasint *,
+-		     float  *, blasint *, float *, float *, blasint *);
+-void OPENBLAS_API(zhemv) (char *, blasint *, double  *, double *, blasint *,
+-		     double  *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(xhemv) (char *, blasint *, xdouble  *, xdouble *, blasint *,
+-		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(chpmv) (char *, blasint *, float  *, float *,
+-		     float  *, blasint *, float *, float *, blasint *);
+-void OPENBLAS_API(zhpmv) (char *, blasint *, double  *, double *,
+-		     double  *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(xhpmv) (char *, blasint *, xdouble  *, xdouble *,
+-		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *);
+-
+-int OPENBLAS_API(snorm)(char *, blasint *, blasint *, float  *, blasint *);
+-int OPENBLAS_API(dnorm)(char *, blasint *, blasint *, double *, blasint *);
+-int OPENBLAS_API(cnorm)(char *, blasint *, blasint *, float  *, blasint *);
+-int OPENBLAS_API(znorm)(char *, blasint *, blasint *, double *, blasint *);
+-
+-void OPENBLAS_API(sgbmv)(char *, blasint *, blasint *, blasint *, blasint *, float  *, float  *, blasint *,
+-		    float  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(dgbmv)(char *, blasint *, blasint *, blasint *, blasint *, double *, double *, blasint *,
+-		    double *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(qgbmv)(char *, blasint *, blasint *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
+-void OPENBLAS_API(cgbmv)(char *, blasint *, blasint *, blasint *, blasint *, float  *, float  *, blasint *,
+-		    float  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(zgbmv)(char *, blasint *, blasint *, blasint *, blasint *, double *, double *, blasint *,
+-		    double *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(xgbmv)(char *, blasint *, blasint *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(ssbmv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
+-		    float  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(dsbmv)(char *, blasint *, blasint *, double *, double *, blasint *,
+-		    double *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(qsbmv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
+-void OPENBLAS_API(csbmv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
+-		    float  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(zsbmv)(char *, blasint *, blasint *, double *, double *, blasint *,
+-		    double *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(xsbmv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(chbmv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
+-		    float  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(zhbmv)(char *, blasint *, blasint *, double *, double *, blasint *,
+-		    double *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(xhbmv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(bgemv)(char *, blasint *, blasint *, bfloat16  *, bfloat16 *, blasint *,
++            bfloat16  *, blasint *, bfloat16  *, bfloat16  *, blasint *, int);
++void BLASFUNC(sbgemv)(char *, blasint *, blasint *, float  *, bfloat16 *, blasint *,
++            bfloat16  *, blasint *, float  *, float  *, blasint *, int);
++void BLASFUNC(shgemv)(char *, blasint *, blasint *, float  *, hfloat16 *, blasint *,
 +            hfloat16  *, blasint *, float  *, float  *, blasint *, int);
- void BLASFUNC(sgemv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
--		    float  *, blasint *, float  *, float  *, blasint *);
++void BLASFUNC(sgemv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
 +		    float  *, blasint *, float  *, float  *, blasint *, int);
- void BLASFUNC(dgemv)(char *, blasint *, blasint *, double *, double *, blasint *,
--		    double *, blasint *, double *, double *, blasint *);
++void BLASFUNC(dgemv)(char *, blasint *, blasint *, double *, double *, blasint *,
 +		    double *, blasint *, double *, double *, blasint *, int);
- void BLASFUNC(qgemv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
--		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(qgemv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 +		    xdouble *, blasint *, xdouble *, xdouble *, blasint *, int);
- void BLASFUNC(cgemv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
--		    float  *, blasint *, float  *, float  *, blasint *);
++void BLASFUNC(cgemv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
 +		    float  *, blasint *, float  *, float  *, blasint *, int);
- void BLASFUNC(zgemv)(char *, blasint *, blasint *, double *, double *, blasint *,
--		    double *, blasint *, double *, double *, blasint *);
++void BLASFUNC(zgemv)(char *, blasint *, blasint *, double *, double *, blasint *,
 +		    double *, blasint *, double *, double *, blasint *, int);
- void BLASFUNC(xgemv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
--		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(xgemv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 +		    xdouble *, blasint *, xdouble *, xdouble *, blasint *, int);
- 
- void BLASFUNC(strsv) (char *, char *, char *, blasint *, float  *, blasint *,
--		     float  *, blasint *);
++
++void BLASFUNC(strsv) (char *, char *, char *, blasint *, float  *, blasint *,
 +		     float  *, blasint *, int, int, int);
- void BLASFUNC(dtrsv) (char *, char *, char *, blasint *, double *, blasint *,
--		     double *, blasint *);
++void BLASFUNC(dtrsv) (char *, char *, char *, blasint *, double *, blasint *,
 +		     double *, blasint *, int, int, int);
- void BLASFUNC(qtrsv) (char *, char *, char *, blasint *, xdouble *, blasint *,
--		     xdouble *, blasint *);
++void BLASFUNC(qtrsv) (char *, char *, char *, blasint *, xdouble *, blasint *,
 +		     xdouble *, blasint *, int, int, int);
- void BLASFUNC(ctrsv) (char *, char *, char *, blasint *, float  *, blasint *,
--		     float  *, blasint *);
++void BLASFUNC(ctrsv) (char *, char *, char *, blasint *, float  *, blasint *,
 +		     float  *, blasint *, int, int, int);
- void BLASFUNC(ztrsv) (char *, char *, char *, blasint *, double *, blasint *,
--		     double *, blasint *);
++void BLASFUNC(ztrsv) (char *, char *, char *, blasint *, double *, blasint *,
 +		     double *, blasint *, int, int, int);
- void BLASFUNC(xtrsv) (char *, char *, char *, blasint *, xdouble *, blasint *,
--		     xdouble *, blasint *);
++void BLASFUNC(xtrsv) (char *, char *, char *, blasint *, xdouble *, blasint *,
 +		     xdouble *, blasint *, int, int, int);
- 
- void BLASFUNC(strmv) (char *, char *, char *, blasint *, float  *, blasint *,
--		     float  *, blasint *);
++
++void BLASFUNC(strmv) (char *, char *, char *, blasint *, float  *, blasint *,
 +		     float  *, blasint *, int, int, int);
- void BLASFUNC(dtrmv) (char *, char *, char *, blasint *, double *, blasint *,
--		     double *, blasint *);
++void BLASFUNC(dtrmv) (char *, char *, char *, blasint *, double *, blasint *,
 +		     double *, blasint *, int, int, int);
- void BLASFUNC(qtrmv) (char *, char *, char *, blasint *, xdouble *, blasint *,
--		     xdouble *, blasint *);
++void BLASFUNC(qtrmv) (char *, char *, char *, blasint *, xdouble *, blasint *,
 +		     xdouble *, blasint *, int, int, int);
- void BLASFUNC(ctrmv) (char *, char *, char *, blasint *, float  *, blasint *,
--		     float  *, blasint *);
++void BLASFUNC(ctrmv) (char *, char *, char *, blasint *, float  *, blasint *,
 +		     float  *, blasint *, int, int, int);
- void BLASFUNC(ztrmv) (char *, char *, char *, blasint *, double *, blasint *,
--		     double *, blasint *);
++void BLASFUNC(ztrmv) (char *, char *, char *, blasint *, double *, blasint *,
 +		     double *, blasint *, int, int, int);
- void BLASFUNC(xtrmv) (char *, char *, char *, blasint *, xdouble *, blasint *,
--		     xdouble *, blasint *);
--
--void BLASFUNC(stpsv) (char *, char *, char *, blasint *, float  *, float  *, blasint *);
--void BLASFUNC(dtpsv) (char *, char *, char *, blasint *, double *, double *, blasint *);
--void BLASFUNC(qtpsv) (char *, char *, char *, blasint *, xdouble *, xdouble *, blasint *);
--void BLASFUNC(ctpsv) (char *, char *, char *, blasint *, float  *, float  *, blasint *);
--void BLASFUNC(ztpsv) (char *, char *, char *, blasint *, double *, double *, blasint *);
--void BLASFUNC(xtpsv) (char *, char *, char *, blasint *, xdouble *, xdouble *, blasint *);
--
--void BLASFUNC(stpmv) (char *, char *, char *, blasint *, float  *, float  *, blasint *);
--void BLASFUNC(dtpmv) (char *, char *, char *, blasint *, double *, double *, blasint *);
--void BLASFUNC(qtpmv) (char *, char *, char *, blasint *, xdouble *, xdouble *, blasint *);
--void BLASFUNC(ctpmv) (char *, char *, char *, blasint *, float  *, float  *, blasint *);
--void BLASFUNC(ztpmv) (char *, char *, char *, blasint *, double *, double *, blasint *);
--void BLASFUNC(xtpmv) (char *, char *, char *, blasint *, xdouble *, xdouble *, blasint *);
--
--void BLASFUNC(stbmv) (char *, char *, char *, blasint *, blasint *, float  *, blasint *, float  *, blasint *);
--void BLASFUNC(dtbmv) (char *, char *, char *, blasint *, blasint *, double *, blasint *, double *, blasint *);
--void BLASFUNC(qtbmv) (char *, char *, char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
--void BLASFUNC(ctbmv) (char *, char *, char *, blasint *, blasint *, float  *, blasint *, float  *, blasint *);
--void BLASFUNC(ztbmv) (char *, char *, char *, blasint *, blasint *, double *, blasint *, double *, blasint *);
--void BLASFUNC(xtbmv) (char *, char *, char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
--
--void BLASFUNC(stbsv) (char *, char *, char *, blasint *, blasint *, float  *, blasint *, float  *, blasint *);
--void BLASFUNC(dtbsv) (char *, char *, char *, blasint *, blasint *, double *, blasint *, double *, blasint *);
--void BLASFUNC(qtbsv) (char *, char *, char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
--void BLASFUNC(ctbsv) (char *, char *, char *, blasint *, blasint *, float  *, blasint *, float  *, blasint *);
--void BLASFUNC(ztbsv) (char *, char *, char *, blasint *, blasint *, double *, blasint *, double *, blasint *);
--void BLASFUNC(xtbsv) (char *, char *, char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
++void BLASFUNC(xtrmv) (char *, char *, char *, blasint *, xdouble *, blasint *,
 +		     xdouble *, blasint *, int, int, int);
 +
 +void BLASFUNC(stpsv) (char *, char *, char *, blasint *, float  *, float  *, blasint *, int, int, int);
@@ -200,600 +754,683 @@ index 26107634d..e4576e60a 100644
 +void BLASFUNC(ctbsv) (char *, char *, char *, blasint *, blasint *, float  *, blasint *, float  *, blasint *, int, int, int);
 +void BLASFUNC(ztbsv) (char *, char *, char *, blasint *, blasint *, double *, blasint *, double *, blasint *, int, int, int);
 +void BLASFUNC(xtbsv) (char *, char *, char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *, int, int, int);
- 
- void BLASFUNC(ssymv) (char *, blasint *, float  *, float *, blasint *,
--		     float  *, blasint *, float *, float *, blasint *);
++
++void BLASFUNC(ssymv) (char *, blasint *, float  *, float *, blasint *,
 +		     float  *, blasint *, float *, float *, blasint *, int);
- void BLASFUNC(dsymv) (char *, blasint *, double  *, double *, blasint *,
--		     double  *, blasint *, double *, double *, blasint *);
++void BLASFUNC(dsymv) (char *, blasint *, double  *, double *, blasint *,
 +		     double  *, blasint *, double *, double *, blasint *, int);
- void BLASFUNC(qsymv) (char *, blasint *, xdouble  *, xdouble *, blasint *,
--		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(qsymv) (char *, blasint *, xdouble  *, xdouble *, blasint *,
 +		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *, int);
- void BLASFUNC(csymv) (char *, blasint *, float  *, float *, blasint *,
--		     float  *, blasint *, float *, float *, blasint *);
++void BLASFUNC(csymv) (char *, blasint *, float  *, float *, blasint *,
 +		     float  *, blasint *, float *, float *, blasint *, int);
- void BLASFUNC(zsymv) (char *, blasint *, double  *, double *, blasint *,
--		     double  *, blasint *, double *, double *, blasint *);
++void BLASFUNC(zsymv) (char *, blasint *, double  *, double *, blasint *,
 +		     double  *, blasint *, double *, double *, blasint *, int);
- void BLASFUNC(xsymv) (char *, blasint *, xdouble  *, xdouble *, blasint *,
--		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(xsymv) (char *, blasint *, xdouble  *, xdouble *, blasint *,
 +		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *, int);
- 
- void BLASFUNC(sspmv) (char *, blasint *, float  *, float *,
--		     float  *, blasint *, float *, float *, blasint *);
++
++void BLASFUNC(sspmv) (char *, blasint *, float  *, float *,
 +		     float  *, blasint *, float *, float *, blasint *, int);
- void BLASFUNC(dspmv) (char *, blasint *, double  *, double *,
--		     double  *, blasint *, double *, double *, blasint *);
++void BLASFUNC(dspmv) (char *, blasint *, double  *, double *,
 +		     double  *, blasint *, double *, double *, blasint *, int);
- void BLASFUNC(qspmv) (char *, blasint *, xdouble  *, xdouble *,
--		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(qspmv) (char *, blasint *, xdouble  *, xdouble *,
 +		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *, int);
- void BLASFUNC(cspmv) (char *, blasint *, float  *, float *,
--		     float  *, blasint *, float *, float *, blasint *);
++void BLASFUNC(cspmv) (char *, blasint *, float  *, float *,
 +		     float  *, blasint *, float *, float *, blasint *, int);
- void BLASFUNC(zspmv) (char *, blasint *, double  *, double *,
--		     double  *, blasint *, double *, double *, blasint *);
++void BLASFUNC(zspmv) (char *, blasint *, double  *, double *,
 +		     double  *, blasint *, double *, double *, blasint *, int);
- void BLASFUNC(xspmv) (char *, blasint *, xdouble  *, xdouble *,
--		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(xspmv) (char *, blasint *, xdouble  *, xdouble *,
 +		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *, int);
- 
- void BLASFUNC(ssyr) (char *, blasint *, float   *, float  *, blasint *,
--		    float  *, blasint *);
++
++void BLASFUNC(ssyr) (char *, blasint *, float   *, float  *, blasint *,
 +		    float  *, blasint *, int);
- void BLASFUNC(dsyr) (char *, blasint *, double  *, double *, blasint *,
--		    double *, blasint *);
++void BLASFUNC(dsyr) (char *, blasint *, double  *, double *, blasint *,
 +		    double *, blasint *, int);
- void BLASFUNC(qsyr) (char *, blasint *, xdouble  *, xdouble *, blasint *,
--		    xdouble *, blasint *);
++void BLASFUNC(qsyr) (char *, blasint *, xdouble  *, xdouble *, blasint *,
 +		    xdouble *, blasint *, int);
- void BLASFUNC(csyr) (char *, blasint *, float   *, float  *, blasint *,
--		    float  *, blasint *);
++void BLASFUNC(csyr) (char *, blasint *, float   *, float  *, blasint *,
 +		    float  *, blasint *, int);
- void BLASFUNC(zsyr) (char *, blasint *, double  *, double *, blasint *,
--		    double *, blasint *);
++void BLASFUNC(zsyr) (char *, blasint *, double  *, double *, blasint *,
 +		    double *, blasint *, int);
- void BLASFUNC(xsyr) (char *, blasint *, xdouble  *, xdouble *, blasint *,
--		    xdouble *, blasint *);
++void BLASFUNC(xsyr) (char *, blasint *, xdouble  *, xdouble *, blasint *,
 +		    xdouble *, blasint *, int);
- 
- void BLASFUNC(ssyr2) (char *, blasint *, float   *,
--		     float  *, blasint *, float  *, blasint *, float  *, blasint *);
++
++void BLASFUNC(ssyr2) (char *, blasint *, float   *,
 +		     float  *, blasint *, float  *, blasint *, float  *, blasint *, int);
- void BLASFUNC(dsyr2) (char *, blasint *, double  *,
--		     double *, blasint *, double *, blasint *, double *, blasint *);
++void BLASFUNC(dsyr2) (char *, blasint *, double  *,
 +		     double *, blasint *, double *, blasint *, double *, blasint *, int);
- void BLASFUNC(qsyr2) (char *, blasint *, xdouble  *,
--		     xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
++void BLASFUNC(qsyr2) (char *, blasint *, xdouble  *,
 +		     xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *, int);
- void BLASFUNC(csyr2) (char *, blasint *, float   *,
--		     float  *, blasint *, float  *, blasint *, float  *, blasint *);
++void BLASFUNC(csyr2) (char *, blasint *, float   *,
 +		     float  *, blasint *, float  *, blasint *, float  *, blasint *, int);
- void BLASFUNC(zsyr2) (char *, blasint *, double  *,
--		     double *, blasint *, double *, blasint *, double *, blasint *);
++void BLASFUNC(zsyr2) (char *, blasint *, double  *,
 +		     double *, blasint *, double *, blasint *, double *, blasint *, int);
- void BLASFUNC(xsyr2) (char *, blasint *, xdouble  *,
--		     xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
++void BLASFUNC(xsyr2) (char *, blasint *, xdouble  *,
 +		     xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *, int);
- 
- void BLASFUNC(sspr) (char *, blasint *, float   *, float  *, blasint *,
--		    float  *);
++
++void BLASFUNC(sspr) (char *, blasint *, float   *, float  *, blasint *,
 +		    float  *, int);
- void BLASFUNC(dspr) (char *, blasint *, double  *, double *, blasint *,
--		    double *);
++void BLASFUNC(dspr) (char *, blasint *, double  *, double *, blasint *,
 +		    double *, int);
- void BLASFUNC(qspr) (char *, blasint *, xdouble  *, xdouble *, blasint *,
--		    xdouble *);
++void BLASFUNC(qspr) (char *, blasint *, xdouble  *, xdouble *, blasint *,
 +		    xdouble *, int);
- void BLASFUNC(cspr) (char *, blasint *, float   *, float  *, blasint *,
--		    float  *);
++void BLASFUNC(cspr) (char *, blasint *, float   *, float  *, blasint *,
 +		    float  *, int);
- void BLASFUNC(zspr) (char *, blasint *, double  *, double *, blasint *,
--		    double *);
++void BLASFUNC(zspr) (char *, blasint *, double  *, double *, blasint *,
 +		    double *, int);
- void BLASFUNC(xspr) (char *, blasint *, xdouble  *, xdouble *, blasint *,
--		    xdouble *);
++void BLASFUNC(xspr) (char *, blasint *, xdouble  *, xdouble *, blasint *,
 +		    xdouble *, int);
- 
- void BLASFUNC(sspr2) (char *, blasint *, float   *,
--		     float  *, blasint *, float  *, blasint *, float  *);
++
++void BLASFUNC(sspr2) (char *, blasint *, float   *,
 +		     float  *, blasint *, float  *, blasint *, float  *, int);
- void BLASFUNC(dspr2) (char *, blasint *, double  *,
--		     double *, blasint *, double *, blasint *, double *);
++void BLASFUNC(dspr2) (char *, blasint *, double  *,
 +		     double *, blasint *, double *, blasint *, double *, int);
- void BLASFUNC(qspr2) (char *, blasint *, xdouble  *,
--		     xdouble *, blasint *, xdouble *, blasint *, xdouble *);
++void BLASFUNC(qspr2) (char *, blasint *, xdouble  *,
 +		     xdouble *, blasint *, xdouble *, blasint *, xdouble *, int);
- void BLASFUNC(cspr2) (char *, blasint *, float   *,
--		     float  *, blasint *, float  *, blasint *, float  *);
++void BLASFUNC(cspr2) (char *, blasint *, float   *,
 +		     float  *, blasint *, float  *, blasint *, float  *, int);
- void BLASFUNC(zspr2) (char *, blasint *, double  *,
--		     double *, blasint *, double *, blasint *, double *);
++void BLASFUNC(zspr2) (char *, blasint *, double  *,
 +		     double *, blasint *, double *, blasint *, double *, int);
- void BLASFUNC(xspr2) (char *, blasint *, xdouble  *,
--		     xdouble *, blasint *, xdouble *, blasint *, xdouble *);
++void BLASFUNC(xspr2) (char *, blasint *, xdouble  *,
 +		     xdouble *, blasint *, xdouble *, blasint *, xdouble *, int);
- 
- void BLASFUNC(cher) (char *, blasint *, float   *, float  *, blasint *,
--		    float  *, blasint *);
++
++void BLASFUNC(cher) (char *, blasint *, float   *, float  *, blasint *,
 +		    float  *, blasint *, int);
- void BLASFUNC(zher) (char *, blasint *, double  *, double *, blasint *,
--		    double *, blasint *);
++void BLASFUNC(zher) (char *, blasint *, double  *, double *, blasint *,
 +		    double *, blasint *, int);
- void BLASFUNC(xher) (char *, blasint *, xdouble  *, xdouble *, blasint *,
--		    xdouble *, blasint *);
++void BLASFUNC(xher) (char *, blasint *, xdouble  *, xdouble *, blasint *,
 +		    xdouble *, blasint *, int);
- 
--void BLASFUNC(chpr) (char *, blasint *, float   *, float  *, blasint *, float  *);
--void BLASFUNC(zhpr) (char *, blasint *, double  *, double *, blasint *, double *);
--void BLASFUNC(xhpr) (char *, blasint *, xdouble  *, xdouble *, blasint *, xdouble *);
++
 +void BLASFUNC(chpr) (char *, blasint *, float   *, float  *, blasint *, float  *, int);
 +void BLASFUNC(zhpr) (char *, blasint *, double  *, double *, blasint *, double *, int);
 +void BLASFUNC(xhpr) (char *, blasint *, double  *, xdouble *, blasint *, xdouble *, int);
- 
- void BLASFUNC(cher2) (char *, blasint *, float   *,
--		     float  *, blasint *, float  *, blasint *, float  *, blasint *);
++
++void BLASFUNC(cher2) (char *, blasint *, float   *,
 +		     float  *, blasint *, float  *, blasint *, float  *, blasint *, int);
- void BLASFUNC(zher2) (char *, blasint *, double  *,
--		     double *, blasint *, double *, blasint *, double *, blasint *);
++void BLASFUNC(zher2) (char *, blasint *, double  *,
 +		     double *, blasint *, double *, blasint *, double *, blasint *, int);
- void BLASFUNC(xher2) (char *, blasint *, xdouble  *,
--		     xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *);
++void BLASFUNC(xher2) (char *, blasint *, xdouble  *,
 +		     xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *, int);
- 
- void BLASFUNC(chpr2) (char *, blasint *, float   *,
--		     float  *, blasint *, float  *, blasint *, float  *);
++
++void BLASFUNC(chpr2) (char *, blasint *, float   *,
 +		     float  *, blasint *, float  *, blasint *, float  *, int);
- void BLASFUNC(zhpr2) (char *, blasint *, double  *,
--		     double *, blasint *, double *, blasint *, double *);
++void BLASFUNC(zhpr2) (char *, blasint *, double  *,
 +		     double *, blasint *, double *, blasint *, double *, int);
- void BLASFUNC(xhpr2) (char *, blasint *, xdouble  *,
--		     xdouble *, blasint *, xdouble *, blasint *, xdouble *);
++void BLASFUNC(xhpr2) (char *, blasint *, xdouble  *,
 +		     xdouble *, blasint *, xdouble *, blasint *, xdouble *, int);
- 
- void BLASFUNC(chemv) (char *, blasint *, float  *, float *, blasint *,
--		     float  *, blasint *, float *, float *, blasint *);
++
++void BLASFUNC(chemv) (char *, blasint *, float  *, float *, blasint *,
 +		     float  *, blasint *, float *, float *, blasint *, int);
- void BLASFUNC(zhemv) (char *, blasint *, double  *, double *, blasint *,
--		     double  *, blasint *, double *, double *, blasint *);
++void BLASFUNC(zhemv) (char *, blasint *, double  *, double *, blasint *,
 +		     double  *, blasint *, double *, double *, blasint *, int);
- void BLASFUNC(xhemv) (char *, blasint *, xdouble  *, xdouble *, blasint *,
--		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(xhemv) (char *, blasint *, xdouble  *, xdouble *, blasint *,
 +		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *, int);
- 
- void BLASFUNC(chpmv) (char *, blasint *, float  *, float *,
--		     float  *, blasint *, float *, float *, blasint *);
++
++void BLASFUNC(chpmv) (char *, blasint *, float  *, float *,
 +		     float  *, blasint *, float *, float *, blasint *, int);
- void BLASFUNC(zhpmv) (char *, blasint *, double  *, double *,
--		     double  *, blasint *, double *, double *, blasint *);
++void BLASFUNC(zhpmv) (char *, blasint *, double  *, double *,
 +		     double  *, blasint *, double *, double *, blasint *, int);
- void BLASFUNC(xhpmv) (char *, blasint *, xdouble  *, xdouble *,
--		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(xhpmv) (char *, blasint *, xdouble  *, xdouble *,
 +		     xdouble  *, blasint *, xdouble *, xdouble *, blasint *, int);
- 
--int BLASFUNC(snorm)(char *, blasint *, blasint *, float  *, blasint *);
--int BLASFUNC(dnorm)(char *, blasint *, blasint *, double *, blasint *);
--int BLASFUNC(cnorm)(char *, blasint *, blasint *, float  *, blasint *);
--int BLASFUNC(znorm)(char *, blasint *, blasint *, double *, blasint *);
++
 +int BLASFUNC(snorm)(char *, blasint *, blasint *, float  *, blasint *, int);
 +int BLASFUNC(dnorm)(char *, blasint *, blasint *, double *, blasint *, int);
 +int BLASFUNC(cnorm)(char *, blasint *, blasint *, float  *, blasint *, int);
 +int BLASFUNC(znorm)(char *, blasint *, blasint *, double *, blasint *, int);
- 
- void BLASFUNC(sgbmv)(char *, blasint *, blasint *, blasint *, blasint *, float  *, float  *, blasint *,
--		    float  *, blasint *, float  *, float  *, blasint *);
++
++void BLASFUNC(sgbmv)(char *, blasint *, blasint *, blasint *, blasint *, float  *, float  *, blasint *,
 +		    float  *, blasint *, float  *, float  *, blasint *, int);
- void BLASFUNC(dgbmv)(char *, blasint *, blasint *, blasint *, blasint *, double *, double *, blasint *,
--		    double *, blasint *, double *, double *, blasint *);
++void BLASFUNC(dgbmv)(char *, blasint *, blasint *, blasint *, blasint *, double *, double *, blasint *,
 +		    double *, blasint *, double *, double *, blasint *, int);
- void BLASFUNC(qgbmv)(char *, blasint *, blasint *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
--		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(qgbmv)(char *, blasint *, blasint *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 +		    xdouble *, blasint *, xdouble *, xdouble *, blasint *, int);
- void BLASFUNC(cgbmv)(char *, blasint *, blasint *, blasint *, blasint *, float  *, float  *, blasint *,
--		    float  *, blasint *, float  *, float  *, blasint *);
++void BLASFUNC(cgbmv)(char *, blasint *, blasint *, blasint *, blasint *, float  *, float  *, blasint *,
 +		    float  *, blasint *, float  *, float  *, blasint *, int);
- void BLASFUNC(zgbmv)(char *, blasint *, blasint *, blasint *, blasint *, double *, double *, blasint *,
--		    double *, blasint *, double *, double *, blasint *);
++void BLASFUNC(zgbmv)(char *, blasint *, blasint *, blasint *, blasint *, double *, double *, blasint *,
 +		    double *, blasint *, double *, double *, blasint *, int);
- void BLASFUNC(xgbmv)(char *, blasint *, blasint *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
--		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(xgbmv)(char *, blasint *, blasint *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 +		    xdouble *, blasint *, xdouble *, xdouble *, blasint *, int);
- 
- void BLASFUNC(ssbmv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
--		    float  *, blasint *, float  *, float  *, blasint *);
++
++void BLASFUNC(ssbmv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
 +		    float  *, blasint *, float  *, float  *, blasint *, int);
- void BLASFUNC(dsbmv)(char *, blasint *, blasint *, double *, double *, blasint *,
--		    double *, blasint *, double *, double *, blasint *);
++void BLASFUNC(dsbmv)(char *, blasint *, blasint *, double *, double *, blasint *,
 +		    double *, blasint *, double *, double *, blasint *, int);
- void BLASFUNC(qsbmv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
--		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(qsbmv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 +		    xdouble *, blasint *, xdouble *, xdouble *, blasint *, int);
- void BLASFUNC(csbmv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
--		    float  *, blasint *, float  *, float  *, blasint *);
++void BLASFUNC(csbmv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
 +		    float  *, blasint *, float  *, float  *, blasint *, int);
- void BLASFUNC(zsbmv)(char *, blasint *, blasint *, double *, double *, blasint *,
--		    double *, blasint *, double *, double *, blasint *);
++void BLASFUNC(zsbmv)(char *, blasint *, blasint *, double *, double *, blasint *,
 +		    double *, blasint *, double *, double *, blasint *, int);
- void BLASFUNC(xsbmv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
--		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(xsbmv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 +		    xdouble *, blasint *, xdouble *, xdouble *, blasint *, int);
- 
- void BLASFUNC(chbmv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
--		    float  *, blasint *, float  *, float  *, blasint *);
++
++void BLASFUNC(chbmv)(char *, blasint *, blasint *, float  *, float  *, blasint *,
 +		    float  *, blasint *, float  *, float  *, blasint *, int);
- void BLASFUNC(zhbmv)(char *, blasint *, blasint *, double *, double *, blasint *,
--		    double *, blasint *, double *, double *, blasint *);
++void BLASFUNC(zhbmv)(char *, blasint *, blasint *, double *, double *, blasint *,
 +		    double *, blasint *, double *, double *, blasint *,  int);
- void BLASFUNC(xhbmv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
--		    xdouble *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(xhbmv)(char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 +		    xdouble *, blasint *, xdouble *, xdouble *, blasint *, int);
  
  /* Level 3 routines */
  
-@@ -492,195 +492,195 @@ void BLASFUNC(shgemm)(char *, char *, blasint *, blasint *, blasint *, float *,
- void BLASFUNC(bgemm)(char *, char *, blasint *, blasint *, blasint *, bfloat16 *,
+-void OPENBLAS_API(shgemm)(char *, char *, blasint *, blasint *, blasint *, float *,
++void BLASFUNC(shgemm)(char *, char *, blasint *, blasint *, blasint *, float *,
+ 	   hfloat16  *, blasint *, hfloat16 *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(bgemm)(char *, char *, blasint *, blasint *, blasint *, bfloat16 *,
++void BLASFUNC(bgemm)(char *, char *, blasint *, blasint *, blasint *, bfloat16 *,
  	   bfloat16 *, blasint *, bfloat16 *, blasint *, bfloat16 *, bfloat16 *, blasint *);
- void BLASFUNC(sbgemm)(char *, char *, blasint *, blasint *, blasint *, float *,
+-void OPENBLAS_API(sbgemm)(char *, char *, blasint *, blasint *, blasint *, float *,
 -	   bfloat16 *, blasint *, bfloat16 *, blasint *, float *, float *, blasint *);
+-void OPENBLAS_API(sgemm)(char *, char *, blasint *, blasint *, blasint *, float *,
+-	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(dgemm)(char *, char *, blasint *, blasint *, blasint *, double *,
+-	   double *, blasint *, double *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(qgemm)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
+-	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *, blasint *);
+-void OPENBLAS_API(cgemm)(char *, char *, blasint *, blasint *, blasint *, float *,
+-	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(zgemm)(char *, char *, blasint *, blasint *, blasint *, double *,
+-	   double *, blasint *, double *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(xgemm)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
+-	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(cgemm3m)(char *, char *, blasint *, blasint *, blasint *, float *,
+-	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(zgemm3m)(char *, char *, blasint *, blasint *, blasint *, double *,
+-	   double *, blasint *, double *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(xgemm3m)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
+-	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *, blasint *);
+-
+-void OPENBLAS_API(sgemmt)(char*, char *, char *, blasint *, blasint *, float *,
+-	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(dgemmt)(char*, char *, char *, blasint *, blasint *, double *,
+-	   double *, blasint *, double *, blasint *, double *, double *, blasint *);
+-void OPENBLAS_API(cgemmt)(char*, char *, char *, blasint *, blasint *, float *,
+-	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *);
+-void OPENBLAS_API(zgemmt)(char*, char *, char *, blasint *, blasint *, double *,
+-	   double *, blasint *, double *, blasint *, double *, double *, blasint *);
+-
+-int OPENBLAS_API(sge2mm)(char *, char *, char *, blasint *, blasint *,
++void BLASFUNC(sbgemm)(char *, char *, blasint *, blasint *, blasint *, float *,
 +	   bfloat16 *, blasint *, bfloat16 *, blasint *, float *, float *, blasint *, int, int);
- void BLASFUNC(sgemm)(char *, char *, blasint *, blasint *, blasint *, float *,
--	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *);
++void BLASFUNC(sgemm)(char *, char *, blasint *, blasint *, blasint *, float *,
 +	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *, int, int);
- void BLASFUNC(dgemm)(char *, char *, blasint *, blasint *, blasint *, double *,
--	   double *, blasint *, double *, blasint *, double *, double *, blasint *);
++void BLASFUNC(dgemm)(char *, char *, blasint *, blasint *, blasint *, double *,
 +	   double *, blasint *, double *, blasint *, double *, double *, blasint *, int, int);
- void BLASFUNC(qgemm)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
--	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(qgemm)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
 +	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
- void BLASFUNC(cgemm)(char *, char *, blasint *, blasint *, blasint *, float *,
--	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *);
++void BLASFUNC(cgemm)(char *, char *, blasint *, blasint *, blasint *, float *,
 +	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *, int, int);
- void BLASFUNC(zgemm)(char *, char *, blasint *, blasint *, blasint *, double *,
--	   double *, blasint *, double *, blasint *, double *, double *, blasint *);
++void BLASFUNC(zgemm)(char *, char *, blasint *, blasint *, blasint *, double *,
 +	   double *, blasint *, double *, blasint *, double *, double *, blasint *, int, int);
- void BLASFUNC(xgemm)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
--	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(xgemm)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
 +	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
- 
- void BLASFUNC(cgemm3m)(char *, char *, blasint *, blasint *, blasint *, float *,
--	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *);
++
++void BLASFUNC(cgemm3m)(char *, char *, blasint *, blasint *, blasint *, float *,
 +	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *, int, int);
- void BLASFUNC(zgemm3m)(char *, char *, blasint *, blasint *, blasint *, double *,
--	   double *, blasint *, double *, blasint *, double *, double *, blasint *);
++void BLASFUNC(zgemm3m)(char *, char *, blasint *, blasint *, blasint *, double *,
 +	   double *, blasint *, double *, blasint *, double *, double *, blasint *, int, int);
- void BLASFUNC(xgemm3m)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
--	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *, blasint *);
++void BLASFUNC(xgemm3m)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
 +	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
- 
- void BLASFUNC(sgemmt)(char*, char *, char *, blasint *, blasint *, float *,
--	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *);
++
++void BLASFUNC(sgemmt)(char*, char *, char *, blasint *, blasint *, float *,
 +	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *, int, int, int);
- void BLASFUNC(dgemmt)(char*, char *, char *, blasint *, blasint *, double *,
--	   double *, blasint *, double *, blasint *, double *, double *, blasint *);
++void BLASFUNC(dgemmt)(char*, char *, char *, blasint *, blasint *, double *,
 +	   double *, blasint *, double *, blasint *, double *, double *, blasint *, int, int, int);
- void BLASFUNC(cgemmt)(char*, char *, char *, blasint *, blasint *, float *,
--	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *);
++void BLASFUNC(cgemmt)(char*, char *, char *, blasint *, blasint *, float *,
 +	   float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *, int, int, int);
- void BLASFUNC(zgemmt)(char*, char *, char *, blasint *, blasint *, double *,
--	   double *, blasint *, double *, blasint *, double *, double *, blasint *);
++void BLASFUNC(zgemmt)(char*, char *, char *, blasint *, blasint *, double *,
 +	   double *, blasint *, double *, blasint *, double *, double *, blasint *, int, int, int);
- 
- int BLASFUNC(sge2mm)(char *, char *, char *, blasint *, blasint *,
++
++int BLASFUNC(sge2mm)(char *, char *, char *, blasint *, blasint *,
  		     float *, float  *, blasint *, float  *, blasint *,
 -		     float *, float  *, blasint *);
+-int OPENBLAS_API(dge2mm)(char *, char *, char *, blasint *, blasint *,
 +		     float *, float  *, blasint *, int, int, int);
- int BLASFUNC(dge2mm)(char *, char *, char *, blasint *, blasint *,
++int BLASFUNC(dge2mm)(char *, char *, char *, blasint *, blasint *,
  		     double *, double  *, blasint *, double  *, blasint *,
 -		     double *, double  *, blasint *);
+-int OPENBLAS_API(cge2mm)(char *, char *, char *, blasint *, blasint *,
 +		     double *, double  *, blasint *, int, int, int);
- int BLASFUNC(cge2mm)(char *, char *, char *, blasint *, blasint *,
++int BLASFUNC(cge2mm)(char *, char *, char *, blasint *, blasint *,
  		     float *, float  *, blasint *, float  *, blasint *,
 -		     float *, float  *, blasint *);
+-int OPENBLAS_API(zge2mm)(char *, char *, char *, blasint *, blasint *,
 +		     float *, float  *, blasint *, int, int, int);
- int BLASFUNC(zge2mm)(char *, char *, char *, blasint *, blasint *,
++int BLASFUNC(zge2mm)(char *, char *, char *, blasint *, blasint *,
  		     double *, double  *, blasint *, double  *, blasint *,
 -		     double *, double  *, blasint *);
-+		     double *, double  *, blasint *, int, int, int);
- 
- void BLASFUNC(strsm)(char *, char *, char *, char *, blasint *, blasint *,
+-
+-void OPENBLAS_API(strsm)(char *, char *, char *, char *, blasint *, blasint *,
 -	   float *,  float *, blasint *, float *, blasint *);
-+	   float *,  float *, blasint *, float *, blasint *, int, int, int, int);
- void BLASFUNC(dtrsm)(char *, char *, char *, char *, blasint *, blasint *,
+-void OPENBLAS_API(dtrsm)(char *, char *, char *, char *, blasint *, blasint *,
 -	   double *,  double *, blasint *, double *, blasint *);
-+	   double *,  double *, blasint *, double *, blasint *, int, int, int, int);
- void BLASFUNC(qtrsm)(char *, char *, char *, char *, blasint *, blasint *,
+-void OPENBLAS_API(qtrsm)(char *, char *, char *, char *, blasint *, blasint *,
 -	   xdouble *,  xdouble *, blasint *, xdouble *, blasint *);
-+	   xdouble *,  xdouble *, blasint *, xdouble *, blasint *, int, int, int, int);
- void BLASFUNC(ctrsm)(char *, char *, char *, char *, blasint *, blasint *,
+-void OPENBLAS_API(ctrsm)(char *, char *, char *, char *, blasint *, blasint *,
 -	   float *,  float *, blasint *, float *, blasint *);
-+	   float *,  float *, blasint *, float *, blasint *, int, int, int, int);
- void BLASFUNC(ztrsm)(char *, char *, char *, char *, blasint *, blasint *,
+-void OPENBLAS_API(ztrsm)(char *, char *, char *, char *, blasint *, blasint *,
 -	   double *,  double *, blasint *, double *, blasint *);
-+	   double *,  double *, blasint *, double *, blasint *, int, int, int, int);
- void BLASFUNC(xtrsm)(char *, char *, char *, char *, blasint *, blasint *,
+-void OPENBLAS_API(xtrsm)(char *, char *, char *, char *, blasint *, blasint *,
 -	   xdouble *,  xdouble *, blasint *, xdouble *, blasint *);
-+	   xdouble *,  xdouble *, blasint *, xdouble *, blasint *, int, int, int, int);
- 
- void BLASFUNC(strmm)(char *, char *, char *, char *, blasint *, blasint *,
+-
+-void OPENBLAS_API(strmm)(char *, char *, char *, char *, blasint *, blasint *,
 -	   float *,  float *, blasint *, float *, blasint *);
-+	   float *,  float *, blasint *, float *, blasint *, int, int, int, int);
- void BLASFUNC(dtrmm)(char *, char *, char *, char *, blasint *, blasint *,
+-void OPENBLAS_API(dtrmm)(char *, char *, char *, char *, blasint *, blasint *,
 -	   double *,  double *, blasint *, double *, blasint *);
-+	   double *,  double *, blasint *, double *, blasint *, int, int, int, int);
- void BLASFUNC(qtrmm)(char *, char *, char *, char *, blasint *, blasint *,
+-void OPENBLAS_API(qtrmm)(char *, char *, char *, char *, blasint *, blasint *,
 -	   xdouble *,  xdouble *, blasint *, xdouble *, blasint *);
-+	   xdouble *,  xdouble *, blasint *, xdouble *, blasint *, int, int, int, int);
- void BLASFUNC(ctrmm)(char *, char *, char *, char *, blasint *, blasint *,
+-void OPENBLAS_API(ctrmm)(char *, char *, char *, char *, blasint *, blasint *,
 -	   float *,  float *, blasint *, float *, blasint *);
-+	   float *,  float *, blasint *, float *, blasint *, int, int, int, int);
- void BLASFUNC(ztrmm)(char *, char *, char *, char *, blasint *, blasint *,
+-void OPENBLAS_API(ztrmm)(char *, char *, char *, char *, blasint *, blasint *,
 -	   double *,  double *, blasint *, double *, blasint *);
-+	   double *,  double *, blasint *, double *, blasint *, int, int, int, int);
- void BLASFUNC(xtrmm)(char *, char *, char *, char *, blasint *, blasint *,
+-void OPENBLAS_API(xtrmm)(char *, char *, char *, char *, blasint *, blasint *,
 -	   xdouble *,  xdouble *, blasint *, xdouble *, blasint *);
-+	   xdouble *,  xdouble *, blasint *, xdouble *, blasint *, int, int, int, int);
- 
- void BLASFUNC(ssymm)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
+-
+-void OPENBLAS_API(ssymm)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
 -	   float  *, blasint *, float  *, float  *, blasint *);
-+	   float  *, blasint *, float  *, float  *, blasint *, int, int);
- void BLASFUNC(dsymm)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
+-void OPENBLAS_API(dsymm)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
 -	   double *, blasint *, double *, double *, blasint *);
-+	   double *, blasint *, double *, double *, blasint *, int, int);
- void BLASFUNC(qsymm)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-void OPENBLAS_API(qsymm)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 -	   xdouble *, blasint *, xdouble *, xdouble *, blasint *);
-+	   xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
- void BLASFUNC(csymm)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
+-void OPENBLAS_API(csymm)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
 -	   float  *, blasint *, float  *, float  *, blasint *);
-+	   float  *, blasint *, float  *, float  *, blasint *, int, int);
- void BLASFUNC(zsymm)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
+-void OPENBLAS_API(zsymm)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
 -	   double *, blasint *, double *, double *, blasint *);
-+	   double *, blasint *, double *, double *, blasint *, int, int);
- void BLASFUNC(xsymm)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-void OPENBLAS_API(xsymm)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 -	   xdouble *, blasint *, xdouble *, xdouble *, blasint *);
-+	   xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
- 
- void BLASFUNC(csymm3m)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
+-
+-void OPENBLAS_API(csymm3m)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
 -	   float  *, blasint *, float  *, float  *, blasint *);
-+	   float  *, blasint *, float  *, float  *, blasint *, int, int);
- void BLASFUNC(zsymm3m)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
+-void OPENBLAS_API(zsymm3m)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
 -	   double *, blasint *, double *, double *, blasint *);
-+	   double *, blasint *, double *, double *, blasint *, int, int);
- void BLASFUNC(xsymm3m)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-void OPENBLAS_API(xsymm3m)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 -	   xdouble *, blasint *, xdouble *, xdouble *, blasint *);
-+	   xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
- 
- void BLASFUNC(ssyrk)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
+-
+-void OPENBLAS_API(ssyrk)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
 -	   float  *, float  *, blasint *);
-+	   float  *, float  *, blasint *, int, int);
- void BLASFUNC(dsyrk)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
+-void OPENBLAS_API(dsyrk)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
 -	   double *, double *, blasint *);
-+	   double *, double *, blasint *, int, int);
- void BLASFUNC(qsyrk)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-void OPENBLAS_API(qsyrk)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 -	   xdouble *, xdouble *, blasint *);
-+	   xdouble *, xdouble *, blasint *, int, int);
- void BLASFUNC(csyrk)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
+-void OPENBLAS_API(csyrk)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
 -	   float  *, float  *, blasint *);
-+	   float  *, float  *, blasint *, int, int);
- void BLASFUNC(zsyrk)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
+-void OPENBLAS_API(zsyrk)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
 -	   double *, double *, blasint *);
-+	   double *, double *, blasint *, int, int);
- void BLASFUNC(xsyrk)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-void OPENBLAS_API(xsyrk)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 -	   xdouble *, xdouble *, blasint *);
-+	   xdouble *, xdouble *, blasint *, int, int);
- 
- void BLASFUNC(ssyr2k)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
+-
+-void OPENBLAS_API(ssyr2k)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
 -	   float *, blasint *, float  *, float  *, blasint *);
-+	   float *, blasint *, float  *, float  *, blasint *, int, int);
- void BLASFUNC(dsyr2k)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
+-void OPENBLAS_API(dsyr2k)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
 -	   double*, blasint *, double *, double *, blasint *);
-+	   double*, blasint *, double *, double *, blasint *, int, int);
- void BLASFUNC(qsyr2k)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-void OPENBLAS_API(qsyr2k)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 -	   xdouble*, blasint *, xdouble *, xdouble *, blasint *);
-+	   xdouble*, blasint *, xdouble *, xdouble *, blasint *, int, int);
- void BLASFUNC(csyr2k)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
+-void OPENBLAS_API(csyr2k)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
 -	   float *, blasint *, float  *, float  *, blasint *);
-+	   float *, blasint *, float  *, float  *, blasint *, int, int);
- void BLASFUNC(zsyr2k)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
+-void OPENBLAS_API(zsyr2k)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
 -	   double*, blasint *, double *, double *, blasint *);
-+	   double*, blasint *, double *, double *, blasint *, int, int);
- void BLASFUNC(xsyr2k)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-void OPENBLAS_API(xsyr2k)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 -	   xdouble*, blasint *, xdouble *, xdouble *, blasint *);
-+	   xdouble*, blasint *, xdouble *, xdouble *, blasint *, int, int);
- 
- void BLASFUNC(chemm)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
+-
+-void OPENBLAS_API(chemm)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
 -	   float  *, blasint *, float  *, float  *, blasint *);
-+	   float  *, blasint *, float  *, float  *, blasint *, int, int);
- void BLASFUNC(zhemm)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
+-void OPENBLAS_API(zhemm)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
 -	   double *, blasint *, double *, double *, blasint *);
-+	   double *, blasint *, double *, double *, blasint *, int, int);
- void BLASFUNC(xhemm)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-void OPENBLAS_API(xhemm)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 -	   xdouble *, blasint *, xdouble *, xdouble *, blasint *);
-+	   xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
- 
- void BLASFUNC(chemm3m)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
+-
+-void OPENBLAS_API(chemm3m)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
 -	   float  *, blasint *, float  *, float  *, blasint *);
-+	   float  *, blasint *, float  *, float  *, blasint *, int, int);
- void BLASFUNC(zhemm3m)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
+-void OPENBLAS_API(zhemm3m)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
 -	   double *, blasint *, double *, double *, blasint *);
-+	   double *, blasint *, double *, double *, blasint *, int, int);
- void BLASFUNC(xhemm3m)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-void OPENBLAS_API(xhemm3m)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 -	   xdouble *, blasint *, xdouble *, xdouble *, blasint *);
-+	   xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
- 
- void BLASFUNC(cherk)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
+-
+-void OPENBLAS_API(cherk)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
 -	   float  *, float  *, blasint *);
-+	   float  *, float  *, blasint *, int, int);
- void BLASFUNC(zherk)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
+-void OPENBLAS_API(zherk)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
 -	   double *, double *, blasint *);
-+	   double *, double *, blasint *, int, int);
- void BLASFUNC(xherk)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-void OPENBLAS_API(xherk)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 -	   xdouble *, xdouble *, blasint *);
-+	   xdouble *, xdouble *, blasint *, int, int);
- 
- void BLASFUNC(cher2k)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
+-
+-void OPENBLAS_API(cher2k)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
 -	   float *, blasint *, float  *, float  *, blasint *);
-+	   float *, blasint *, float  *, float  *, blasint *, int, int);
- void BLASFUNC(zher2k)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
+-void OPENBLAS_API(zher2k)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
 -	   double*, blasint *, double *, double *, blasint *);
-+	   double*, blasint *, double *, double *, blasint *, int, int);
- void BLASFUNC(xher2k)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-void OPENBLAS_API(xher2k)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 -	   xdouble*, blasint *, xdouble *, xdouble *, blasint *);
-+	   xdouble*, blasint *, xdouble *, xdouble *, blasint *, int, int);
- 
- int BLASFUNC(cher2m)(char *, char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
+-
+-int OPENBLAS_API(cher2m)(char *, char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
 -	   float *, blasint *, float  *, float  *, blasint *);
-+	   float *, blasint *, float  *, float  *, blasint *, int, int, int);
- int BLASFUNC(zher2m)(char *, char *, char *, blasint *, blasint *, double *, double *, blasint *,
+-int OPENBLAS_API(zher2m)(char *, char *, char *, blasint *, blasint *, double *, double *, blasint *,
 -	   double*, blasint *, double *, double *, blasint *);
-+	   double*, blasint *, double *, double *, blasint *, int, int, int);
- int BLASFUNC(xher2m)(char *, char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
+-int OPENBLAS_API(xher2m)(char *, char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
 -	   xdouble*, blasint *, xdouble *, xdouble *, blasint *);
-+	   xdouble*, blasint *, xdouble *, xdouble *, blasint *, int, int, int);
- 
- int BLASFUNC(sgemt)(char *, blasint *, blasint *, float  *, float  *, blasint *,
+-
+-int OPENBLAS_API(sgemt)(char *, blasint *, blasint *, float  *, float  *, blasint *,
 -		    float  *, blasint *);
-+		    float  *, blasint *, int);
- int BLASFUNC(dgemt)(char *, blasint *, blasint *, double *, double *, blasint *,
+-int OPENBLAS_API(dgemt)(char *, blasint *, blasint *, double *, double *, blasint *,
 -		    double *, blasint *);
-+		    double *, blasint *, int);
- int BLASFUNC(cgemt)(char *, blasint *, blasint *, float  *, float  *, blasint *,
+-int OPENBLAS_API(cgemt)(char *, blasint *, blasint *, float  *, float  *, blasint *,
 -		    float  *, blasint *);
-+		    float  *, blasint *, int);
- int BLASFUNC(zgemt)(char *, blasint *, blasint *, double *, double *, blasint *,
+-int OPENBLAS_API(zgemt)(char *, blasint *, blasint *, double *, double *, blasint *,
 -		    double *, blasint *);
-+		    double *, blasint *, int);
- 
- int BLASFUNC(sgema)(char *, char *, blasint *, blasint *, float  *,
+-
+-int OPENBLAS_API(sgema)(char *, char *, blasint *, blasint *, float  *,
 -		    float  *, blasint *, float *, float  *, blasint *, float *, blasint *);
-+		    float  *, blasint *, float *, float  *, blasint *, float *, blasint *, int, int);
- int BLASFUNC(dgema)(char *, char *, blasint *, blasint *, double *,
+-int OPENBLAS_API(dgema)(char *, char *, blasint *, blasint *, double *,
 -		    double *, blasint *, double*, double *, blasint *, double*, blasint *);
-+		    double *, blasint *, double*, double *, blasint *, double*, blasint *, int, int);
- int BLASFUNC(cgema)(char *, char *, blasint *, blasint *, float  *,
+-int OPENBLAS_API(cgema)(char *, char *, blasint *, blasint *, float  *,
 -		    float  *, blasint *, float *, float  *, blasint *, float *, blasint *);
-+		    float  *, blasint *, float *, float  *, blasint *, float *, blasint *, int, int);
- int BLASFUNC(zgema)(char *, char *, blasint *, blasint *, double *,
+-int OPENBLAS_API(zgema)(char *, char *, blasint *, blasint *, double *,
 -		    double *, blasint *, double*, double *, blasint *, double*, blasint *);
-+		    double *, blasint *, double*, double *, blasint *, double*, blasint *, int, int);
- 
- int BLASFUNC(sgems)(char *, char *, blasint *, blasint *, float  *,
+-
+-int OPENBLAS_API(sgems)(char *, char *, blasint *, blasint *, float  *,
 -		    float  *, blasint *, float *, float  *, blasint *, float *, blasint *);
-+		    float  *, blasint *, float *, float  *, blasint *, float *, blasint *, int, int);
- int BLASFUNC(dgems)(char *, char *, blasint *, blasint *, double *,
+-int OPENBLAS_API(dgems)(char *, char *, blasint *, blasint *, double *,
 -		    double *, blasint *, double*, double *, blasint *, double*, blasint *);
-+		    double *, blasint *, double*, double *, blasint *, double*, blasint *, int, int);
- int BLASFUNC(cgems)(char *, char *, blasint *, blasint *, float  *,
+-int OPENBLAS_API(cgems)(char *, char *, blasint *, blasint *, float  *,
 -		    float  *, blasint *, float *, float  *, blasint *, float *, blasint *);
-+		    float  *, blasint *, float *, float  *, blasint *, float *, blasint *, int, int);
- int BLASFUNC(zgems)(char *, char *, blasint *, blasint *, double *,
+-int OPENBLAS_API(zgems)(char *, char *, blasint *, blasint *, double *,
 -		    double *, blasint *, double*, double *, blasint *, double*, blasint *);
-+		    double *, blasint *, double*, double *, blasint *, double*, blasint *, int, int);
- 
- int BLASFUNC(sgemc)(char *, char *, blasint *, blasint *, blasint *, float *,
+-
+-int OPENBLAS_API(sgemc)(char *, char *, blasint *, blasint *, blasint *, float *,
 -	   float  *, blasint *, float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *);
-+	   float  *, blasint *, float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *, int, int);
- int BLASFUNC(dgemc)(char *, char *, blasint *, blasint *, blasint *, double *,
+-int OPENBLAS_API(dgemc)(char *, char *, blasint *, blasint *, blasint *, double *,
 -	   double *, blasint *, double *, blasint *, double *, blasint *, double *, double *, blasint *);
-+	   double *, blasint *, double *, blasint *, double *, blasint *, double *, double *, blasint *, int, int);
- int BLASFUNC(qgemc)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
+-int OPENBLAS_API(qgemc)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
 -	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *,  xdouble *, xdouble *, blasint *);
-+	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *,  xdouble *, xdouble *, blasint *, int, int);
- int BLASFUNC(cgemc)(char *, char *, blasint *, blasint *, blasint *, float *,
+-int OPENBLAS_API(cgemc)(char *, char *, blasint *, blasint *, blasint *, float *,
 -	   float  *, blasint *, float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *);
-+	   float  *, blasint *, float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *, int, int);
- int BLASFUNC(zgemc)(char *, char *, blasint *, blasint *, blasint *, double *,
+-int OPENBLAS_API(zgemc)(char *, char *, blasint *, blasint *, blasint *, double *,
 -	   double *, blasint *, double *, blasint *, double *, blasint *, double *, double *, blasint *);
-+	   double *, blasint *, double *, blasint *, double *, blasint *, double *, double *, blasint *, int, int);
- int BLASFUNC(xgemc)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
+-int OPENBLAS_API(xgemc)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
 -	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *, blasint *);
++		     double *, double  *, blasint *, int, int, int);
++
++void BLASFUNC(strsm)(char *, char *, char *, char *, blasint *, blasint *,
++	   float *,  float *, blasint *, float *, blasint *, int, int, int, int);
++void BLASFUNC(dtrsm)(char *, char *, char *, char *, blasint *, blasint *,
++	   double *,  double *, blasint *, double *, blasint *, int, int, int, int);
++void BLASFUNC(qtrsm)(char *, char *, char *, char *, blasint *, blasint *,
++	   xdouble *,  xdouble *, blasint *, xdouble *, blasint *, int, int, int, int);
++void BLASFUNC(ctrsm)(char *, char *, char *, char *, blasint *, blasint *,
++	   float *,  float *, blasint *, float *, blasint *, int, int, int, int);
++void BLASFUNC(ztrsm)(char *, char *, char *, char *, blasint *, blasint *,
++	   double *,  double *, blasint *, double *, blasint *, int, int, int, int);
++void BLASFUNC(xtrsm)(char *, char *, char *, char *, blasint *, blasint *,
++	   xdouble *,  xdouble *, blasint *, xdouble *, blasint *, int, int, int, int);
++
++void BLASFUNC(strmm)(char *, char *, char *, char *, blasint *, blasint *,
++	   float *,  float *, blasint *, float *, blasint *, int, int, int, int);
++void BLASFUNC(dtrmm)(char *, char *, char *, char *, blasint *, blasint *,
++	   double *,  double *, blasint *, double *, blasint *, int, int, int, int);
++void BLASFUNC(qtrmm)(char *, char *, char *, char *, blasint *, blasint *,
++	   xdouble *,  xdouble *, blasint *, xdouble *, blasint *, int, int, int, int);
++void BLASFUNC(ctrmm)(char *, char *, char *, char *, blasint *, blasint *,
++	   float *,  float *, blasint *, float *, blasint *, int, int, int, int);
++void BLASFUNC(ztrmm)(char *, char *, char *, char *, blasint *, blasint *,
++	   double *,  double *, blasint *, double *, blasint *, int, int, int, int);
++void BLASFUNC(xtrmm)(char *, char *, char *, char *, blasint *, blasint *,
++	   xdouble *,  xdouble *, blasint *, xdouble *, blasint *, int, int, int, int);
++
++void BLASFUNC(ssymm)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
++	   float  *, blasint *, float  *, float  *, blasint *, int, int);
++void BLASFUNC(dsymm)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
++	   double *, blasint *, double *, double *, blasint *, int, int);
++void BLASFUNC(qsymm)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
++	   xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
++void BLASFUNC(csymm)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
++	   float  *, blasint *, float  *, float  *, blasint *, int, int);
++void BLASFUNC(zsymm)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
++	   double *, blasint *, double *, double *, blasint *, int, int);
++void BLASFUNC(xsymm)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
++	   xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
++
++void BLASFUNC(csymm3m)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
++	   float  *, blasint *, float  *, float  *, blasint *, int, int);
++void BLASFUNC(zsymm3m)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
++	   double *, blasint *, double *, double *, blasint *, int, int);
++void BLASFUNC(xsymm3m)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
++	   xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
++
++void BLASFUNC(ssyrk)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
++	   float  *, float  *, blasint *, int, int);
++void BLASFUNC(dsyrk)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
++	   double *, double *, blasint *, int, int);
++void BLASFUNC(qsyrk)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
++	   xdouble *, xdouble *, blasint *, int, int);
++void BLASFUNC(csyrk)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
++	   float  *, float  *, blasint *, int, int);
++void BLASFUNC(zsyrk)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
++	   double *, double *, blasint *, int, int);
++void BLASFUNC(xsyrk)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
++	   xdouble *, xdouble *, blasint *, int, int);
++
++void BLASFUNC(ssyr2k)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
++	   float *, blasint *, float  *, float  *, blasint *, int, int);
++void BLASFUNC(dsyr2k)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
++	   double*, blasint *, double *, double *, blasint *, int, int);
++void BLASFUNC(qsyr2k)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
++	   xdouble*, blasint *, xdouble *, xdouble *, blasint *, int, int);
++void BLASFUNC(csyr2k)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
++	   float *, blasint *, float  *, float  *, blasint *, int, int);
++void BLASFUNC(zsyr2k)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
++	   double*, blasint *, double *, double *, blasint *, int, int);
++void BLASFUNC(xsyr2k)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
++	   xdouble*, blasint *, xdouble *, xdouble *, blasint *, int, int);
++
++void BLASFUNC(chemm)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
++	   float  *, blasint *, float  *, float  *, blasint *, int, int);
++void BLASFUNC(zhemm)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
++	   double *, blasint *, double *, double *, blasint *, int, int);
++void BLASFUNC(xhemm)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
++	   xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
++
++void BLASFUNC(chemm3m)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
++	   float  *, blasint *, float  *, float  *, blasint *, int, int);
++void BLASFUNC(zhemm3m)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
++	   double *, blasint *, double *, double *, blasint *, int, int);
++void BLASFUNC(xhemm3m)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
++	   xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
++
++void BLASFUNC(cherk)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
++	   float  *, float  *, blasint *, int, int);
++void BLASFUNC(zherk)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
++	   double *, double *, blasint *, int, int);
++void BLASFUNC(xherk)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
++	   xdouble *, xdouble *, blasint *, int, int);
++
++void BLASFUNC(cher2k)(char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
++	   float *, blasint *, float  *, float  *, blasint *, int, int);
++void BLASFUNC(zher2k)(char *, char *, blasint *, blasint *, double *, double *, blasint *,
++	   double*, blasint *, double *, double *, blasint *, int, int);
++void BLASFUNC(xher2k)(char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
++	   xdouble*, blasint *, xdouble *, xdouble *, blasint *, int, int);
++
++int BLASFUNC(cher2m)(char *, char *, char *, blasint *, blasint *, float  *, float  *, blasint *,
++	   float *, blasint *, float  *, float  *, blasint *, int, int, int);
++int BLASFUNC(zher2m)(char *, char *, char *, blasint *, blasint *, double *, double *, blasint *,
++	   double*, blasint *, double *, double *, blasint *, int, int, int);
++int BLASFUNC(xher2m)(char *, char *, char *, blasint *, blasint *, xdouble *, xdouble *, blasint *,
++	   xdouble*, blasint *, xdouble *, xdouble *, blasint *, int, int, int);
++
++int BLASFUNC(sgemt)(char *, blasint *, blasint *, float  *, float  *, blasint *,
++		    float  *, blasint *, int);
++int BLASFUNC(dgemt)(char *, blasint *, blasint *, double *, double *, blasint *,
++		    double *, blasint *, int);
++int BLASFUNC(cgemt)(char *, blasint *, blasint *, float  *, float  *, blasint *,
++		    float  *, blasint *, int);
++int BLASFUNC(zgemt)(char *, blasint *, blasint *, double *, double *, blasint *,
++		    double *, blasint *, int);
++
++int BLASFUNC(sgema)(char *, char *, blasint *, blasint *, float  *,
++		    float  *, blasint *, float *, float  *, blasint *, float *, blasint *, int, int);
++int BLASFUNC(dgema)(char *, char *, blasint *, blasint *, double *,
++		    double *, blasint *, double*, double *, blasint *, double*, blasint *, int, int);
++int BLASFUNC(cgema)(char *, char *, blasint *, blasint *, float  *,
++		    float  *, blasint *, float *, float  *, blasint *, float *, blasint *, int, int);
++int BLASFUNC(zgema)(char *, char *, blasint *, blasint *, double *,
++		    double *, blasint *, double*, double *, blasint *, double*, blasint *, int, int);
++
++int BLASFUNC(sgems)(char *, char *, blasint *, blasint *, float  *,
++		    float  *, blasint *, float *, float  *, blasint *, float *, blasint *, int, int);
++int BLASFUNC(dgems)(char *, char *, blasint *, blasint *, double *,
++		    double *, blasint *, double*, double *, blasint *, double*, blasint *, int, int);
++int BLASFUNC(cgems)(char *, char *, blasint *, blasint *, float  *,
++		    float  *, blasint *, float *, float  *, blasint *, float *, blasint *, int, int);
++int BLASFUNC(zgems)(char *, char *, blasint *, blasint *, double *,
++		    double *, blasint *, double*, double *, blasint *, double*, blasint *, int, int);
++
++int BLASFUNC(sgemc)(char *, char *, blasint *, blasint *, blasint *, float *,
++	   float  *, blasint *, float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *, int, int);
++int BLASFUNC(dgemc)(char *, char *, blasint *, blasint *, blasint *, double *,
++	   double *, blasint *, double *, blasint *, double *, blasint *, double *, double *, blasint *, int, int);
++int BLASFUNC(qgemc)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
++	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *,  xdouble *, xdouble *, blasint *, int, int);
++int BLASFUNC(cgemc)(char *, char *, blasint *, blasint *, blasint *, float *,
++	   float  *, blasint *, float  *, blasint *, float  *, blasint *, float  *, float  *, blasint *, int, int);
++int BLASFUNC(zgemc)(char *, char *, blasint *, blasint *, blasint *, double *,
++	   double *, blasint *, double *, blasint *, double *, blasint *, double *, double *, blasint *, int, int);
++int BLASFUNC(xgemc)(char *, char *, blasint *, blasint *, blasint *, xdouble *,
 +	   xdouble *, blasint *, xdouble *, blasint *, xdouble *, blasint *, xdouble *, xdouble *, blasint *, int, int);
  
  /* Lapack routines */
  
-@@ -705,12 +705,12 @@ int BLASFUNC(claswp)(blasint *, float  *, blasint *, blasint *, blasint *, blasi
- int BLASFUNC(zlaswp)(blasint *, double *, blasint *, blasint *, blasint *, blasint *, blasint *);
- int BLASFUNC(xlaswp)(blasint *, xdouble *, blasint *, blasint *, blasint *, blasint *, blasint *);
- 
--int BLASFUNC(sgetrs)(char *, blasint *, blasint *, float  *, blasint *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(dgetrs)(char *, blasint *, blasint *, double *, blasint *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(qgetrs)(char *, blasint *, blasint *, xdouble *, blasint *, blasint *, xdouble *, blasint *, blasint *);
--int BLASFUNC(cgetrs)(char *, blasint *, blasint *, float  *, blasint *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(zgetrs)(char *, blasint *, blasint *, double *, blasint *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(xgetrs)(char *, blasint *, blasint *, xdouble *, blasint *, blasint *, xdouble *, blasint *, blasint *);
+-int OPENBLAS_API(sgetf2)(blasint *, blasint *, float  *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(dgetf2)(blasint *, blasint *, double *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(qgetf2)(blasint *, blasint *, xdouble *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(cgetf2)(blasint *, blasint *, float  *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(zgetf2)(blasint *, blasint *, double *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(xgetf2)(blasint *, blasint *, xdouble *, blasint *, blasint *, blasint *);
+-
+-int OPENBLAS_API(sgetrf)(blasint *, blasint *, float  *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(dgetrf)(blasint *, blasint *, double *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(qgetrf)(blasint *, blasint *, xdouble *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(cgetrf)(blasint *, blasint *, float  *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(zgetrf)(blasint *, blasint *, double *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(xgetrf)(blasint *, blasint *, xdouble *, blasint *, blasint *, blasint *);
+-
+-int OPENBLAS_API(slaswp)(blasint *, float  *, blasint *, blasint *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(dlaswp)(blasint *, double *, blasint *, blasint *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(qlaswp)(blasint *, xdouble *, blasint *, blasint *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(claswp)(blasint *, float  *, blasint *, blasint *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(zlaswp)(blasint *, double *, blasint *, blasint *, blasint *, blasint *, blasint *);
+-int OPENBLAS_API(xlaswp)(blasint *, xdouble *, blasint *, blasint *, blasint *, blasint *, blasint *);
+-
+-int OPENBLAS_API(sgetrs)(char *, blasint *, blasint *, float  *, blasint *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(dgetrs)(char *, blasint *, blasint *, double *, blasint *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(qgetrs)(char *, blasint *, blasint *, xdouble *, blasint *, blasint *, xdouble *, blasint *, blasint *);
+-int OPENBLAS_API(cgetrs)(char *, blasint *, blasint *, float  *, blasint *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(zgetrs)(char *, blasint *, blasint *, double *, blasint *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(xgetrs)(char *, blasint *, blasint *, xdouble *, blasint *, blasint *, xdouble *, blasint *, blasint *);
+-
+-int OPENBLAS_API(sgesv)(blasint *, blasint *, float  *, blasint *, blasint *, float *, blasint *, blasint *);
+-int OPENBLAS_API(dgesv)(blasint *, blasint *, double *, blasint *, blasint *, double*, blasint *, blasint *);
+-int OPENBLAS_API(qgesv)(blasint *, blasint *, xdouble *, blasint *, blasint *, xdouble*, blasint *, blasint *);
+-int OPENBLAS_API(cgesv)(blasint *, blasint *, float  *, blasint *, blasint *, float *, blasint *, blasint *);
+-int OPENBLAS_API(zgesv)(blasint *, blasint *, double *, blasint *, blasint *, double*, blasint *, blasint *);
+-int OPENBLAS_API(xgesv)(blasint *, blasint *, xdouble *, blasint *, blasint *, xdouble*, blasint *, blasint *);
+-
+-int OPENBLAS_API(spotf2)(char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(dpotf2)(char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(qpotf2)(char *, blasint *, xdouble *, blasint *, blasint *);
+-int OPENBLAS_API(cpotf2)(char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(zpotf2)(char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(xpotf2)(char *, blasint *, xdouble *, blasint *, blasint *);
+-
+-int OPENBLAS_API(spotrf)(char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(dpotrf)(char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(qpotrf)(char *, blasint *, xdouble *, blasint *, blasint *);
+-int OPENBLAS_API(cpotrf)(char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(zpotrf)(char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(xpotrf)(char *, blasint *, xdouble *, blasint *, blasint *);
+-
+-int OPENBLAS_API(spotri)(char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(dpotri)(char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(qpotri)(char *, blasint *, xdouble *, blasint *, blasint *);
+-int OPENBLAS_API(cpotri)(char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(zpotri)(char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(xpotri)(char *, blasint *, xdouble *, blasint *, blasint *);
+-
+-int OPENBLAS_API(spotrs)(char *, blasint *, blasint *, float   *, blasint *, float   *, blasint *, blasint *);
+-int OPENBLAS_API(dpotrs)(char *, blasint *, blasint *, double  *, blasint *, double  *, blasint *, blasint *);
+-int OPENBLAS_API(qpotrs)(char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *, blasint *);
+-int OPENBLAS_API(cpotrs)(char *, blasint *, blasint *, float   *, blasint *, float   *, blasint *, blasint *);
+-int OPENBLAS_API(zpotrs)(char *, blasint *, blasint *, double  *, blasint *, double  *, blasint *, blasint *);
+-int OPENBLAS_API(xpotrs)(char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *, blasint *);
+-
+-int OPENBLAS_API(slauu2)(char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(dlauu2)(char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(qlauu2)(char *, blasint *, xdouble *, blasint *, blasint *);
+-int OPENBLAS_API(clauu2)(char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(zlauu2)(char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(xlauu2)(char *, blasint *, xdouble *, blasint *, blasint *);
+-
+-int OPENBLAS_API(slauum)(char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(dlauum)(char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(qlauum)(char *, blasint *, xdouble *, blasint *, blasint *);
+-int OPENBLAS_API(clauum)(char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(zlauum)(char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(xlauum)(char *, blasint *, xdouble *, blasint *, blasint *);
+-
+-int OPENBLAS_API(strti2)(char *, char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(dtrti2)(char *, char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(qtrti2)(char *, char *, blasint *, xdouble *, blasint *, blasint *);
+-int OPENBLAS_API(ctrti2)(char *, char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(ztrti2)(char *, char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(xtrti2)(char *, char *, blasint *, xdouble *, blasint *, blasint *);
+-
+-int OPENBLAS_API(strtri)(char *, char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(dtrtri)(char *, char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(qtrtri)(char *, char *, blasint *, xdouble *, blasint *, blasint *);
+-int OPENBLAS_API(ctrtri)(char *, char *, blasint *, float  *, blasint *, blasint *);
+-int OPENBLAS_API(ztrtri)(char *, char *, blasint *, double *, blasint *, blasint *);
+-int OPENBLAS_API(xtrtri)(char *, char *, blasint *, xdouble *, blasint *, blasint *);
+-
+-
+-FLOATRET  OPENBLAS_API(slamch)(char *);
+-double    OPENBLAS_API(dlamch)(char *);
+-xdouble   OPENBLAS_API(qlamch)(char *);
+-
+-FLOATRET  OPENBLAS_API(slamc3)(float *, float *);
+-double    OPENBLAS_API(dlamc3)(double *, double *);
+-xdouble   OPENBLAS_API(qlamc3)(xdouble *, xdouble *);
++int BLASFUNC(sgetf2)(blasint *, blasint *, float  *, blasint *, blasint *, blasint *);
++int BLASFUNC(dgetf2)(blasint *, blasint *, double *, blasint *, blasint *, blasint *);
++int BLASFUNC(qgetf2)(blasint *, blasint *, xdouble *, blasint *, blasint *, blasint *);
++int BLASFUNC(cgetf2)(blasint *, blasint *, float  *, blasint *, blasint *, blasint *);
++int BLASFUNC(zgetf2)(blasint *, blasint *, double *, blasint *, blasint *, blasint *);
++int BLASFUNC(xgetf2)(blasint *, blasint *, xdouble *, blasint *, blasint *, blasint *);
++
++int BLASFUNC(sgetrf)(blasint *, blasint *, float  *, blasint *, blasint *, blasint *);
++int BLASFUNC(dgetrf)(blasint *, blasint *, double *, blasint *, blasint *, blasint *);
++int BLASFUNC(qgetrf)(blasint *, blasint *, xdouble *, blasint *, blasint *, blasint *);
++int BLASFUNC(cgetrf)(blasint *, blasint *, float  *, blasint *, blasint *, blasint *);
++int BLASFUNC(zgetrf)(blasint *, blasint *, double *, blasint *, blasint *, blasint *);
++int BLASFUNC(xgetrf)(blasint *, blasint *, xdouble *, blasint *, blasint *, blasint *);
++
++int BLASFUNC(slaswp)(blasint *, float  *, blasint *, blasint *, blasint *, blasint *, blasint *);
++int BLASFUNC(dlaswp)(blasint *, double *, blasint *, blasint *, blasint *, blasint *, blasint *);
++int BLASFUNC(qlaswp)(blasint *, xdouble *, blasint *, blasint *, blasint *, blasint *, blasint *);
++int BLASFUNC(claswp)(blasint *, float  *, blasint *, blasint *, blasint *, blasint *, blasint *);
++int BLASFUNC(zlaswp)(blasint *, double *, blasint *, blasint *, blasint *, blasint *, blasint *);
++int BLASFUNC(xlaswp)(blasint *, xdouble *, blasint *, blasint *, blasint *, blasint *, blasint *);
++
 +int BLASFUNC(sgetrs)(char *, blasint *, blasint *, float  *, blasint *, blasint *, float  *, blasint *, blasint *, int);
 +int BLASFUNC(dgetrs)(char *, blasint *, blasint *, double *, blasint *, blasint *, double *, blasint *, blasint *, int);
 +int BLASFUNC(qgetrs)(char *, blasint *, blasint *, xdouble *, blasint *, blasint *, xdouble *, blasint *, blasint *, int);
 +int BLASFUNC(cgetrs)(char *, blasint *, blasint *, float  *, blasint *, blasint *, float  *, blasint *, blasint *, int);
 +int BLASFUNC(zgetrs)(char *, blasint *, blasint *, double *, blasint *, blasint *, double *, blasint *, blasint *, int);
 +int BLASFUNC(xgetrs)(char *, blasint *, blasint *, xdouble *, blasint *, blasint *, xdouble *, blasint *, blasint *, int);
- 
- int BLASFUNC(sgesv)(blasint *, blasint *, float  *, blasint *, blasint *, float *, blasint *, blasint *);
- int BLASFUNC(dgesv)(blasint *, blasint *, double *, blasint *, blasint *, double*, blasint *, blasint *);
-@@ -719,66 +719,66 @@ int BLASFUNC(cgesv)(blasint *, blasint *, float  *, blasint *, blasint *, float
- int BLASFUNC(zgesv)(blasint *, blasint *, double *, blasint *, blasint *, double*, blasint *, blasint *);
- int BLASFUNC(xgesv)(blasint *, blasint *, xdouble *, blasint *, blasint *, xdouble*, blasint *, blasint *);
- 
--int BLASFUNC(spotf2)(char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(dpotf2)(char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(qpotf2)(char *, blasint *, xdouble *, blasint *, blasint *);
--int BLASFUNC(cpotf2)(char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(zpotf2)(char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(xpotf2)(char *, blasint *, xdouble *, blasint *, blasint *);
--
--int BLASFUNC(spotrf)(char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(dpotrf)(char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(qpotrf)(char *, blasint *, xdouble *, blasint *, blasint *);
--int BLASFUNC(cpotrf)(char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(zpotrf)(char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(xpotrf)(char *, blasint *, xdouble *, blasint *, blasint *);
--
--int BLASFUNC(spotri)(char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(dpotri)(char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(qpotri)(char *, blasint *, xdouble *, blasint *, blasint *);
--int BLASFUNC(cpotri)(char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(zpotri)(char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(xpotri)(char *, blasint *, xdouble *, blasint *, blasint *);
--
--int BLASFUNC(spotrs)(char *, blasint *, blasint *, float   *, blasint *, float   *, blasint *, blasint *);
--int BLASFUNC(dpotrs)(char *, blasint *, blasint *, double  *, blasint *, double  *, blasint *, blasint *);
--int BLASFUNC(qpotrs)(char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *, blasint *);
--int BLASFUNC(cpotrs)(char *, blasint *, blasint *, float   *, blasint *, float   *, blasint *, blasint *);
--int BLASFUNC(zpotrs)(char *, blasint *, blasint *, double  *, blasint *, double  *, blasint *, blasint *);
--int BLASFUNC(xpotrs)(char *, blasint *, blasint *, xdouble *, blasint *, xdouble *, blasint *, blasint *);
--
--int BLASFUNC(slauu2)(char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(dlauu2)(char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(qlauu2)(char *, blasint *, xdouble *, blasint *, blasint *);
--int BLASFUNC(clauu2)(char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(zlauu2)(char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(xlauu2)(char *, blasint *, xdouble *, blasint *, blasint *);
--
--int BLASFUNC(slauum)(char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(dlauum)(char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(qlauum)(char *, blasint *, xdouble *, blasint *, blasint *);
--int BLASFUNC(clauum)(char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(zlauum)(char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(xlauum)(char *, blasint *, xdouble *, blasint *, blasint *);
--
--int BLASFUNC(strti2)(char *, char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(dtrti2)(char *, char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(qtrti2)(char *, char *, blasint *, xdouble *, blasint *, blasint *);
--int BLASFUNC(ctrti2)(char *, char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(ztrti2)(char *, char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(xtrti2)(char *, char *, blasint *, xdouble *, blasint *, blasint *);
--
--int BLASFUNC(strtri)(char *, char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(dtrtri)(char *, char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(qtrtri)(char *, char *, blasint *, xdouble *, blasint *, blasint *);
--int BLASFUNC(ctrtri)(char *, char *, blasint *, float  *, blasint *, blasint *);
--int BLASFUNC(ztrtri)(char *, char *, blasint *, double *, blasint *, blasint *);
--int BLASFUNC(xtrtri)(char *, char *, blasint *, xdouble *, blasint *, blasint *);
--
--
--FLOATRET  BLASFUNC(slamch)(char *);
--double    BLASFUNC(dlamch)(char *);
--xdouble   BLASFUNC(qlamch)(char *);
++
++int BLASFUNC(sgesv)(blasint *, blasint *, float  *, blasint *, blasint *, float *, blasint *, blasint *);
++int BLASFUNC(dgesv)(blasint *, blasint *, double *, blasint *, blasint *, double*, blasint *, blasint *);
++int BLASFUNC(qgesv)(blasint *, blasint *, xdouble *, blasint *, blasint *, xdouble*, blasint *, blasint *);
++int BLASFUNC(cgesv)(blasint *, blasint *, float  *, blasint *, blasint *, float *, blasint *, blasint *);
++int BLASFUNC(zgesv)(blasint *, blasint *, double *, blasint *, blasint *, double*, blasint *, blasint *);
++int BLASFUNC(xgesv)(blasint *, blasint *, xdouble *, blasint *, blasint *, xdouble*, blasint *, blasint *);
++
 +int BLASFUNC(spotf2)(char *, blasint *, float  *, blasint *, blasint *, int);
 +int BLASFUNC(dpotf2)(char *, blasint *, double *, blasint *, blasint *, int);
 +int BLASFUNC(qpotf2)(char *, blasint *, xdouble *, blasint *, blasint *, int);
@@ -854,17 +1491,47 @@ index 26107634d..e4576e60a 100644
 +FLOATRET  BLASFUNC(slamch)(char *, int);
 +double    BLASFUNC(dlamch)(char *, int);
 +xdouble   BLASFUNC(qlamch)(char *, int);
++
++FLOATRET  BLASFUNC(slamc3)(float *, float *);
++double    BLASFUNC(dlamc3)(double *, double *);
++xdouble   BLASFUNC(qlamc3)(xdouble *, xdouble *);
  
- FLOATRET  BLASFUNC(slamc3)(float *, float *);
- double    BLASFUNC(dlamc3)(double *, double *);
-@@ -801,10 +801,10 @@ void    BLASFUNC(dimatcopy) (char *, char *, blasint *, blasint *, double  *, do
- void    BLASFUNC(cimatcopy) (char *, char *, blasint *, blasint *, float  *, float  *, blasint *, blasint *);
- void    BLASFUNC(zimatcopy) (char *, char *, blasint *, blasint *, double  *, double  *, blasint *, blasint *);
+ /* BLAS extensions */
  
--void    BLASFUNC(sgeadd) (blasint *, blasint *, float *, float *, blasint *, float *, float *, blasint*,char*, char*); 
--void    BLASFUNC(dgeadd) (blasint *, blasint *, double *, double *, blasint *, double *, double *, blasint*,char *, char *); 
--void    BLASFUNC(cgeadd) (blasint *, blasint *, float *, float *, blasint *, float *, float *, blasint*,char *, char *); 
--void    BLASFUNC(zgeadd) (blasint *, blasint *, double *, double *, blasint *, double *, double *, blasint*,char *, char *); 
+-void    OPENBLAS_API(saxpby) (blasint *, float  *, float  *, blasint *, float *, float  *, blasint *);
+-void    OPENBLAS_API(daxpby) (blasint *, double  *, double  *, blasint *, double *, double  *, blasint *);
+-void    OPENBLAS_API(caxpby) (blasint *, void  *, float  *, blasint *, void *, float  *, blasint *);
+-void    OPENBLAS_API(zaxpby) (blasint *, void  *, double *, blasint *, void *, double  *, blasint *);
+-
+-void    OPENBLAS_API(somatcopy) (char *, char *, blasint *, blasint *, float  *, float  *, blasint *, float  *, blasint *);
+-void    OPENBLAS_API(domatcopy) (char *, char *, blasint *, blasint *, double  *, double  *, blasint *, double  *, blasint *);
+-void    OPENBLAS_API(comatcopy) (char *, char *, blasint *, blasint *, float  *, float  *, blasint *, float  *, blasint *);
+-void    OPENBLAS_API(zomatcopy) (char *, char *, blasint *, blasint *, double  *, double  *, blasint *, double  *, blasint *);
+-
+-void    OPENBLAS_API(simatcopy) (char *, char *, blasint *, blasint *, float  *, float  *, blasint *, blasint *);
+-void    OPENBLAS_API(dimatcopy) (char *, char *, blasint *, blasint *, double  *, double  *, blasint *, blasint *);
+-void    OPENBLAS_API(cimatcopy) (char *, char *, blasint *, blasint *, float  *, float  *, blasint *, blasint *);
+-void    OPENBLAS_API(zimatcopy) (char *, char *, blasint *, blasint *, double  *, double  *, blasint *, blasint *);
+-
+-void    OPENBLAS_API(sgeadd) (blasint *, blasint *, float *, float *, blasint *, float *, float *, blasint*,char*, char*); 
+-void    OPENBLAS_API(dgeadd) (blasint *, blasint *, double *, double *, blasint *, double *, double *, blasint*,char *, char *); 
+-void    OPENBLAS_API(cgeadd) (blasint *, blasint *, float *, float *, blasint *, float *, float *, blasint*,char *, char *); 
+-void    OPENBLAS_API(zgeadd) (blasint *, blasint *, double *, double *, blasint *, double *, double *, blasint*,char *, char *); 
++void    BLASFUNC(saxpby) (blasint *, float  *, float  *, blasint *, float *, float  *, blasint *);
++void    BLASFUNC(daxpby) (blasint *, double  *, double  *, blasint *, double *, double  *, blasint *);
++void    BLASFUNC(caxpby) (blasint *, void  *, float  *, blasint *, void *, float  *, blasint *);
++void    BLASFUNC(zaxpby) (blasint *, void  *, double *, blasint *, void *, double  *, blasint *);
++
++void    BLASFUNC(somatcopy) (char *, char *, blasint *, blasint *, float  *, float  *, blasint *, float  *, blasint *);
++void    BLASFUNC(domatcopy) (char *, char *, blasint *, blasint *, double  *, double  *, blasint *, double  *, blasint *);
++void    BLASFUNC(comatcopy) (char *, char *, blasint *, blasint *, float  *, float  *, blasint *, float  *, blasint *);
++void    BLASFUNC(zomatcopy) (char *, char *, blasint *, blasint *, double  *, double  *, blasint *, double  *, blasint *);
++
++void    BLASFUNC(simatcopy) (char *, char *, blasint *, blasint *, float  *, float  *, blasint *, blasint *);
++void    BLASFUNC(dimatcopy) (char *, char *, blasint *, blasint *, double  *, double  *, blasint *, blasint *);
++void    BLASFUNC(cimatcopy) (char *, char *, blasint *, blasint *, float  *, float  *, blasint *, blasint *);
++void    BLASFUNC(zimatcopy) (char *, char *, blasint *, blasint *, double  *, double  *, blasint *, blasint *);
++
 +void    BLASFUNC(sgeadd) (blasint *, blasint *, float *, float *, blasint *, float *, float *, blasint*,char*, char*);
 +void    BLASFUNC(dgeadd) (blasint *, blasint *, double *, double *, blasint *, double *, double *, blasint*,char *, char *);
 +void    BLASFUNC(cgeadd) (blasint *, blasint *, float *, float *, blasint *, float *, float *, blasint*,char *, char *);
@@ -873,10 +1540,10 @@ index 26107634d..e4576e60a 100644
  
  #ifdef __cplusplus
 diff --git a/interface/gbmv.c b/interface/gbmv.c
-index 7a6581368..04172cb8d 100644
+index 3abbbd0aa..7803eccc4 100644
 --- a/interface/gbmv.c
 +++ b/interface/gbmv.c
-@@ -80,7 +80,7 @@ void NAME(char *TRANS, blasint *M, blasint *N,
+@@ -81,7 +81,7 @@ void NAME(char *TRANS, blasint *M, blasint *N,
  	 blasint *KU, blasint *KL,
  	 FLOAT *ALPHA, FLOAT *a, blasint *LDA,
  	 FLOAT *x, blasint *INCX,
@@ -886,10 +1553,10 @@ index 7a6581368..04172cb8d 100644
    char trans = *TRANS;
    blasint m = *M;
 diff --git a/interface/gemm.c b/interface/gemm.c
-index 79b076164..5253d9f36 100644
+index 93a74959c..0d3e0682d 100644
 --- a/interface/gemm.c
 +++ b/interface/gemm.c
-@@ -260,7 +260,7 @@ void NAME(char *TRANSA, char *TRANSB,
+@@ -262,7 +262,7 @@ void NAME(char *TRANSA, char *TRANSB,
  	  IFLOAT *a, blasint *ldA,
  	  IFLOAT *b, blasint *ldB,
  	  FLOAT *beta,
@@ -899,10 +1566,10 @@ index 79b076164..5253d9f36 100644
    blas_arg_t args;
  
 diff --git a/interface/gemmt.c b/interface/gemmt.c
-index aa65f81ed..887be7ec6 100644
+index 39f41ae1c..deb855a24 100644
 --- a/interface/gemmt.c
 +++ b/interface/gemmt.c
-@@ -90,7 +90,7 @@ void NAME(char *UPLO, char *TRANSA, char *TRANSB,
+@@ -92,7 +92,7 @@ void NAME(char *UPLO, char *TRANSA, char *TRANSB,
  	  blasint * M, blasint * K,
  	  FLOAT * Alpha,
  	  IFLOAT * a, blasint * ldA,
@@ -911,7 +1578,7 @@ index aa65f81ed..887be7ec6 100644
  {
  
  	blasint m, k;
-@@ -180,7 +180,7 @@ void NAME(char *UPLO, char *TRANSA, char *TRANSB,
+@@ -182,7 +182,7 @@ void NAME(char *UPLO, char *TRANSA, char *TRANSB,
  		uplo = 0;
  	if (Uplo == 'L')
  		uplo = 1;
@@ -920,7 +1587,7 @@ index aa65f81ed..887be7ec6 100644
  	nrowa = m;
  	if (transa & 1) nrowa = k;
  	nrowb = k;
-@@ -377,7 +377,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo,
+@@ -379,7 +379,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo,
  
  		info = -1;
  
@@ -930,10 +1597,10 @@ index aa65f81ed..887be7ec6 100644
  		blasint ncolb;
  #endif
 diff --git a/interface/gemv.c b/interface/gemv.c
-index 79589d808..abbf208f8 100644
+index d718e1701..35f0874b5 100644
 --- a/interface/gemv.c
 +++ b/interface/gemv.c
-@@ -136,7 +136,7 @@ static inline int get_gemv_optimal_nthreads(BLASLONG MN) {
+@@ -138,7 +138,7 @@ OPENBLAS_EXPORT
  void NAME(char *TRANS, blasint *M, blasint *N,
  	   FLOAT *ALPHA, FLOAT *a, blasint *LDA,
  	   FLOAT *x, blasint *INCX,
@@ -942,7 +1609,7 @@ index 79589d808..abbf208f8 100644
  
    char trans = *TRANS;
    blasint m = *M;
-@@ -269,7 +269,7 @@ void CNAME(enum CBLAS_ORDER order,
+@@ -271,7 +271,7 @@ void CNAME(enum CBLAS_ORDER order,
    if (beta != ONE) SCAL_K(leny, 0, 0, beta, y, blasabs(incy), NULL, 0, NULL, 0);
  
    if (alpha == ZERO) return;
@@ -952,10 +1619,10 @@ index 79589d808..abbf208f8 100644
  
    FUNCTION_PROFILE_START();
 diff --git a/interface/lapack/getrf.c b/interface/lapack/getrf.c
-index 270604120..4a58774d1 100644
+index c802c14a3..8e7781f23 100644
 --- a/interface/lapack/getrf.c
 +++ b/interface/lapack/getrf.c
-@@ -98,7 +98,7 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
+@@ -99,7 +99,7 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
  
  #ifndef DOUBLE
    int nmax = 40000;
@@ -965,12 +1632,12 @@ index 270604120..4a58774d1 100644
  #endif
    if (args.m*args.n <nmax) {
 diff --git a/interface/lapack/getrs.c b/interface/lapack/getrs.c
-index 0cc6df037..b86b173ce 100644
+index 4fc13c676..33ce4c5d3 100644
 --- a/interface/lapack/getrs.c
 +++ b/interface/lapack/getrs.c
-@@ -61,7 +61,7 @@ static blasint (*getrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- #endif
+@@ -62,7 +62,7 @@ static blasint (*getrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  
+ OPENBLAS_EXPORT
  int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
 -  blasint *ipiv, FLOAT *b, blasint *ldB, blasint *Info){
 +  blasint *ipiv, FLOAT *b, blasint *ldB, blasint *Info, int dummy_len){
@@ -978,58 +1645,58 @@ index 0cc6df037..b86b173ce 100644
    char trans_arg = *TRANS;
  
 diff --git a/interface/lapack/lauu2.c b/interface/lapack/lauu2.c
-index e581e3c15..74ddb0831 100644
+index bbc8c51f1..eaf68f634 100644
 --- a/interface/lapack/lauu2.c
 +++ b/interface/lapack/lauu2.c
-@@ -60,7 +60,7 @@ static blasint (*lauu2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
- #endif
+@@ -61,7 +61,7 @@ static blasint (*lauu2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
    };
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/lauum.c b/interface/lapack/lauum.c
-index 81c4fc07a..cc927ff6b 100644
+index 14ab393a3..474efcec1 100644
 --- a/interface/lapack/lauum.c
 +++ b/interface/lapack/lauum.c
-@@ -60,7 +60,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
+@@ -61,7 +61,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/potf2.c b/interface/lapack/potf2.c
-index 1537b6ee4..cfd116ba1 100644
+index a8ecbe8cf..4f10d3592 100644
 --- a/interface/lapack/potf2.c
 +++ b/interface/lapack/potf2.c
-@@ -60,7 +60,7 @@ static blasint (*potf2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
- #endif
+@@ -61,7 +61,7 @@ static blasint (*potf2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
    };
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/potrf.c b/interface/lapack/potrf.c
-index a24e48d95..3f994e7f6 100644
+index 4c9ee613c..e1bf6d4b6 100644
 --- a/interface/lapack/potrf.c
 +++ b/interface/lapack/potrf.c
-@@ -60,7 +60,7 @@ static blasint (*potrf_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
+@@ -61,7 +61,7 @@ static blasint (*potrf_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
-@@ -114,7 +114,7 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
+@@ -115,7 +115,7 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
    args.common = NULL;
  #ifndef DOUBLE
    int nmax = 128;
@@ -1039,51 +1706,51 @@ index a24e48d95..3f994e7f6 100644
  #endif
    if (args.n <nmax) {
 diff --git a/interface/lapack/potri.c b/interface/lapack/potri.c
-index eb0fcbe70..51eb4fb2e 100644
+index 8f9676771..bc44ec2de 100644
 --- a/interface/lapack/potri.c
 +++ b/interface/lapack/potri.c
-@@ -68,7 +68,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
+@@ -69,7 +69,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/trti2.c b/interface/lapack/trti2.c
-index 47f04f06f..bd32dc433 100644
+index 9cd299674..348c007a9 100644
 --- a/interface/lapack/trti2.c
 +++ b/interface/lapack/trti2.c
-@@ -60,7 +60,7 @@ static blasint (*trti2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
- #endif
+@@ -61,7 +61,7 @@ static blasint (*trti2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
    };
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/trtri.c b/interface/lapack/trtri.c
-index 82d806b8c..e118caad8 100644
+index 78e0469eb..3977cc6b1 100644
 --- a/interface/lapack/trtri.c
 +++ b/interface/lapack/trtri.c
-@@ -61,7 +61,7 @@ static blasint (*trtri_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- #endif
+@@ -62,7 +62,7 @@ static blasint (*trtri_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/trtrs.c b/interface/lapack/trtrs.c
-index 53d8fb0ec..249c05fbe 100644
+index 11e7dc064..4b12b4041 100644
 --- a/interface/lapack/trtrs.c
 +++ b/interface/lapack/trtrs.c
-@@ -61,7 +61,7 @@ static blasint (*trtrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- #endif
+@@ -62,7 +62,7 @@ static blasint (*trtrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  
+ OPENBLAS_EXPORT
  int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
 -  FLOAT *b, blasint *ldB, blasint *Info){
 +  FLOAT *b, blasint *ldB, blasint *Info, int dummy_len0, int dummy_len1, int dummy_len2){
@@ -1091,12 +1758,12 @@ index 53d8fb0ec..249c05fbe 100644
      char uplo_arg = *UPLO;
      char trans_arg = *TRANS;
 diff --git a/interface/lapack/zgetrs.c b/interface/lapack/zgetrs.c
-index e76a8a1b2..15832fce7 100644
+index 6b3cdb729..1e3ee2d23 100644
 --- a/interface/lapack/zgetrs.c
 +++ b/interface/lapack/zgetrs.c
-@@ -61,7 +61,7 @@ static blasint (*getrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- #endif
+@@ -62,7 +62,7 @@ static blasint (*getrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  
+ OPENBLAS_EXPORT
  int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
 -	    blasint *ipiv, FLOAT *b, blasint *ldB, blasint *Info){
 +	    blasint *ipiv, FLOAT *b, blasint *ldB, blasint *Info, int dummy_len){
@@ -1104,103 +1771,103 @@ index e76a8a1b2..15832fce7 100644
    char trans_arg = *TRANS;
  
 diff --git a/interface/lapack/zlauu2.c b/interface/lapack/zlauu2.c
-index ae972543c..2385b5ff6 100644
+index 18b05b720..c0f12eb3a 100644
 --- a/interface/lapack/zlauu2.c
 +++ b/interface/lapack/zlauu2.c
-@@ -61,7 +61,7 @@ static blasint (*lauu2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
- #endif
+@@ -62,7 +62,7 @@ static blasint (*lauu2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
    };
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/zlauum.c b/interface/lapack/zlauum.c
-index 9f0cd9400..1ef3429d3 100644
+index 10d6353c1..fd4d8f347 100644
 --- a/interface/lapack/zlauum.c
 +++ b/interface/lapack/zlauum.c
-@@ -60,7 +60,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
+@@ -61,7 +61,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/zpotf2.c b/interface/lapack/zpotf2.c
-index c74b66728..490f0ceae 100644
+index 27890cdf3..7558dc4bf 100644
 --- a/interface/lapack/zpotf2.c
 +++ b/interface/lapack/zpotf2.c
-@@ -61,7 +61,7 @@ static blasint (*potf2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
- #endif
+@@ -62,7 +62,7 @@ static blasint (*potf2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
    };
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/zpotrf.c b/interface/lapack/zpotrf.c
-index 298efbbc1..dd80b9678 100644
+index 0943d311c..d0383856c 100644
 --- a/interface/lapack/zpotrf.c
 +++ b/interface/lapack/zpotrf.c
-@@ -60,7 +60,7 @@ static blasint (*potrf_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
+@@ -61,7 +61,7 @@ static blasint (*potrf_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/zpotri.c b/interface/lapack/zpotri.c
-index 8748c6352..6d789d7a4 100644
+index acee404c1..f2725b468 100644
 --- a/interface/lapack/zpotri.c
 +++ b/interface/lapack/zpotri.c
-@@ -68,7 +68,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
+@@ -69,7 +69,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/ztrti2.c b/interface/lapack/ztrti2.c
-index cb9c0d557..b8085d387 100644
+index e962523cf..74cb23d04 100644
 --- a/interface/lapack/ztrti2.c
 +++ b/interface/lapack/ztrti2.c
-@@ -60,7 +60,7 @@ static blasint (*trti2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
- #endif
+@@ -61,7 +61,7 @@ static blasint (*trti2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
    };
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/ztrtri.c b/interface/lapack/ztrtri.c
-index bfd6e3ea9..d3081b041 100644
+index ba6001160..266f564b0 100644
 --- a/interface/lapack/ztrtri.c
 +++ b/interface/lapack/ztrtri.c
-@@ -60,7 +60,7 @@ static blasint (*trtri_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
+@@ -61,7 +61,7 @@ static blasint (*trtri_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info){
 +int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
  
    blas_arg_t args;
  
 diff --git a/interface/lapack/ztrtrs.c b/interface/lapack/ztrtrs.c
-index df0bac360..a64eaca47 100644
+index eb8ae6413..fddfdb2d2 100644
 --- a/interface/lapack/ztrtrs.c
 +++ b/interface/lapack/ztrtrs.c
-@@ -61,7 +61,7 @@ static blasint (*trtrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- #endif
+@@ -62,7 +62,7 @@ static blasint (*trtrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  
+ OPENBLAS_EXPORT
  int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
 -  FLOAT *b, blasint *ldB, blasint *Info){
 +  FLOAT *b, blasint *ldB, blasint *Info, int dummy_len0, int dummy_len1, int dummy_len2){
@@ -1208,10 +1875,10 @@ index df0bac360..a64eaca47 100644
      char uplo_arg = *UPLO;
      char trans_arg = *TRANS;
 diff --git a/interface/sbmv.c b/interface/sbmv.c
-index 25e99ca34..6a08e67ab 100644
+index 019c72c13..b7a170060 100644
 --- a/interface/sbmv.c
 +++ b/interface/sbmv.c
-@@ -84,7 +84,7 @@ static  int (*sbmv_thread[])(BLASLONG, BLASLONG, FLOAT, FLOAT *, BLASLONG, FLOAT
+@@ -86,7 +86,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, blasint *K, FLOAT  *ALPHA, FLOAT *a, blasint *LDA,
@@ -1221,10 +1888,10 @@ index 25e99ca34..6a08e67ab 100644
    char uplo_arg = *UPLO;
    blasint n	= *N;
 diff --git a/interface/spmv.c b/interface/spmv.c
-index e08ae3f6e..7c5a17339 100644
+index c2aca3786..b672ffe37 100644
 --- a/interface/spmv.c
 +++ b/interface/spmv.c
-@@ -76,7 +76,7 @@ static  int (*spmv_thread[])(BLASLONG, FLOAT, FLOAT *, FLOAT *, BLASLONG, FLOAT
+@@ -78,7 +78,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA, FLOAT *a,
@@ -1234,10 +1901,10 @@ index e08ae3f6e..7c5a17339 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/spr.c b/interface/spr.c
-index 1f5e0bd31..8cd88edee 100644
+index dbe090b15..5e824c72e 100644
 --- a/interface/spr.c
 +++ b/interface/spr.c
-@@ -76,7 +76,7 @@ static int (*spr_thread[])(BLASLONG, FLOAT, FLOAT *, BLASLONG, FLOAT *, FLOAT *,
+@@ -78,7 +78,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
@@ -1246,7 +1913,7 @@ index 1f5e0bd31..8cd88edee 100644
  
    char uplo_arg = *UPLO;
    blasint n		= *N;
-@@ -176,7 +176,7 @@ void CNAME(enum CBLAS_ORDER order,
+@@ -178,7 +178,7 @@ void CNAME(enum CBLAS_ORDER order,
          }
          a += i + 1;
        }
@@ -1256,10 +1923,10 @@ index 1f5e0bd31..8cd88edee 100644
          if (x[i] != ZERO) {
            AXPYU_K(n - i, 0, 0, alpha * x[i], x + i, 1, a, 1, NULL, 0);
 diff --git a/interface/spr2.c b/interface/spr2.c
-index fb1b338f2..ef8ece787 100644
+index 90ca1c965..8c6823f68 100644
 --- a/interface/spr2.c
 +++ b/interface/spr2.c
-@@ -76,7 +76,7 @@ static int (*spr2_thread[])(BLASLONG, FLOAT, FLOAT *, BLASLONG, FLOAT *, BLASLON
+@@ -78,7 +78,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
@@ -1269,10 +1936,10 @@ index fb1b338f2..ef8ece787 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/symm.c b/interface/symm.c
-index 4f51f9faf..1227c81fd 100644
+index c1ab19608..96bf916dd 100644
 --- a/interface/symm.c
 +++ b/interface/symm.c
-@@ -155,7 +155,7 @@ void NAME(char *SIDE, char *UPLO,
+@@ -157,7 +157,7 @@ void NAME(char *SIDE, char *UPLO,
           blasint *M, blasint *N,
           FLOAT *alpha, FLOAT *a, blasint *ldA,
           FLOAT *b, blasint *ldB,
@@ -1281,7 +1948,7 @@ index 4f51f9faf..1227c81fd 100644
  
    char side_arg  = *SIDE;
    char uplo_arg  = *UPLO;
-@@ -253,7 +253,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_SIDE Side, enum CBLAS_UPLO Uplo,
+@@ -255,7 +255,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_SIDE Side, enum CBLAS_UPLO Uplo,
    FLOAT *beta  = (FLOAT*) vbeta;
    FLOAT *a = (FLOAT*) va;
    FLOAT *b = (FLOAT*) vb;
@@ -1291,10 +1958,10 @@ index 4f51f9faf..1227c81fd 100644
  
    blas_arg_t args;
 diff --git a/interface/symv.c b/interface/symv.c
-index 1f23ce4ee..b7e6558fb 100644
+index 756252620..fe4235439 100644
 --- a/interface/symv.c
 +++ b/interface/symv.c
-@@ -54,7 +54,7 @@
+@@ -56,7 +56,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA, FLOAT *a, blasint *LDA,
@@ -1304,10 +1971,10 @@ index 1f23ce4ee..b7e6558fb 100644
    char uplo_arg = *UPLO;
    blasint n	= *N;
 diff --git a/interface/syr.c b/interface/syr.c
-index 761df762a..773473e5b 100644
+index a7581740f..54e1d6b56 100644
 --- a/interface/syr.c
 +++ b/interface/syr.c
-@@ -76,7 +76,7 @@ static int (*syr_thread[])(BLASLONG, FLOAT, FLOAT *, BLASLONG, FLOAT *, BLASLONG
+@@ -78,7 +78,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
@@ -1316,7 +1983,7 @@ index 761df762a..773473e5b 100644
  
    char uplo_arg = *UPLO;
    blasint n		= *N;
-@@ -178,7 +178,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo, blasint n, FLOAT alpha,
+@@ -180,7 +180,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo, blasint n, FLOAT alpha,
            AXPYU_K(i + 1, 0, 0, alpha * x[i], x,     1, a, 1, NULL, 0);
          }
          a += lda;
@@ -1325,7 +1992,7 @@ index 761df762a..773473e5b 100644
      } else {
        for (i = 0; i < n; i++){
          if (x[i] != ZERO) {
-@@ -188,7 +188,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo, blasint n, FLOAT alpha,
+@@ -190,7 +190,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo, blasint n, FLOAT alpha,
        }
      }
      return;
@@ -1335,10 +2002,10 @@ index 761df762a..773473e5b 100644
    if (incx < 0 ) x -= (n - 1) * incx;
  
 diff --git a/interface/syr2.c b/interface/syr2.c
-index b983fa0d6..b1c3b019f 100644
+index 795958a02..8fc904d65 100644
 --- a/interface/syr2.c
 +++ b/interface/syr2.c
-@@ -76,7 +76,7 @@ static int (*syr2_thread[])(BLASLONG, FLOAT, FLOAT *, BLASLONG, FLOAT *, BLASLON
+@@ -78,7 +78,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
@@ -1347,7 +2014,7 @@ index b983fa0d6..b1c3b019f 100644
  
    char uplo_arg = *UPLO;
    blasint n		= *N;
-@@ -188,7 +188,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo, blasint n, FLOAT alpha,
+@@ -190,7 +190,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo, blasint n, FLOAT alpha,
      return;
    }
  
@@ -1357,10 +2024,10 @@ index b983fa0d6..b1c3b019f 100644
  
    if (incx < 0 ) x -= (n - 1) * incx;
 diff --git a/interface/syr2k.c b/interface/syr2k.c
-index bfdc1c029..234c225bb 100644
+index 4b005d088..736bae117 100644
 --- a/interface/syr2k.c
 +++ b/interface/syr2k.c
-@@ -85,7 +85,7 @@ void NAME(char *UPLO, char *TRANS,
+@@ -87,7 +87,7 @@ void NAME(char *UPLO, char *TRANS,
           blasint *N, blasint *K,
           FLOAT *alpha, FLOAT *a, blasint *ldA,
  	               FLOAT *b, blasint *ldB,
@@ -1370,10 +2037,10 @@ index bfdc1c029..234c225bb 100644
    char uplo_arg  = *UPLO;
    char trans_arg = *TRANS;
 diff --git a/interface/syrk.c b/interface/syrk.c
-index 3647ac5cf..5e35cc957 100644
+index bfce536a0..fc70856d6 100644
 --- a/interface/syrk.c
 +++ b/interface/syrk.c
-@@ -96,7 +96,7 @@ static int (*syrk[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *, BLA
+@@ -98,7 +98,7 @@ OPENBLAS_EXPORT
  void NAME(char *UPLO, char *TRANS,
           blasint *N, blasint *K,
           FLOAT *alpha, FLOAT *a, blasint *ldA,
@@ -1383,10 +2050,10 @@ index 3647ac5cf..5e35cc957 100644
    char uplo_arg  = *UPLO;
    char trans_arg = *TRANS;
 diff --git a/interface/tbmv.c b/interface/tbmv.c
-index c518c296a..b39a73f5e 100644
+index 0317a06d2..040183bf5 100644
 --- a/interface/tbmv.c
 +++ b/interface/tbmv.c
-@@ -83,7 +83,7 @@ static int (*tbmv_thread[])(BLASLONG, BLASLONG, FLOAT *, BLASLONG, FLOAT *, BLAS
+@@ -85,7 +85,7 @@ OPENBLAS_EXPORT
  
  void NAME(char *UPLO, char *TRANS, char *DIAG,
  	 blasint *N, blasint *K,
@@ -1396,10 +2063,10 @@ index c518c296a..b39a73f5e 100644
    char uplo_arg  = *UPLO;
    char trans_arg = *TRANS;
 diff --git a/interface/tbsv.c b/interface/tbsv.c
-index 12a1eb003..66b806797 100644
+index 7f4393c18..85448cef3 100644
 --- a/interface/tbsv.c
 +++ b/interface/tbsv.c
-@@ -68,7 +68,7 @@ static int (*tbsv[])(BLASLONG, BLASLONG, FLOAT *, BLASLONG, FLOAT *, BLASLONG, v
+@@ -70,7 +70,7 @@ OPENBLAS_EXPORT
  
  void NAME(char *UPLO, char *TRANS, char *DIAG,
  	 blasint *N, blasint *K,
@@ -1409,10 +2076,10 @@ index 12a1eb003..66b806797 100644
    char uplo_arg  = *UPLO;
    char trans_arg = *TRANS;
 diff --git a/interface/tpmv.c b/interface/tpmv.c
-index c9ad3748a..e736dfeac 100644
+index d818f30c6..9a283633f 100644
 --- a/interface/tpmv.c
 +++ b/interface/tpmv.c
-@@ -82,7 +82,7 @@ static int (*tpmv_thread[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLOAT *, int)
+@@ -84,7 +84,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, char *TRANS, char *DIAG,
@@ -1422,10 +2089,10 @@ index c9ad3748a..e736dfeac 100644
    char uplo_arg  = *UPLO;
    char trans_arg = *TRANS;
 diff --git a/interface/tpsv.c b/interface/tpsv.c
-index 58be77cd3..74fe727be 100644
+index 09e6c334d..508894e42 100644
 --- a/interface/tpsv.c
 +++ b/interface/tpsv.c
-@@ -67,7 +67,7 @@ static int (*tpsv[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, void *) = {
+@@ -69,7 +69,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, char *TRANS, char *DIAG,
@@ -1435,10 +2102,10 @@ index 58be77cd3..74fe727be 100644
    char uplo_arg  = *UPLO;
    char trans_arg = *TRANS;
 diff --git a/interface/trmv.c b/interface/trmv.c
-index 029a83499..3b86a7db3 100644
+index d9beffd5a..a1135e165 100644
 --- a/interface/trmv.c
 +++ b/interface/trmv.c
-@@ -82,7 +82,7 @@ static int (*trmv_thread[])(BLASLONG, FLOAT *, BLASLONG, FLOAT *, BLASLONG, FLOA
+@@ -84,7 +84,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, char *TRANS, char *DIAG,
@@ -1448,10 +2115,10 @@ index 029a83499..3b86a7db3 100644
    char uplo_arg  = *UPLO;
    char trans_arg = *TRANS;
 diff --git a/interface/trsm.c b/interface/trsm.c
-index 988b59f6f..981f02f5d 100644
+index 1395e88f5..a45d87b01 100644
 --- a/interface/trsm.c
 +++ b/interface/trsm.c
-@@ -117,7 +117,7 @@ static int (*trsm[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *, BLA
+@@ -119,7 +119,7 @@ OPENBLAS_EXPORT
  
  void NAME(char *SIDE, char *UPLO, char *TRANS, char *DIAG,
  	   blasint *M, blasint *N, FLOAT *alpha,
@@ -1460,7 +2127,7 @@ index 988b59f6f..981f02f5d 100644
  
    char side_arg  = *SIDE;
    char uplo_arg  = *UPLO;
-@@ -414,7 +414,7 @@ if (strcmp(gotoblas_corename(), "armv9sme") == 0
+@@ -421,7 +421,7 @@ if (strcmp(gotoblas_corename(), "armv9sme") == 0
  	args.nthreads = 1;
    else
  	args.nthreads = num_cpu_avail(3);
@@ -1470,10 +2137,10 @@ index 988b59f6f..981f02f5d 100644
    if (args.nthreads == 1) {
  #endif
 diff --git a/interface/trsv.c b/interface/trsv.c
-index a054d8eeb..6372a74e8 100644
+index d1c069fc4..a205da17b 100644
 --- a/interface/trsv.c
 +++ b/interface/trsv.c
-@@ -67,7 +67,7 @@ static int (*trsv[])(BLASLONG, FLOAT *, BLASLONG, FLOAT *, BLASLONG, void *) = {
+@@ -69,7 +69,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, char *TRANS, char *DIAG,
@@ -1483,10 +2150,10 @@ index a054d8eeb..6372a74e8 100644
    char uplo_arg  = *UPLO;
    char trans_arg = *TRANS;
 diff --git a/interface/zgbmv.c b/interface/zgbmv.c
-index 5128b22e1..6b0b1b35b 100644
+index 09e5b2b44..46a8acfbe 100644
 --- a/interface/zgbmv.c
 +++ b/interface/zgbmv.c
-@@ -86,7 +86,7 @@ void NAME(char *TRANS, blasint *M, blasint *N,
+@@ -88,7 +88,7 @@ void NAME(char *TRANS, blasint *M, blasint *N,
  	 blasint *KU, blasint *KL,
  	 FLOAT *ALPHA, FLOAT *a, blasint *LDA,
  	 FLOAT *x, blasint *INCX,
@@ -1495,8 +2162,8 @@ index 5128b22e1..6b0b1b35b 100644
  
    char trans = *TRANS;
    blasint m = *M;
-@@ -251,7 +251,7 @@ void CNAME(enum CBLAS_ORDER order,
-   buffer = (FLOAT *)blas_memory_alloc(1);
+@@ -258,7 +258,7 @@ void CNAME(enum CBLAS_ORDER order,
+   }
  
  #ifdef SMP
 -  if (m * n  < 125000 || ku + kl < 15) 
@@ -1505,10 +2172,10 @@ index 5128b22e1..6b0b1b35b 100644
    else
      nthreads = num_cpu_avail(2);
 diff --git a/interface/zgemv.c b/interface/zgemv.c
-index 3438575b9..2e3b75f3b 100644
+index 42498c160..60f4b92f7 100644
 --- a/interface/zgemv.c
 +++ b/interface/zgemv.c
-@@ -67,7 +67,7 @@ static int (*gemv_thread[])(BLASLONG, BLASLONG, FLOAT *, FLOAT *, BLASLONG,  FLO
+@@ -69,7 +69,7 @@ OPENBLAS_EXPORT
  void NAME(char *TRANS, blasint *M, blasint *N,
  	 FLOAT *ALPHA, FLOAT *a, blasint *LDA,
  	 FLOAT *x, blasint *INCX,
@@ -1517,7 +2184,7 @@ index 3438575b9..2e3b75f3b 100644
  
    char trans = *TRANS;
    blasint m = *M;
-@@ -253,7 +253,7 @@ void CNAME(enum CBLAS_ORDER order,
+@@ -255,7 +255,7 @@ void CNAME(enum CBLAS_ORDER order,
  #ifdef SMP
  
  #if defined(_WIN64) && defined(_M_ARM64)
@@ -1526,7 +2193,7 @@ index 3438575b9..2e3b75f3b 100644
      nthreads = num_cpu_avail(4);
    else
      nthreads = 1;
-@@ -262,10 +262,10 @@ void CNAME(enum CBLAS_ORDER order,
+@@ -264,10 +264,10 @@ void CNAME(enum CBLAS_ORDER order,
      nthreads = 1;
    else
      nthreads = num_cpu_avail(2);
@@ -1540,10 +2207,10 @@ index 3438575b9..2e3b75f3b 100644
      (gemv[(int)trans])(m, n, 0, alpha_r, alpha_i, a, lda, x, incx, y, incy, buffer);
  
 diff --git a/interface/zhbmv.c b/interface/zhbmv.c
-index 656f137c6..32727097e 100644
+index 4ee7cc73b..af46ee686 100644
 --- a/interface/zhbmv.c
 +++ b/interface/zhbmv.c
-@@ -76,7 +76,7 @@ static  int (*hbmv_thread[])(BLASLONG, BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLO
+@@ -78,7 +78,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, blasint *K, FLOAT  *ALPHA, FLOAT *a, blasint *LDA,
@@ -1553,10 +2220,10 @@ index 656f137c6..32727097e 100644
    char uplo_arg = *UPLO;
    blasint n	= *N;
 diff --git a/interface/zhemv.c b/interface/zhemv.c
-index 9c31f31d9..173c46aca 100644
+index 3f5785c91..d380f80af 100644
 --- a/interface/zhemv.c
 +++ b/interface/zhemv.c
-@@ -58,7 +58,7 @@
+@@ -60,7 +60,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA, FLOAT *a, blasint *LDA,
@@ -1566,10 +2233,10 @@ index 9c31f31d9..173c46aca 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/zher.c b/interface/zher.c
-index 49b1cec03..29f165700 100644
+index ce836559f..498257104 100644
 --- a/interface/zher.c
 +++ b/interface/zher.c
-@@ -76,7 +76,7 @@ static int (*her_thread[])(BLASLONG, FLOAT, FLOAT *, BLASLONG, FLOAT *, BLASLONG
+@@ -78,7 +78,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
@@ -1579,10 +2246,10 @@ index 49b1cec03..29f165700 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/zher2.c b/interface/zher2.c
-index eba4c4f41..de3c6d71d 100644
+index c6999b4bf..d37423055 100644
 --- a/interface/zher2.c
 +++ b/interface/zher2.c
-@@ -76,7 +76,7 @@ static int (*her2_thread[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLOAT *, BLASL
+@@ -78,7 +78,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
@@ -1592,10 +2259,10 @@ index eba4c4f41..de3c6d71d 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/zhpmv.c b/interface/zhpmv.c
-index 013dd3e79..adff0a7ae 100644
+index c2812f49e..14c403365 100644
 --- a/interface/zhpmv.c
 +++ b/interface/zhpmv.c
-@@ -76,7 +76,7 @@ static  int (*hpmv_thread[])(BLASLONG, FLOAT *, FLOAT *, FLOAT *, BLASLONG, FLOA
+@@ -78,7 +78,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA, FLOAT *a,
@@ -1605,10 +2272,10 @@ index 013dd3e79..adff0a7ae 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/zhpr.c b/interface/zhpr.c
-index 34700549e..e7b1db6d5 100644
+index 264c18fde..c0f05bfa0 100644
 --- a/interface/zhpr.c
 +++ b/interface/zhpr.c
-@@ -76,7 +76,7 @@ static int (*hpr_thread[])(BLASLONG, FLOAT, FLOAT *, BLASLONG, FLOAT *, FLOAT *,
+@@ -78,7 +78,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
@@ -1618,10 +2285,10 @@ index 34700549e..e7b1db6d5 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/zhpr2.c b/interface/zhpr2.c
-index 1cbaaa062..0855d8018 100644
+index 5e286e778..624950fe7 100644
 --- a/interface/zhpr2.c
 +++ b/interface/zhpr2.c
-@@ -76,7 +76,7 @@ static int (*hpr2_thread[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLOAT *, BLASL
+@@ -78,7 +78,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
@@ -1631,12 +2298,12 @@ index 1cbaaa062..0855d8018 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/zsbmv.c b/interface/zsbmv.c
-index cd5cefed9..dcb561c18 100644
+index fd71bc59e..5ee1645ba 100644
 --- a/interface/zsbmv.c
 +++ b/interface/zsbmv.c
-@@ -82,7 +82,7 @@ static  int (*sbmv_thread[])(BLASLONG, BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLO
- #endif
+@@ -83,7 +83,7 @@ static  int (*sbmv_thread[])(BLASLONG, BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLO
  
+ OPENBLAS_EXPORT
  void NAME(char *UPLO, blasint *N, blasint *K, FLOAT  *ALPHA, FLOAT *a, blasint *LDA,
 -            FLOAT  *b, blasint *INCX, FLOAT *BETA, FLOAT *c, blasint *INCY){
 +            FLOAT  *b, blasint *INCX, FLOAT *BETA, FLOAT *c, blasint *INCY, int dummy_len){
@@ -1644,11 +2311,11 @@ index cd5cefed9..dcb561c18 100644
    char uplo_arg = *UPLO;
    blasint n	= *N;
 diff --git a/interface/zspmv.c b/interface/zspmv.c
-index be11463c0..d881cba6b 100644
+index 57f2fbfdf..8fdbb0ade 100644
 --- a/interface/zspmv.c
 +++ b/interface/zspmv.c
-@@ -74,7 +74,7 @@ static  int (*spmv_thread[])(BLASLONG, FLOAT *, FLOAT *, FLOAT *, BLASLONG, FLOA
- #endif
+@@ -76,7 +76,7 @@ static  int (*spmv_thread[])(BLASLONG, FLOAT *, FLOAT *, FLOAT *, BLASLONG, FLOA
+ OPENBLAS_EXPORT
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA, FLOAT *a,
 -            FLOAT  *b, blasint *INCX, FLOAT *BETA, FLOAT *c, blasint *INCY){
@@ -1657,12 +2324,12 @@ index be11463c0..d881cba6b 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/zspr.c b/interface/zspr.c
-index 190e62d66..881cdcd47 100644
+index 339ad801d..c42b228a5 100644
 --- a/interface/zspr.c
 +++ b/interface/zspr.c
-@@ -74,7 +74,7 @@ static int (*spr_thread[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLOAT *, FLOAT
- #endif
+@@ -75,7 +75,7 @@ static int (*spr_thread[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLOAT *, FLOAT
  
+ OPENBLAS_EXPORT
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
 -	 FLOAT  *x, blasint *INCX, FLOAT *a){
 +	 FLOAT  *x, blasint *INCX, FLOAT *a, int dummy_len){
@@ -1670,12 +2337,12 @@ index 190e62d66..881cdcd47 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/zspr2.c b/interface/zspr2.c
-index 53b7b9867..f950638a1 100644
+index 74a1b2467..aceac4638 100644
 --- a/interface/zspr2.c
 +++ b/interface/zspr2.c
-@@ -74,7 +74,7 @@ static int (*spr2_thread[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLOAT *, BLASL
- #endif
+@@ -75,7 +75,7 @@ static int (*spr2_thread[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLOAT *, BLASL
  
+ OPENBLAS_EXPORT
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
 -	 FLOAT  *x, blasint *INCX, FLOAT *y, blasint *INCY, FLOAT *a){
 +	 FLOAT  *x, blasint *INCX, FLOAT *y, blasint *INCY, FLOAT *a, int dummy_len){
@@ -1683,11 +2350,11 @@ index 53b7b9867..f950638a1 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/zsymv.c b/interface/zsymv.c
-index 0cd690f81..ebd7b7bab 100644
+index cd5afea45..618eda623 100644
 --- a/interface/zsymv.c
 +++ b/interface/zsymv.c
-@@ -52,7 +52,7 @@
- #endif
+@@ -54,7 +54,7 @@
+ OPENBLAS_EXPORT
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA, FLOAT *a, blasint *LDA,
 -            FLOAT  *b, blasint *INCX, FLOAT *BETA, FLOAT *c, blasint *INCY){
@@ -1696,10 +2363,10 @@ index 0cd690f81..ebd7b7bab 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/zsyr.c b/interface/zsyr.c
-index 0d3c35dc0..1161b7d56 100644
+index 418f81431..ee84a0c42 100644
 --- a/interface/zsyr.c
 +++ b/interface/zsyr.c
-@@ -77,7 +77,7 @@ static int (*syr_thread[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLOAT *, BLASLO
+@@ -78,7 +78,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
@@ -1709,12 +2376,12 @@ index 0d3c35dc0..1161b7d56 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/zsyr2.c b/interface/zsyr2.c
-index e3bdf56e2..6c09b2e3f 100644
+index c892fc43e..edc60354f 100644
 --- a/interface/zsyr2.c
 +++ b/interface/zsyr2.c
-@@ -74,7 +74,7 @@ static int (*syr2_thread[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLOAT *, BLASL
- #endif
+@@ -75,7 +75,7 @@ static int (*syr2_thread[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLOAT *, BLASL
  
+ OPENBLAS_EXPORT
  void NAME(char *UPLO, blasint *N, FLOAT  *ALPHA,
 -	 FLOAT  *x, blasint *INCX, FLOAT *y, blasint *INCY, FLOAT *a, blasint *LDA){
 +	 FLOAT  *x, blasint *INCX, FLOAT *y, blasint *INCY, FLOAT *a, blasint *LDA, int dummy_len){
@@ -1722,10 +2389,10 @@ index e3bdf56e2..6c09b2e3f 100644
    char uplo_arg = *UPLO;
    blasint n		= *N;
 diff --git a/interface/ztbmv.c b/interface/ztbmv.c
-index 98fce6606..beb498887 100644
+index dd0dd72a2..e713e8d96 100644
 --- a/interface/ztbmv.c
 +++ b/interface/ztbmv.c
-@@ -95,7 +95,7 @@ static int (*tbmv_thread[])(BLASLONG, BLASLONG, FLOAT *, BLASLONG, FLOAT *, BLAS
+@@ -97,7 +97,7 @@ OPENBLAS_EXPORT
  
  void NAME(char *UPLO, char *TRANS, char *DIAG,
  	 blasint *N, blasint *K,
@@ -1735,10 +2402,10 @@ index 98fce6606..beb498887 100644
    char uplo_arg  = *UPLO;
    char trans_arg = *TRANS;
 diff --git a/interface/ztbsv.c b/interface/ztbsv.c
-index 7e144ce75..84c551e3b 100644
+index bb912be07..495ba09b9 100644
 --- a/interface/ztbsv.c
 +++ b/interface/ztbsv.c
-@@ -74,7 +74,7 @@ static int (*tbsv[])(BLASLONG, BLASLONG, FLOAT *, BLASLONG, FLOAT *, BLASLONG, v
+@@ -76,7 +76,7 @@ OPENBLAS_EXPORT
  
  void NAME(char *UPLO, char *TRANS, char *DIAG,
  	 blasint *N, blasint *K,
@@ -1747,7 +2414,7 @@ index 7e144ce75..84c551e3b 100644
  
    char uplo_arg  = *UPLO;
    char trans_arg = *TRANS;
-@@ -135,7 +135,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo,
+@@ -137,7 +137,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo,
  
    FLOAT *a = (FLOAT*) va;
    FLOAT *x = (FLOAT*) vx;
@@ -1757,59 +2424,15 @@ index 7e144ce75..84c551e3b 100644
    blasint info;
    FLOAT *buffer;
 diff --git a/interface/ztpmv.c b/interface/ztpmv.c
-index 3d79e84e1..1594ecf4f 100644
+index f199697f0..c76d15944 100644
 --- a/interface/ztpmv.c
 +++ b/interface/ztpmv.c
-@@ -94,7 +94,7 @@ static int (*tpmv_thread[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, FLOAT *, int)
+@@ -96,7 +96,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, char *TRANS, char *DIAG,
 -	   blasint *N, FLOAT *a, FLOAT *x, blasint *INCX){
 +	   blasint *N, FLOAT *a, FLOAT *x, blasint *INCX, int dummy_len0, int dummy_len1, int dummy_len2){
- 
-   char uplo_arg  = *UPLO;
-   char trans_arg = *TRANS;
-@@ -154,7 +154,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo,
- 
-   FLOAT *a = (FLOAT*) va;
-   FLOAT *x = (FLOAT*) vx;
--  
-+
-   int trans, uplo, unit;
-   blasint info;
-   FLOAT *buffer;
-diff --git a/interface/ztpsv.c b/interface/ztpsv.c
-index fa706b565..cae3b811b 100644
---- a/interface/ztpsv.c
-+++ b/interface/ztpsv.c
-@@ -73,7 +73,7 @@ static int (*tpsv[])(BLASLONG, FLOAT *, FLOAT *, BLASLONG, void *) = {
- #ifndef CBLAS
- 
- void NAME(char *UPLO, char *TRANS, char *DIAG,
--	   blasint *N, FLOAT *a, FLOAT *x, blasint *INCX){
-+	   blasint *N, FLOAT *a, FLOAT *x, blasint *INCX, int dummy_len0, int dummy_len1, int dummy_len2){
- 
-   char uplo_arg  = *UPLO;
-   char trans_arg = *TRANS;
-@@ -130,7 +130,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo,
- 
-   FLOAT *a = (FLOAT*) va;
-   FLOAT *x = (FLOAT*) vx;
--  
-+
-   int trans, uplo, unit;
-   blasint info;
-   FLOAT *buffer;
-diff --git a/interface/ztrmv.c b/interface/ztrmv.c
-index 4c47e9e91..492476427 100644
---- a/interface/ztrmv.c
-+++ b/interface/ztrmv.c
-@@ -94,7 +94,7 @@ static int (*trmv_thread[])(BLASLONG, FLOAT *, BLASLONG, FLOAT *, BLASLONG, FLOA
- #ifndef CBLAS
- 
- void NAME(char *UPLO, char *TRANS, char *DIAG,
--	   blasint *N, FLOAT *a, blasint *LDA, FLOAT *x, blasint *INCX){
-+	   blasint *N, FLOAT *a, blasint *LDA, FLOAT *x, blasint *INCX, int dummy_len0, int dummy_len1, int dummy_len2){
  
    char uplo_arg  = *UPLO;
    char trans_arg = *TRANS;
@@ -1819,14 +2442,36 @@ index 4c47e9e91..492476427 100644
    FLOAT *x = (FLOAT*) vx;
 -  
 +
-   int trans, uplo, unit, buffer_size;
+   int trans, uplo, unit;
    blasint info;
    FLOAT *buffer;
-diff --git a/interface/ztrsv.c b/interface/ztrsv.c
-index cbb7bba13..d8f451060 100644
---- a/interface/ztrsv.c
-+++ b/interface/ztrsv.c
-@@ -73,7 +73,7 @@ static int (*trsv[])(BLASLONG, FLOAT *, BLASLONG, FLOAT *, BLASLONG, void *) = {
+diff --git a/interface/ztpsv.c b/interface/ztpsv.c
+index d657ce7f9..c7a0d081d 100644
+--- a/interface/ztpsv.c
++++ b/interface/ztpsv.c
+@@ -75,7 +75,7 @@ OPENBLAS_EXPORT
+ #ifndef CBLAS
+ 
+ void NAME(char *UPLO, char *TRANS, char *DIAG,
+-	   blasint *N, FLOAT *a, FLOAT *x, blasint *INCX){
++	   blasint *N, FLOAT *a, FLOAT *x, blasint *INCX, int dummy_len0, int dummy_len1, int dummy_len2){
+ 
+   char uplo_arg  = *UPLO;
+   char trans_arg = *TRANS;
+@@ -132,7 +132,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo,
+ 
+   FLOAT *a = (FLOAT*) va;
+   FLOAT *x = (FLOAT*) vx;
+-  
++
+   int trans, uplo, unit;
+   blasint info;
+   FLOAT *buffer;
+diff --git a/interface/ztrmv.c b/interface/ztrmv.c
+index 4e37a677c..b720c7633 100644
+--- a/interface/ztrmv.c
++++ b/interface/ztrmv.c
+@@ -96,7 +96,7 @@ OPENBLAS_EXPORT
  #ifndef CBLAS
  
  void NAME(char *UPLO, char *TRANS, char *DIAG,
@@ -1835,7 +2480,29 @@ index cbb7bba13..d8f451060 100644
  
    char uplo_arg  = *UPLO;
    char trans_arg = *TRANS;
-@@ -134,7 +134,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo,
+@@ -158,7 +158,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo,
+ 
+   FLOAT *a = (FLOAT*) va;
+   FLOAT *x = (FLOAT*) vx;
+-  
++
+   int trans, uplo, unit, buffer_size;
+   blasint info;
+   FLOAT *buffer;
+diff --git a/interface/ztrsv.c b/interface/ztrsv.c
+index 51bd2f8e6..ff2d4ba15 100644
+--- a/interface/ztrsv.c
++++ b/interface/ztrsv.c
+@@ -75,7 +75,7 @@ OPENBLAS_EXPORT
+ #ifndef CBLAS
+ 
+ void NAME(char *UPLO, char *TRANS, char *DIAG,
+-	   blasint *N, FLOAT *a, blasint *LDA, FLOAT *x, blasint *INCX){
++	   blasint *N, FLOAT *a, blasint *LDA, FLOAT *x, blasint *INCX, int dummy_len0, int dummy_len1, int dummy_len2){
+ 
+   char uplo_arg  = *UPLO;
+   char trans_arg = *TRANS;
+@@ -136,7 +136,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_UPLO Uplo,
  
    FLOAT *a = (FLOAT*) va;
    FLOAT *x = (FLOAT*) vx;
@@ -1845,13 +2512,13 @@ index cbb7bba13..d8f451060 100644
    blasint info;
    FLOAT *buffer;
 diff --git a/kernel/generic/lsame.c b/kernel/generic/lsame.c
-index 83fff1798..eb1f1dbbd 100644
+index 5c7f0b17c..eca46579b 100644
 --- a/kernel/generic/lsame.c
 +++ b/kernel/generic/lsame.c
-@@ -38,7 +38,7 @@
+@@ -40,7 +40,7 @@
+ #include "exports.h"
  
- #include <ctype.h>
- 
+ OPENBLAS_EXPORT
 -int NAME(const char *A, const char *B){
 +int NAME(const char *A, const char *B, int dummy_len0, int dummy_len1){
  
@@ -1911,5 +2578,5 @@ index dac98bb8c..ad80e0a5c 100644
  
    return 0;
 -- 
-2.55.0
+2.54.0
 

@@ -1,7 +1,7 @@
-From fc4edd915b7b2f53a4add1e5c282b69932087321 Mon Sep 17 00:00:00 2001
+From d7a86b5283fc82e1f98ee00682e264d970f1fdc8 Mon Sep 17 00:00:00 2001
 From: Ian Thomas <ianthomas23@gmail.com>
 Date: Mon, 8 Dec 2025 08:00:00 +0000
-Subject: [PATCH 5/8] Return void not int
+Subject: [PATCH 05/14] Return void not int
 
 Co-authored-by: Julien Jerphanion <git@jjerphan.xyz>
 ---
@@ -342,7 +342,7 @@ index e4576e60a..1037e7b0e 100644
  
  FLOATRET  BLASFUNC(slamch)(char *, int);
 diff --git a/driver/others/xerbla.c b/driver/others/xerbla.c
-index c7cc69b82..43516eea6 100644
+index 8e2110c91..5e3b30c73 100644
 --- a/driver/others/xerbla.c
 +++ b/driver/others/xerbla.c
 @@ -87,8 +87,8 @@ openblas_set_xerbla(openblas_xerbla_handler handler) {
@@ -381,19 +381,19 @@ index c7cc69b82..43516eea6 100644
  }
  #endif
 diff --git a/interface/lapack/gesv.c b/interface/lapack/gesv.c
-index 61aa5c168..2263096cd 100644
+index 084a7aa93..6bf8120b2 100644
 --- a/interface/lapack/gesv.c
 +++ b/interface/lapack/gesv.c
-@@ -60,7 +60,7 @@
- #endif
+@@ -61,7 +61,7 @@
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA, blasint *ipiv,
 +void NAME(blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA, blasint *ipiv,
           FLOAT *b, blasint *ldB, blasint *Info){
  
    blas_arg_t args;
-@@ -91,7 +91,7 @@ int NAME(blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA, blasint *ipiv,
+@@ -92,7 +92,7 @@ int NAME(blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA, blasint *ipiv,
    if (info) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
      *Info = - info;
@@ -402,7 +402,7 @@ index 61aa5c168..2263096cd 100644
    }
  
    args.alpha = NULL;
-@@ -99,7 +99,7 @@ int NAME(blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA, blasint *ipiv,
+@@ -100,7 +100,7 @@ int NAME(blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA, blasint *ipiv,
  
    *Info = 0;
  
@@ -411,7 +411,7 @@ index 61aa5c168..2263096cd 100644
  
    IDEBUG_START;
  
-@@ -107,7 +107,7 @@ int NAME(blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA, blasint *ipiv,
+@@ -108,7 +108,7 @@ int NAME(blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA, blasint *ipiv,
  
  #ifndef PPC440
    buffer = (FLOAT *)blas_memory_alloc(1);
@@ -420,7 +420,7 @@ index 61aa5c168..2263096cd 100644
    sa = (FLOAT *)((BLASLONG)buffer + GEMM_OFFSET_A);
    sb = (FLOAT *)(((BLASLONG)sa + ((GEMM_P * GEMM_Q * COMPSIZE * SIZE + GEMM_ALIGN) & ~GEMM_ALIGN)) + GEMM_OFFSET_B);
  #endif
-@@ -171,5 +171,5 @@ int NAME(blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA, blasint *ipiv,
+@@ -172,5 +172,5 @@ int NAME(blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA, blasint *ipiv,
  
    IDEBUG_END;
  
@@ -428,19 +428,19 @@ index 61aa5c168..2263096cd 100644
 +  return;
  }
 diff --git a/interface/lapack/getf2.c b/interface/lapack/getf2.c
-index 8506feca9..26f40df4e 100644
+index 582ebd7ff..801b42dca 100644
 --- a/interface/lapack/getf2.c
 +++ b/interface/lapack/getf2.c
-@@ -50,7 +50,7 @@
- #define ERROR_NAME "SGETF2"
+@@ -51,7 +51,7 @@
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint *Info){
 +void NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint *Info){
  
    blas_arg_t args;
  
-@@ -76,11 +76,11 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
+@@ -77,11 +77,11 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
    if (info) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
      *Info = - info;
@@ -454,7 +454,7 @@ index 8506feca9..26f40df4e 100644
  
    IDEBUG_START;
  
-@@ -105,5 +105,5 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
+@@ -106,5 +106,5 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
  
    IDEBUG_END;
  
@@ -462,19 +462,19 @@ index 8506feca9..26f40df4e 100644
 +  return;
  }
 diff --git a/interface/lapack/getrf.c b/interface/lapack/getrf.c
-index 4a58774d1..e62158e61 100644
+index 8e7781f23..3b2d79c40 100644
 --- a/interface/lapack/getrf.c
 +++ b/interface/lapack/getrf.c
-@@ -50,7 +50,7 @@
- #define ERROR_NAME "SGETRF"
+@@ -51,7 +51,7 @@
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint *Info){
 +void NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint *Info){
  
    blas_arg_t args;
  
-@@ -76,11 +76,11 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
+@@ -77,11 +77,11 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
    if (info) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
      *Info = - info;
@@ -488,7 +488,7 @@ index 4a58774d1..e62158e61 100644
  
    IDEBUG_START;
  
-@@ -129,5 +129,5 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
+@@ -130,5 +130,5 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
  
    IDEBUG_END;
  
@@ -496,19 +496,19 @@ index 4a58774d1..e62158e61 100644
 +  return;
  }
 diff --git a/interface/lapack/getrs.c b/interface/lapack/getrs.c
-index b86b173ce..72cfa588a 100644
+index 33ce4c5d3..d8b7c7b42 100644
 --- a/interface/lapack/getrs.c
 +++ b/interface/lapack/getrs.c
-@@ -60,7 +60,7 @@ static blasint (*getrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
+@@ -61,7 +61,7 @@ static blasint (*getrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
 +void NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
    blasint *ipiv, FLOAT *b, blasint *ldB, blasint *Info, int dummy_len){
  
    char trans_arg = *TRANS;
-@@ -103,7 +103,7 @@ int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
+@@ -104,7 +104,7 @@ int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
  
    if (info != 0) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
@@ -517,7 +517,7 @@ index b86b173ce..72cfa588a 100644
    }
  
    args.alpha = NULL;
-@@ -111,7 +111,7 @@ int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
+@@ -112,7 +112,7 @@ int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
  
    *Info = info;
  
@@ -526,7 +526,7 @@ index b86b173ce..72cfa588a 100644
  
    IDEBUG_START;
  
-@@ -151,6 +151,6 @@ int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
+@@ -152,6 +152,6 @@ int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
  
    IDEBUG_END;
  
@@ -535,13 +535,13 @@ index b86b173ce..72cfa588a 100644
  
  }
 diff --git a/interface/lapack/laed3.c b/interface/lapack/laed3.c
-index bf3198bc0..470393ad2 100644
+index 7d46f26de..05c5057e1 100644
 --- a/interface/lapack/laed3.c
 +++ b/interface/lapack/laed3.c
-@@ -40,9 +40,9 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- #endif
+@@ -41,9 +41,9 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  
  /* ===================================================================== */
+ OPENBLAS_EXPORT
 -int NAME(blasint *k, blasint *n, blasint *n1, FLOAT *d, 
 +void NAME(blasint *k, blasint *n, blasint *n1, FLOAT *d,
          FLOAT *q, blasint *ldq, FLOAT *rho, FLOAT *dlamda,
@@ -550,7 +550,7 @@ index bf3198bc0..470393ad2 100644
          FLOAT *s, blasint *Info)
  {
    blasint kval, nval, qdim, info;
-@@ -63,13 +63,13 @@ int NAME(blasint *k, blasint *n, blasint *n1, FLOAT *d,
+@@ -64,13 +64,13 @@ int NAME(blasint *k, blasint *n, blasint *n1, FLOAT *d,
    if (info) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
      *Info = - info;
@@ -566,7 +566,7 @@ index bf3198bc0..470393ad2 100644
  
  #ifdef SMP
    int nthreads = 1;
-@@ -84,5 +84,5 @@ int NAME(blasint *k, blasint *n, blasint *n1, FLOAT *d,
+@@ -85,5 +85,5 @@ int NAME(blasint *k, blasint *n, blasint *n1, FLOAT *d,
    }
  #endif
  
@@ -574,19 +574,19 @@ index bf3198bc0..470393ad2 100644
 +  return;
  }
 diff --git a/interface/lapack/laswp.c b/interface/lapack/laswp.c
-index 698e39a99..c0bfdf336 100644
+index 468499fef..e6fa05eda 100644
 --- a/interface/lapack/laswp.c
 +++ b/interface/lapack/laswp.c
-@@ -52,7 +52,7 @@ static int (*laswp[])(BLASLONG, BLASLONG, BLASLONG, FLOAT, FLOAT *, BLASLONG, FL
- #endif
+@@ -53,7 +53,7 @@ static int (*laswp[])(BLASLONG, BLASLONG, BLASLONG, FLOAT, FLOAT *, BLASLONG, FL
  };
  
+ OPENBLAS_EXPORT
 -int NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *ipiv, blasint *INCX){
 +void NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *ipiv, blasint *INCX){
  
    blasint n    = *N;
    blasint lda  = *LDA;
-@@ -68,7 +68,7 @@ int NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *
+@@ -69,7 +69,7 @@ int NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *
  
    PRINT_DEBUG_NAME;
  
@@ -595,7 +595,7 @@ index 698e39a99..c0bfdf336 100644
  
    IDEBUG_START;
  
-@@ -109,6 +109,6 @@ int NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *
+@@ -110,6 +110,6 @@ int NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *
  
    IDEBUG_END;
  
@@ -604,19 +604,19 @@ index 698e39a99..c0bfdf336 100644
  
  }
 diff --git a/interface/lapack/lauu2.c b/interface/lapack/lauu2.c
-index 74ddb0831..1b463200a 100644
+index eaf68f634..22c2e0c8b 100644
 --- a/interface/lapack/lauu2.c
 +++ b/interface/lapack/lauu2.c
-@@ -60,7 +60,7 @@ static blasint (*lauu2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
- #endif
+@@ -61,7 +61,7 @@ static blasint (*lauu2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
    };
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
 +void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
-@@ -92,12 +92,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+@@ -93,12 +93,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
    if (info) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
      *Info = - info;
@@ -631,7 +631,7 @@ index 74ddb0831..1b463200a 100644
  
    IDEBUG_START;
  
-@@ -124,5 +124,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+@@ -125,5 +125,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
  
    IDEBUG_END;
  
@@ -639,19 +639,19 @@ index 74ddb0831..1b463200a 100644
 +  return;
  }
 diff --git a/interface/lapack/lauum.c b/interface/lapack/lauum.c
-index cc927ff6b..7732c0120 100644
+index 474efcec1..acfabc074 100644
 --- a/interface/lapack/lauum.c
 +++ b/interface/lapack/lauum.c
-@@ -60,7 +60,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
+@@ -61,7 +61,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
 +void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
-@@ -92,12 +92,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+@@ -93,12 +93,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
    if (info) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
      *Info = - info;
@@ -666,7 +666,7 @@ index cc927ff6b..7732c0120 100644
  
    IDEBUG_START;
  
-@@ -139,5 +139,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+@@ -140,5 +140,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
  
    IDEBUG_END;
  
@@ -674,19 +674,19 @@ index cc927ff6b..7732c0120 100644
 +  return;
  }
 diff --git a/interface/lapack/potf2.c b/interface/lapack/potf2.c
-index cfd116ba1..7e6a385b5 100644
+index 4f10d3592..f744e6d81 100644
 --- a/interface/lapack/potf2.c
 +++ b/interface/lapack/potf2.c
-@@ -60,7 +60,7 @@ static blasint (*potf2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
- #endif
+@@ -61,7 +61,7 @@ static blasint (*potf2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
    };
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
 +void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
-@@ -92,12 +92,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+@@ -93,12 +93,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
    if (info) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
      *Info = - info;
@@ -701,7 +701,7 @@ index cfd116ba1..7e6a385b5 100644
  
    IDEBUG_START;
  
-@@ -124,5 +124,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+@@ -125,5 +125,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
  
    IDEBUG_END;
  
@@ -709,19 +709,19 @@ index cfd116ba1..7e6a385b5 100644
 +  return;
  }
 diff --git a/interface/lapack/potrf.c b/interface/lapack/potrf.c
-index 3f994e7f6..fe8577ccd 100644
+index e1bf6d4b6..a04f5ffa9 100644
 --- a/interface/lapack/potrf.c
 +++ b/interface/lapack/potrf.c
-@@ -60,7 +60,7 @@ static blasint (*potrf_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
+@@ -61,7 +61,7 @@ static blasint (*potrf_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
 +void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
-@@ -92,12 +92,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+@@ -93,12 +93,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
    if (info) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
      *Info = - info;
@@ -736,7 +736,7 @@ index 3f994e7f6..fe8577ccd 100644
  
    IDEBUG_START;
  
-@@ -146,5 +146,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+@@ -147,5 +147,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
  
    IDEBUG_END;
  
@@ -744,19 +744,19 @@ index 3f994e7f6..fe8577ccd 100644
 +  return;
  }
 diff --git a/interface/lapack/potri.c b/interface/lapack/potri.c
-index 51eb4fb2e..7a828876d 100644
+index bc44ec2de..93843961f 100644
 --- a/interface/lapack/potri.c
 +++ b/interface/lapack/potri.c
-@@ -68,7 +68,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
+@@ -69,7 +69,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
 +void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
  
    blas_arg_t args;
  
-@@ -101,12 +101,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+@@ -102,12 +102,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
    if (info) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
      *Info = - info;
@@ -771,7 +771,7 @@ index 51eb4fb2e..7a828876d 100644
  
    IDEBUG_START;
  
-@@ -159,5 +159,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+@@ -160,5 +160,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
  
    IDEBUG_END;
  
@@ -779,19 +779,19 @@ index 51eb4fb2e..7a828876d 100644
 +  return;
  }
 diff --git a/interface/lapack/trti2.c b/interface/lapack/trti2.c
-index bd32dc433..adef0d25d 100644
+index 348c007a9..d1c2e0ed9 100644
 --- a/interface/lapack/trti2.c
 +++ b/interface/lapack/trti2.c
-@@ -60,7 +60,7 @@ static blasint (*trti2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
- #endif
+@@ -61,7 +61,7 @@ static blasint (*trti2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
    };
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
 +void NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
  
    blas_arg_t args;
  
-@@ -98,12 +98,12 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
+@@ -99,12 +99,12 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
    if (info) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
      *Info = - info;
@@ -806,7 +806,7 @@ index bd32dc433..adef0d25d 100644
  
    IDEBUG_START;
  
-@@ -130,5 +130,5 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
+@@ -131,5 +131,5 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
  
    IDEBUG_END;
  
@@ -814,19 +814,451 @@ index bd32dc433..adef0d25d 100644
 +  return;
  }
 diff --git a/interface/lapack/trtri.c b/interface/lapack/trtri.c
-index e118caad8..248486ebb 100644
+index 3977cc6b1..42c98ff61 100644
 --- a/interface/lapack/trtri.c
 +++ b/interface/lapack/trtri.c
-@@ -61,7 +61,7 @@ static blasint (*trtri_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- #endif
+@@ -62,7 +62,7 @@ static blasint (*trtri_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
 +void NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
  
    blas_arg_t args;
  
-@@ -101,17 +101,17 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
+@@ -102,17 +102,17 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
+   if (info) {
+     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
+     *Info = - info;
+-    return 0;
++    return;
+   }
+ 
+   *Info = 0;
+ 
+-  if (args.n == 0) return 0;
++  if (args.n == 0) return;
+ 
+   if (diag) {
+     if (AMIN_K(args.n, args.a, args.lda + 1) == ZERO) {
+       *Info = IAMIN_K(args.n, args.a, args.lda + 1);
+-      return 0;
++      return;
+     }
+   }
+ 
+@@ -156,5 +156,5 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
+ 
+   IDEBUG_END;
+ 
+-  return 0;
++  return;
+ }
+diff --git a/interface/lapack/trtrs.c b/interface/lapack/trtrs.c
+index 4b12b4041..f78e1a284 100644
+--- a/interface/lapack/trtrs.c
++++ b/interface/lapack/trtrs.c
+@@ -61,7 +61,7 @@ static blasint (*trtrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
+ #endif
+ 
+ OPENBLAS_EXPORT
+-int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
++void NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
+   FLOAT *b, blasint *ldB, blasint *Info, int dummy_len0, int dummy_len1, int dummy_len2){
+ 
+     char uplo_arg = *UPLO;
+@@ -117,7 +117,7 @@ int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *
+   if (info != 0) {
+     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
+     *Info = - info;
+-    return 0;
++    return;
+   }
+ 
+   args.alpha = NULL;
+@@ -125,12 +125,12 @@ int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *
+ 
+   *Info = 0;
+ 
+-  if (args.m == 0) return 0;
++  if (args.m == 0) return;
+ 
+   if (diag) {
+     if (AMIN_K(args.m, args.a, args.lda + 1) == ZERO) {
+       *Info = IAMIN_K(args.m, args.a, args.lda + 1);
+-      return 0;
++      return;
+     }
+   }
+ 
+@@ -173,6 +173,6 @@ int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *
+ 
+   IDEBUG_END;
+ 
+-  return 0;
++  return;
+ 
+ }
+diff --git a/interface/lapack/zgetf2.c b/interface/lapack/zgetf2.c
+index 0fca2d050..9c53caf86 100644
+--- a/interface/lapack/zgetf2.c
++++ b/interface/lapack/zgetf2.c
+@@ -51,7 +51,7 @@
+ #endif
+ 
+ OPENBLAS_EXPORT
+-int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint *Info){
++void NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint *Info){
+ 
+   blas_arg_t args;
+ 
+@@ -77,11 +77,11 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
+   if (info) {
+     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
+     *Info = - info;
+-    return 0;
++    return;
+   }
+ 
+   *Info = 0;
+-  if (args.m == 0 || args.n == 0) return 0;
++  if (args.m == 0 || args.n == 0) return;
+ 
+   IDEBUG_START;
+ 
+@@ -106,5 +106,5 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
+ 
+   IDEBUG_END;
+ 
+-  return 0;
++  return;
+ }
+diff --git a/interface/lapack/zgetrf.c b/interface/lapack/zgetrf.c
+index 383381dd6..2992a1035 100644
+--- a/interface/lapack/zgetrf.c
++++ b/interface/lapack/zgetrf.c
+@@ -51,7 +51,7 @@
+ #endif
+ 
+ OPENBLAS_EXPORT
+-int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint *Info){
++void NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint *Info){
+ 
+   blas_arg_t args;
+ 
+@@ -77,11 +77,11 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
+   if (info) {
+     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
+     *Info = - info;
+-    return 0;
++    return;
+   }
+ 
+   *Info = 0;
+-  if (args.m == 0 || args.n == 0) return 0;
++  if (args.m == 0 || args.n == 0) return;
+ 
+   IDEBUG_START;
+ 
+@@ -122,5 +122,5 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
+ 
+   IDEBUG_END;
+ 
+-  return 0;
++  return;
+ }
+diff --git a/interface/lapack/zgetrs.c b/interface/lapack/zgetrs.c
+index 1e3ee2d23..782192d10 100644
+--- a/interface/lapack/zgetrs.c
++++ b/interface/lapack/zgetrs.c
+@@ -61,7 +61,7 @@ static blasint (*getrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
+ #endif
+ 
+ OPENBLAS_EXPORT
+-int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
++void NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
+ 	    blasint *ipiv, FLOAT *b, blasint *ldB, blasint *Info, int dummy_len){
+ 
+   char trans_arg = *TRANS;
+@@ -104,7 +104,7 @@ int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
+ 
+   if (info != 0) {
+     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
+-    return 0;
++    return;
+   }
+ 
+   args.alpha = NULL;
+@@ -112,7 +112,7 @@ int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
+ 
+   *Info = info;
+ 
+-  if (args.m == 0 || args.n == 0) return 0;
++  if (args.m == 0 || args.n == 0) return;
+ 
+   IDEBUG_START;
+ 
+@@ -153,6 +153,6 @@ int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
+ 
+   IDEBUG_END;
+ 
+-  return 0;
++  return;
+ 
+ }
+diff --git a/interface/lapack/zlaswp.c b/interface/lapack/zlaswp.c
+index efe27999c..c81d74f68 100644
+--- a/interface/lapack/zlaswp.c
++++ b/interface/lapack/zlaswp.c
+@@ -53,7 +53,7 @@ static int (*laswp[])(BLASLONG, BLASLONG, BLASLONG, FLOAT, FLOAT, FLOAT *, BLASL
+ };
+ 
+ OPENBLAS_EXPORT
+-int NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *ipiv, blasint *INCX){
++void NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *ipiv, blasint *INCX){
+ 
+   blasint n    = *N;
+   blasint lda  = *LDA;
+@@ -70,7 +70,7 @@ int NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *
+ 
+   PRINT_DEBUG_NAME;
+ 
+-  if (incx == 0 || n <= 0) return 0;
++  if (incx == 0 || n <= 0) return;
+ 
+   IDEBUG_START;
+ 
+@@ -109,5 +109,5 @@ int NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *
+ 
+   IDEBUG_END;
+ 
+-  return 0;
++  return;
+ }
+diff --git a/interface/lapack/zlauu2.c b/interface/lapack/zlauu2.c
+index c0f12eb3a..0db96779a 100644
+--- a/interface/lapack/zlauu2.c
++++ b/interface/lapack/zlauu2.c
+@@ -62,7 +62,7 @@ static blasint (*lauu2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
+   };
+ 
+ OPENBLAS_EXPORT
+-int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
++void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
+ 
+   blas_arg_t args;
+ 
+@@ -94,12 +94,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+   if (info) {
+     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
+     *Info = - info;
+-    return 0;
++    return;
+   }
+ 
+   *Info = 0;
+ 
+-  if (args.n <= 0) return 0;
++  if (args.n <= 0) return;
+ 
+   IDEBUG_START;
+ 
+@@ -126,5 +126,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+ 
+   IDEBUG_END;
+ 
+-  return 0;
++  return;
+ }
+diff --git a/interface/lapack/zlauum.c b/interface/lapack/zlauum.c
+index fd4d8f347..de166ea34 100644
+--- a/interface/lapack/zlauum.c
++++ b/interface/lapack/zlauum.c
+@@ -61,7 +61,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
+ #endif
+ 
+ OPENBLAS_EXPORT
+-int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
++void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
+ 
+   blas_arg_t args;
+ 
+@@ -93,12 +93,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+   if (info) {
+     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME));
+     *Info = - info;
+-    return 0;
++    return;
+   }
+ 
+   *Info = 0;
+ 
+-  if (args.n == 0) return 0;
++  if (args.n == 0) return;
+ 
+   IDEBUG_START;
+ 
+@@ -142,5 +142,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+ 
+   IDEBUG_END;
+ 
+-  return 0;
++  return;
+ }
+diff --git a/interface/lapack/zpotf2.c b/interface/lapack/zpotf2.c
+index 7558dc4bf..be08eb0a0 100644
+--- a/interface/lapack/zpotf2.c
++++ b/interface/lapack/zpotf2.c
+@@ -62,7 +62,7 @@ static blasint (*potf2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
+   };
+ 
+ OPENBLAS_EXPORT
+-int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0){
++void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0){
+ 
+   blas_arg_t args;
+ 
+@@ -94,12 +94,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+   if (info) {
+     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
+     *Info = - info;
+-    return 0;
++    return;
+   }
+ 
+   *Info = 0;
+ 
+-  if (args.n <= 0) return 0;
++  if (args.n <= 0) return;
+ 
+   IDEBUG_START;
+ 
+@@ -126,5 +126,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+ 
+   IDEBUG_END;
+ 
+-  return 0;
++  return;
+ }
+diff --git a/interface/lapack/zpotrf.c b/interface/lapack/zpotrf.c
+index d0383856c..4932d56b9 100644
+--- a/interface/lapack/zpotrf.c
++++ b/interface/lapack/zpotrf.c
+@@ -61,7 +61,7 @@ static blasint (*potrf_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
+ #endif
+ 
+ OPENBLAS_EXPORT
+-int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
++void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
+ 
+   blas_arg_t args;
+ 
+@@ -93,12 +93,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+   if (info) {
+     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
+     *Info = - info;
+-    return 0;
++    return;
+   }
+ 
+   *Info = 0;
+ 
+-  if (args.n == 0) return 0;
++  if (args.n == 0) return;
+ 
+   IDEBUG_START;
+ 
+@@ -145,5 +145,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+ 
+   IDEBUG_END;
+ 
+-  return 0;
++  return;
+ }
+diff --git a/interface/lapack/zpotri.c b/interface/lapack/zpotri.c
+index f2725b468..5c3894aff 100644
+--- a/interface/lapack/zpotri.c
++++ b/interface/lapack/zpotri.c
+@@ -69,7 +69,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
+ #endif
+ 
+ OPENBLAS_EXPORT
+-int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
++void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
+ 
+   blas_arg_t args;
+ 
+@@ -102,12 +102,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+   if (info) {
+     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
+     *Info = - info;
+-    return 0;
++    return;
+   }
+ 
+   *Info = 0;
+ 
+-  if (args.n == 0) return 0;
++  if (args.n == 0) return;
+ 
+   IDEBUG_START;
+ 
+@@ -166,5 +166,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
+ 
+   IDEBUG_END;
+ 
+-  return 0;
++  return;
+ }
+diff --git a/interface/lapack/ztrti2.c b/interface/lapack/ztrti2.c
+index 74cb23d04..c9c064227 100644
+--- a/interface/lapack/ztrti2.c
++++ b/interface/lapack/ztrti2.c
+@@ -61,7 +61,7 @@ static blasint (*trti2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
+   };
+ 
+ OPENBLAS_EXPORT
+-int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
++void NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
+ 
+   blas_arg_t args;
+ 
+@@ -99,12 +99,12 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
+   if (info) {
+     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
+     *Info = - info;
+-    return 0;
++    return;
+   }
+ 
+   *Info = 0;
+ 
+-  if (args.n <= 0) return 0;
++  if (args.n <= 0) return;
+ 
+   IDEBUG_START;
+ 
+@@ -131,5 +131,5 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
+ 
+   IDEBUG_END;
+ 
+-  return 0;
++  return;
+ }
+diff --git a/interface/lapack/ztrtri.c b/interface/lapack/ztrtri.c
+index 266f564b0..97d762cf5 100644
+--- a/interface/lapack/ztrtri.c
++++ b/interface/lapack/ztrtri.c
+@@ -61,7 +61,7 @@ static blasint (*trtri_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
+ #endif
+ 
+ OPENBLAS_EXPORT
+-int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
++void NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
+ 
+   blas_arg_t args;
+ 
+@@ -99,17 +99,17 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
    if (info) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
      *Info = - info;
@@ -854,452 +1286,20 @@ index e118caad8..248486ebb 100644
 -  return 0;
 +  return;
  }
-diff --git a/interface/lapack/trtrs.c b/interface/lapack/trtrs.c
-index 249c05fbe..14f791634 100644
---- a/interface/lapack/trtrs.c
-+++ b/interface/lapack/trtrs.c
-@@ -60,7 +60,7 @@ static blasint (*trtrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
- #endif
- 
--int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
-+void NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
-   FLOAT *b, blasint *ldB, blasint *Info, int dummy_len0, int dummy_len1, int dummy_len2){
- 
-     char uplo_arg = *UPLO;
-@@ -116,7 +116,7 @@ int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *
-   if (info != 0) {
-     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
-     *Info = - info;
--    return 0;
-+    return;
-   }
- 
-   args.alpha = NULL;
-@@ -124,12 +124,12 @@ int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *
- 
-   *Info = 0;
- 
--  if (args.m == 0) return 0;
-+  if (args.m == 0) return;
- 
-   if (diag) {
-     if (AMIN_K(args.m, args.a, args.lda + 1) == ZERO) {
-       *Info = IAMIN_K(args.m, args.a, args.lda + 1);
--      return 0;
-+      return;
-     }
-   }
- 
-@@ -172,6 +172,6 @@ int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *
- 
-   IDEBUG_END;
- 
--  return 0;
-+  return;
- 
- }
-diff --git a/interface/lapack/zgetf2.c b/interface/lapack/zgetf2.c
-index 68b9a7e4b..772115f5f 100644
---- a/interface/lapack/zgetf2.c
-+++ b/interface/lapack/zgetf2.c
-@@ -50,7 +50,7 @@
- #define ERROR_NAME "CGETF2"
- #endif
- 
--int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint *Info){
-+void NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint *Info){
- 
-   blas_arg_t args;
- 
-@@ -76,11 +76,11 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
-   if (info) {
-     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
-     *Info = - info;
--    return 0;
-+    return;
-   }
- 
-   *Info = 0;
--  if (args.m == 0 || args.n == 0) return 0;
-+  if (args.m == 0 || args.n == 0) return;
- 
-   IDEBUG_START;
- 
-@@ -105,5 +105,5 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
- 
-   IDEBUG_END;
- 
--  return 0;
-+  return;
- }
-diff --git a/interface/lapack/zgetrf.c b/interface/lapack/zgetrf.c
-index d03541fad..bea44cf78 100644
---- a/interface/lapack/zgetrf.c
-+++ b/interface/lapack/zgetrf.c
-@@ -50,7 +50,7 @@
- #define ERROR_NAME "CGETRF"
- #endif
- 
--int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint *Info){
-+void NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint *Info){
- 
-   blas_arg_t args;
- 
-@@ -76,11 +76,11 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
-   if (info) {
-     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
-     *Info = - info;
--    return 0;
-+    return;
-   }
- 
-   *Info = 0;
--  if (args.m == 0 || args.n == 0) return 0;
-+  if (args.m == 0 || args.n == 0) return;
- 
-   IDEBUG_START;
- 
-@@ -121,5 +121,5 @@ int NAME(blasint *M, blasint *N, FLOAT *a, blasint *ldA, blasint *ipiv, blasint
- 
-   IDEBUG_END;
- 
--  return 0;
-+  return;
- }
-diff --git a/interface/lapack/zgetrs.c b/interface/lapack/zgetrs.c
-index 15832fce7..3828b24ab 100644
---- a/interface/lapack/zgetrs.c
-+++ b/interface/lapack/zgetrs.c
-@@ -60,7 +60,7 @@ static blasint (*getrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
- #endif
- 
--int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
-+void NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
- 	    blasint *ipiv, FLOAT *b, blasint *ldB, blasint *Info, int dummy_len){
- 
-   char trans_arg = *TRANS;
-@@ -103,7 +103,7 @@ int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
- 
-   if (info != 0) {
-     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
--    return 0;
-+    return;
-   }
- 
-   args.alpha = NULL;
-@@ -111,7 +111,7 @@ int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
- 
-   *Info = info;
- 
--  if (args.m == 0 || args.n == 0) return 0;
-+  if (args.m == 0 || args.n == 0) return;
- 
-   IDEBUG_START;
- 
-@@ -152,6 +152,6 @@ int NAME(char *TRANS, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
- 
-   IDEBUG_END;
- 
--  return 0;
-+  return;
- 
- }
-diff --git a/interface/lapack/zlaswp.c b/interface/lapack/zlaswp.c
-index c5188cdf7..1ab566228 100644
---- a/interface/lapack/zlaswp.c
-+++ b/interface/lapack/zlaswp.c
-@@ -52,7 +52,7 @@ static int (*laswp[])(BLASLONG, BLASLONG, BLASLONG, FLOAT, FLOAT, FLOAT *, BLASL
- #endif
- };
- 
--int NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *ipiv, blasint *INCX){
-+void NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *ipiv, blasint *INCX){
- 
-   blasint n    = *N;
-   blasint lda  = *LDA;
-@@ -69,7 +69,7 @@ int NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *
- 
-   PRINT_DEBUG_NAME;
- 
--  if (incx == 0 || n <= 0) return 0;
-+  if (incx == 0 || n <= 0) return;
- 
-   IDEBUG_START;
- 
-@@ -108,5 +108,5 @@ int NAME(blasint *N, FLOAT *a, blasint *LDA, blasint *K1, blasint *K2, blasint *
- 
-   IDEBUG_END;
- 
--  return 0;
-+  return;
- }
-diff --git a/interface/lapack/zlauu2.c b/interface/lapack/zlauu2.c
-index 2385b5ff6..81b5e6360 100644
---- a/interface/lapack/zlauu2.c
-+++ b/interface/lapack/zlauu2.c
-@@ -61,7 +61,7 @@ static blasint (*lauu2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
- #endif
-   };
- 
--int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
-+void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
- 
-   blas_arg_t args;
- 
-@@ -93,12 +93,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
-   if (info) {
-     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
-     *Info = - info;
--    return 0;
-+    return;
-   }
- 
-   *Info = 0;
- 
--  if (args.n <= 0) return 0;
-+  if (args.n <= 0) return;
- 
-   IDEBUG_START;
- 
-@@ -125,5 +125,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
- 
-   IDEBUG_END;
- 
--  return 0;
-+  return;
- }
-diff --git a/interface/lapack/zlauum.c b/interface/lapack/zlauum.c
-index 1ef3429d3..187f7f635 100644
---- a/interface/lapack/zlauum.c
-+++ b/interface/lapack/zlauum.c
-@@ -60,7 +60,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
- #endif
- 
--int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
-+void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
- 
-   blas_arg_t args;
- 
-@@ -92,12 +92,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
-   if (info) {
-     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME));
-     *Info = - info;
--    return 0;
-+    return;
-   }
- 
-   *Info = 0;
- 
--  if (args.n == 0) return 0;
-+  if (args.n == 0) return;
- 
-   IDEBUG_START;
- 
-@@ -141,5 +141,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
- 
-   IDEBUG_END;
- 
--  return 0;
-+  return;
- }
-diff --git a/interface/lapack/zpotf2.c b/interface/lapack/zpotf2.c
-index 490f0ceae..349a98597 100644
---- a/interface/lapack/zpotf2.c
-+++ b/interface/lapack/zpotf2.c
-@@ -61,7 +61,7 @@ static blasint (*potf2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
- #endif
-   };
- 
--int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0){
-+void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0){
- 
-   blas_arg_t args;
- 
-@@ -93,12 +93,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
-   if (info) {
-     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
-     *Info = - info;
--    return 0;
-+    return;
-   }
- 
-   *Info = 0;
- 
--  if (args.n <= 0) return 0;
-+  if (args.n <= 0) return;
- 
-   IDEBUG_START;
- 
-@@ -125,5 +125,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
- 
-   IDEBUG_END;
- 
--  return 0;
-+  return;
- }
-diff --git a/interface/lapack/zpotrf.c b/interface/lapack/zpotrf.c
-index dd80b9678..9074a1e34 100644
---- a/interface/lapack/zpotrf.c
-+++ b/interface/lapack/zpotrf.c
-@@ -60,7 +60,7 @@ static blasint (*potrf_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
- #endif
- 
--int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
-+void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
- 
-   blas_arg_t args;
- 
-@@ -92,12 +92,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
-   if (info) {
-     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
-     *Info = - info;
--    return 0;
-+    return;
-   }
- 
-   *Info = 0;
- 
--  if (args.n == 0) return 0;
-+  if (args.n == 0) return;
- 
-   IDEBUG_START;
- 
-@@ -144,5 +144,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
- 
-   IDEBUG_END;
- 
--  return 0;
-+  return;
- }
-diff --git a/interface/lapack/zpotri.c b/interface/lapack/zpotri.c
-index 6d789d7a4..cfc25f2d3 100644
---- a/interface/lapack/zpotri.c
-+++ b/interface/lapack/zpotri.c
-@@ -68,7 +68,7 @@ static blasint (*lauum_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
- #endif
- 
--int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
-+void NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len){
- 
-   blas_arg_t args;
- 
-@@ -101,12 +101,12 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
-   if (info) {
-     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
-     *Info = - info;
--    return 0;
-+    return;
-   }
- 
-   *Info = 0;
- 
--  if (args.n == 0) return 0;
-+  if (args.n == 0) return;
- 
-   IDEBUG_START;
- 
-@@ -165,5 +165,5 @@ int NAME(char *UPLO, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dumm
- 
-   IDEBUG_END;
- 
--  return 0;
-+  return;
- }
-diff --git a/interface/lapack/ztrti2.c b/interface/lapack/ztrti2.c
-index b8085d387..1f3b5d1b6 100644
---- a/interface/lapack/ztrti2.c
-+++ b/interface/lapack/ztrti2.c
-@@ -60,7 +60,7 @@ static blasint (*trti2[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *, FLOAT *
- #endif
-   };
- 
--int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
-+void NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
- 
-   blas_arg_t args;
- 
-@@ -98,12 +98,12 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
-   if (info) {
-     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
-     *Info = - info;
--    return 0;
-+    return;
-   }
- 
-   *Info = 0;
- 
--  if (args.n <= 0) return 0;
-+  if (args.n <= 0) return;
- 
-   IDEBUG_START;
- 
-@@ -130,5 +130,5 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
- 
-   IDEBUG_END;
- 
--  return 0;
-+  return;
- }
-diff --git a/interface/lapack/ztrtri.c b/interface/lapack/ztrtri.c
-index d3081b041..07c07c8a8 100644
---- a/interface/lapack/ztrtri.c
-+++ b/interface/lapack/ztrtri.c
-@@ -60,7 +60,7 @@ static blasint (*trtri_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
- #endif
- 
--int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
-+void NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *Info, int dummy_len0, int dummy_len1){
- 
-   blas_arg_t args;
- 
-@@ -98,17 +98,17 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
-   if (info) {
-     BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
-     *Info = - info;
--    return 0;
-+    return;
-   }
- 
-   *Info = 0;
- 
--  if (args.n == 0) return 0;
-+  if (args.n == 0) return;
- 
-   if (diag) {
-     if (AMIN_K(args.n, args.a, args.lda + 1) == ZERO) {
-       *Info = IAMIN_K(args.n, args.a, args.lda + 1);
--      return 0;
-+      return;
-     }
-   }
- 
-@@ -154,5 +154,5 @@ int NAME(char *UPLO, char *DIAG, blasint *N, FLOAT *a, blasint *ldA, blasint *In
- 
-   IDEBUG_END;
- 
--  return 0;
-+  return;
- }
 diff --git a/interface/lapack/ztrtrs.c b/interface/lapack/ztrtrs.c
-index a64eaca47..2c1224c7d 100644
+index fddfdb2d2..5630538f3 100644
 --- a/interface/lapack/ztrtrs.c
 +++ b/interface/lapack/ztrtrs.c
-@@ -60,7 +60,7 @@ static blasint (*trtrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
- };
+@@ -61,7 +61,7 @@ static blasint (*trtrs_parallel[])(blas_arg_t *, BLASLONG *, BLASLONG *, FLOAT *
  #endif
  
+ OPENBLAS_EXPORT
 -int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
 +void NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *a, blasint *ldA,
    FLOAT *b, blasint *ldB, blasint *Info, int dummy_len0, int dummy_len1, int dummy_len2){
  
      char uplo_arg = *UPLO;
-@@ -116,7 +116,7 @@ int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *
+@@ -117,7 +117,7 @@ int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *
    if (info != 0) {
      BLASFUNC(xerbla)(ERROR_NAME, &info, sizeof(ERROR_NAME) - 1);
      *Info = - info;
@@ -1308,7 +1308,7 @@ index a64eaca47..2c1224c7d 100644
    }
  
    args.alpha = NULL;
-@@ -124,12 +124,12 @@ int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *
+@@ -125,12 +125,12 @@ int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *
  
    *Info = 0;
  
@@ -1323,7 +1323,7 @@ index a64eaca47..2c1224c7d 100644
      }
    }
  
-@@ -172,6 +172,6 @@ int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *
+@@ -173,6 +173,6 @@ int NAME(char *UPLO, char* TRANS, char* DIAG, blasint *N, blasint *NRHS, FLOAT *
  
    IDEBUG_END;
  
@@ -1332,5 +1332,5 @@ index a64eaca47..2c1224c7d 100644
  
  }
 -- 
-2.55.0
+2.54.0
 

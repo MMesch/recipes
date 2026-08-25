@@ -1,7 +1,7 @@
-From 765fdfc97b0fc09ba08c11b698aa25d084f06256 Mon Sep 17 00:00:00 2001
+From c863390634a81e1cf0d2255185ddff654efcc697 Mon Sep 17 00:00:00 2001
 From: Julien Jerphanion <git@jjerphan.xyz>
 Date: Thu, 13 Aug 2026 09:45:45 +0200
-Subject: Skip fork-based utests for emscripten
+Subject: [PATCH 09/14] Skip fork-based utests for emscripten
 
 Signed-off-by: Julien Jerphanion <git@jjerphan.xyz>
 ---
@@ -9,10 +9,10 @@ Signed-off-by: Julien Jerphanion <git@jjerphan.xyz>
  1 file changed, 12 deletions(-)
 
 diff --git a/utest/Makefile b/utest/Makefile
-index 07de0c2fc..5b602b1b0 100644
+index 1e7e17d44..b568e0e1e 100644
 --- a/utest/Makefile
 +++ b/utest/Makefile
-@@ -41,18 +41,6 @@ endif
+@@ -42,18 +42,6 @@ endif
  endif
  endif
  
@@ -32,5 +32,5 @@ index 07de0c2fc..5b602b1b0 100644
  OBJS = utest_main2.o
  endif
 -- 
-2.55.0
+2.54.0
 
