@@ -354,6 +354,44 @@ outputs:
     summary: Qt6 MQTT (v3.1.1 / v5.0) client for Emscripten (WASM)
     license_file: LICENSES/LGPL-3.0-only.txt
 
+- package:
+    name: qt6-positioning
+    version: ${{ version }}
+  source:
+    url: https://download.qt.io/official_releases/qt/6.11/${{ version }}/submodules/qtpositioning-everywhere-src-${{ version }}.tar.xz
+    sha256: d8cf15ad43a3b1520adac64cec5900028525cf75f01a4c82a0002e7ac1ae7499
+  build:
+    script: build_qtpositioning.sh
+  requirements:
+    build:
+    - ${{ compiler('cxx') }}
+    - cmake
+    - ninja
+    - perl
+    - python
+    - qt6-main == ${{ version }}
+    host:
+    - ${{ pin_subpackage('qt6-main', exact=True) }}
+    run:
+    - ${{ pin_subpackage('qt6-main', exact=True) }}
+  tests:
+  - package_contents:
+      files:
+      - lib/libQt6Positioning.a
+      - lib/cmake/Qt6Positioning/Qt6PositioningConfig.cmake
+      - include/QtPositioning/QGeoPositionInfoSource
+  - script:
+    - build_tests_qtpositioning.sh
+    requirements:
+      build:
+      - ${{ compiler('cxx') }}
+    files:
+      recipe:
+      - build_tests_qtpositioning.sh
+  about:
+    summary: Qt6 Positioning (geolocation, QGeoCoordinate/QGeoPositionInfoSource) for Emscripten (WASM)
+    license_file: LICENSES/LGPL-3.0-only.txt
+
 about:
   homepage: https://www.qt.io/
   repository: https://code.qt.io/qt/qt5.git
