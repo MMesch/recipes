@@ -240,6 +240,44 @@ outputs:
     summary: Qt6 WebSockets (RFC 6455) client for Emscripten (WASM)
     license_file: LICENSES/LGPL-3.0-only.txt
 
+- package:
+    name: qt6-networkauth
+    version: ${{ version }}
+  source:
+    url: https://download.qt.io/official_releases/qt/6.11/${{ version }}/submodules/qtnetworkauth-everywhere-src-${{ version }}.tar.xz
+    sha256: 0c83c23077ab7824393fa15bb0015c3c5acaf5678544aa789e3fcbb4d41fa05b
+  build:
+    script: build_qtnetworkauth.sh
+  requirements:
+    build:
+    - ${{ compiler('cxx') }}
+    - cmake
+    - ninja
+    - perl
+    - python
+    - qt6-main == ${{ version }}
+    host:
+    - ${{ pin_subpackage('qt6-main', exact=True) }}
+    run:
+    - ${{ pin_subpackage('qt6-main', exact=True) }}
+  tests:
+  - package_contents:
+      files:
+      - lib/libQt6NetworkAuth.a
+      - lib/cmake/Qt6NetworkAuth/Qt6NetworkAuthConfig.cmake
+      - include/QtNetworkAuth/QOAuth2AuthorizationCodeFlow
+  - script:
+    - build_tests_qtnetworkauth.sh
+    requirements:
+      build:
+      - ${{ compiler('cxx') }}
+    files:
+      recipe:
+      - build_tests_qtnetworkauth.sh
+  about:
+    summary: Qt6 NetworkAuth (OAuth1/OAuth2) for Emscripten (WASM)
+    license_file: LICENSES/LGPL-3.0-only.txt
+
 about:
   homepage: https://www.qt.io/
   repository: https://code.qt.io/qt/qt5.git
