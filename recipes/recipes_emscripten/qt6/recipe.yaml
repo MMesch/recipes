@@ -316,6 +316,44 @@ outputs:
     summary: Qt6 SCXML state-machine module for Emscripten (WASM)
     license_file: LICENSES/LGPL-3.0-only.txt
 
+- package:
+    name: qt6-mqtt
+    version: ${{ version }}
+  source:
+    url: https://download.qt.io/official_releases/qt/6.11/${{ version }}/submodules/qtmqtt-everywhere-src-${{ version }}.tar.xz
+    sha256: 80c3fe2ae1062abf56456f52518bd670f9ec3917b7f85e152b347ac6b6faf880
+  build:
+    script: build_qtmqtt.sh
+  requirements:
+    build:
+    - ${{ compiler('cxx') }}
+    - cmake
+    - ninja
+    - perl
+    - python
+    - qt6-main == ${{ version }}
+    host:
+    - ${{ pin_subpackage('qt6-main', exact=True) }}
+    run:
+    - ${{ pin_subpackage('qt6-main', exact=True) }}
+  tests:
+  - package_contents:
+      files:
+      - lib/libQt6Mqtt.a
+      - lib/cmake/Qt6Mqtt/Qt6MqttConfig.cmake
+      - include/QtMqtt/QMqttClient
+  - script:
+    - build_tests_qtmqtt.sh
+    requirements:
+      build:
+      - ${{ compiler('cxx') }}
+    files:
+      recipe:
+      - build_tests_qtmqtt.sh
+  about:
+    summary: Qt6 MQTT (v3.1.1 / v5.0) client for Emscripten (WASM)
+    license_file: LICENSES/LGPL-3.0-only.txt
+
 about:
   homepage: https://www.qt.io/
   repository: https://code.qt.io/qt/qt5.git
