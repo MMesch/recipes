@@ -35,3 +35,13 @@ Emscripten-forge uses pixi to setup the environment for building the packages.
 
 ## Quetz
 Quetz is an [open source](https://beta.mamba.pm/channels/emscripten-forge) conda package server. It is used to host the [emscripten-forge](https://beta.mamba.pm/channels/emscripten-forge) packages.
+
+
+# Built with emscripten-forge
+
+Projects that build on emscripten-forge packages:
+
+## notebook.link
+[notebook.link](https://notebook.link/) is a browser-based notebook service that runs Python and other kernels entirely in the browser, using packages from emscripten-forge.
+
+Using emscripten-forge in your project? Open a PR to be listed here.
