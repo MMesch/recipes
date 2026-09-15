@@ -1,5 +1,15 @@
 # Credits
 
+## Supporters
+
+Emscripten-forge strives to be a community project, shaped by its active individual and organizational supporters. Anyone can participate in the decision-making process openly through [GitHub](https://github.com/emscripten-forge/recipes) — issues, pull requests, and discussions.
+
+Organizational supporters:
+
+- **[QuantStack](https://quantstack.net/)** — engineering time, maintenance, and support.
+
+Interested in supporting emscripten-forge, as an individual or as an organization? Reach out via [GitHub](https://github.com/emscripten-forge/recipes/issues).
+
 ## Pyodide
 This project is heavily inspired by the [pyodide](https://pyodide.org/en/stable/) project.
 Many recipes, build scripts, and patches are heavily inspired by the pyodide project.

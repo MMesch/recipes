@@ -10,7 +10,7 @@ Conda-forge does not (yet) support the `emscripten-wasm32` platform. `emscripten
 The recipes repository not only stores the recipe files for multiple packages, but it also builds and uploads these packages to the `emscripten-forge` channel on [prefix.dev](https://prefix.dev/channels/emscripten-forge-4x)
 
 !!! info "Supported by"
-    Emscripten-forge strives to be a community project, shaped by its active individual and organizational supporters — currently [**QuantStack**](https://quantstack.net/) and many individual contributors. Anyone can participate in the decision-making process openly through GitHub — see [Supporters](project/supporters.md) to learn how to get involved.
+    Emscripten-forge strives to be a community project, shaped by its active individual and organizational supporters — currently [**QuantStack**](https://quantstack.net/) and many individual contributors. Anyone can participate in the decision-making process openly through GitHub — see [Credits](project/credits.md#supporters) to learn how to get involved.
 
 ##
 
@@ -33,7 +33,6 @@ The recipes repository not only stores the recipe files for multiple packages, b
 ### Project
 
   * [Blog](blog)
-  * [Supporters](project/supporters)
   * [Related projects](project/related_projects)
   * [FAQ](project/faq)
   * [Credits](project/credits)
